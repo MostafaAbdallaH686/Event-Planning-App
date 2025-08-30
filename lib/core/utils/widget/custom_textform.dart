@@ -37,7 +37,7 @@ class CustomTextform extends StatelessWidget {
         vertical: size.height * 0.02,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(1),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColor.border),
       ),
       child: TextFormField(

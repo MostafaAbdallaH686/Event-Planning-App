@@ -3,10 +3,10 @@ import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
-import 'package:event_planning_app/core/widgets/custom_firebasebutton.dart';
-import 'package:event_planning_app/core/widgets/custom_linedtext.dart';
-import 'package:event_planning_app/core/widgets/custom_textbutton.dart';
-import 'package:event_planning_app/core/widgets/custom_textform.dart';
+import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
+import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -104,7 +104,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
             ),
             //login with facebook
             CustomFirebasebutton(
-                icon: AppIcon.fasebook, text: AppString.logFace),
+                icon: AppIcon.facebook, text: AppString.logFace),
             //login with google
             CustomFirebasebutton(
                 icon: AppIcon.google, text: AppString.logGoogle),
