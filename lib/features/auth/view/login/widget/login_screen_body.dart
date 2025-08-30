@@ -36,6 +36,8 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             //picture

@@ -34,7 +34,7 @@ class CustomTextform extends StatelessWidget {
       ),
       padding: EdgeInsets.symmetric(
         horizontal: size.width * 0.055,
-        vertical: size.height * 0.02,
+        vertical: size.height * 0.002,
       ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -45,10 +45,13 @@ class CustomTextform extends StatelessWidget {
         validator: validator,
         obscureText: obscureText,
         decoration: InputDecoration(
-          prefixIcon: SvgPicture.asset(prefixicon),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(prefixicon, width: 20, height: 20),
+          ),
           hintText: prefixtext,
           hintStyle: AppTextStyle.reg14(AppColor.colorbA1),
-          suffixIcon: suffixicon ?? const SizedBox(),
+          suffixIcon: suffixicon,
           border: InputBorder.none,
         ),
       ),

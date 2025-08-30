@@ -39,6 +39,8 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Form(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
