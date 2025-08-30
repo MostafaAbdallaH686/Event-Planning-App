@@ -71,7 +71,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
               ),
             ),
             CustomTextform(
-              controller: _passwordCtrl,
+              controller: _confirmPassCtrl,
               validator: (value) => AppValidator()
                   .confirmPasswordValidator(value, _passwordCtrl.text),
               prefixicon: AppIcon.password,
