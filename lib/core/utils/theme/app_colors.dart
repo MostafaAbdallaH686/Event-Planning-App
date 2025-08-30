@@ -14,6 +14,7 @@ abstract class AppColor {
   static Color colorbr88 = Color(0xff8B8688);
   static Color colorbr688 = Color(0xff747688);
   static Color colorbrD8 = Color(0xffD9D9D9);
+  static const Color border = Color(0xff8B8688);
   static Color colorstack =
       Color.alphaBlend(Color(0xffB9DAFB), Color(0xff9895EE));
   static Color colorbrCC = Color(0xffCCCCCC);

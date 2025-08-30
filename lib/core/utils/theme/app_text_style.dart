@@ -163,4 +163,12 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w200,
         color: color,
       );
+  static TextStyle reg14(Color color) =>
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color);
+  static TextStyle reg18(Color color) =>
+      TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: color);
+  static TextStyle reg11(Color color) =>
+      TextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: color);
+  static TextStyle reg16(Color color) =>
+      TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: color);
 }
