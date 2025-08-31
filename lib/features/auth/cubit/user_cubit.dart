@@ -27,4 +27,37 @@ class UserCubit extends Cubit<UserState> {
       emit(UserError(e.toString()));
     }
   }
+
+  Future<void> logout() async {
+    emit(UserLoggingOut());
+    await _repository.logout();
+    emit(UserLoggedOut());
+  }
+
+  Future<void> resetPassword(String email) async {
+    emit(UserLoadingEmail());
+    try {
+      await _repository.resetPassword(email);
+      emit(UserEmailSent());
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    emit(UserLoadingGoogle());
+    try {
+      UserModel? user = await _repository.loginWithGoogle();
+
+      if (user != null) {
+        emit(UserLoggedIn(user));
+        print("Welcome ${user.username}");
+      } else {
+        emit(UserLoggedOut());
+        print("Sign-in canceled");
+      }
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
 }

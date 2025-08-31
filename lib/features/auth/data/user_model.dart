@@ -30,4 +30,13 @@ class UserModel {
       isFacebook: true,
     );
   }
+
+  factory UserModel.fromGoogle(Map<String, dynamic> data) {
+    return UserModel(
+      uid: data['id'] ?? '',
+      email: data['email'] ?? '',
+      username: data['name'] ?? '',
+      profilePicture: data['photoUrl'],
+    );
+  }
 }

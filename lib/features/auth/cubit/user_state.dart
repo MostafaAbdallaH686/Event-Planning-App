@@ -20,6 +20,8 @@ class UserLoggedIn extends UserState {
   List<Object?> get props => [user];
 }
 
+class UserLoggingOut extends UserState {}
+
 class UserLoggedOut extends UserState {}
 
 class UserError extends UserState {
@@ -29,3 +31,9 @@ class UserError extends UserState {
   @override
   List<Object?> get props => [message];
 }
+
+class UserLoadingEmail extends UserState {}
+
+class UserEmailSent extends UserState {}
+
+class UserLoadingGoogle extends UserState {}

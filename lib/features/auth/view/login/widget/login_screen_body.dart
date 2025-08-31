@@ -9,10 +9,8 @@ import 'package:event_planning_app/core/widgets/custom_textbutton.dart';
 import 'package:event_planning_app/core/widgets/custom_textform.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -152,10 +150,25 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
               },
             ),
             //login with google
-            CustomFirebasebutton(
-              icon: AppIcon.google,
-              text: AppString.logGoogle,
-              onpressed: () {},
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserLoggedIn) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                return CustomFirebasebutton(
+                  icon: AppIcon.google,
+                  text: AppString.logGoogle,
+                  onpressed: () {
+                    context.read<UserCubit>().loginWithGoogle();
+                  },
+                );
+              },
             ),
             SizedBox(height: size.height * 0.02),
             Row(

@@ -6,12 +6,17 @@ import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   //initialize firebase for project
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await GoogleSignIn.instance.initialize(
+    serverClientId:
+        '229484552631-tuupqshucmh9spj48gr7qlj3u0rs9te2.apps.googleusercontent.com', // اختياري للخوادم
   );
   runApp(const MyApp());
 }
