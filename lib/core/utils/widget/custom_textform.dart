@@ -24,22 +24,8 @@ class CustomTextform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      height: size.height * 0.07,
-      margin: EdgeInsets.only(
-        left: size.width * 0.0278,
-        right: size.width * 0.0278,
-        top: size.height * 0.025,
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.055,
-        vertical: size.height * 0.002,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColor.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.only(left: 12, top: 15, right: 12),
       child: TextFormField(
         controller: controller,
         validator: validator,
@@ -52,7 +38,7 @@ class CustomTextform extends StatelessWidget {
           hintText: prefixtext,
           hintStyle: AppTextStyle.reg14(AppColor.colorbA1),
           suffixIcon: suffixicon,
-          border: InputBorder.none,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );
