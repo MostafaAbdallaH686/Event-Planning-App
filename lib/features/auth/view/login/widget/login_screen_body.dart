@@ -42,7 +42,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
           children: [
             //picture
             SvgPicture.asset(
-              AppIcon.splash,
+              AppIcon.tAppicon,
               width: double.infinity,
               height: size.height * 0.30,
             ),
@@ -57,12 +57,14 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
             ),
             //name form
             CustomTextform(
-                controller: _nameCtrl,
-                validator: (value) => AppValidator().nameValidator(value),
-                prefixicon: AppIcon.username,
-                prefixtext: AppString.enterName),
+              controller: _nameCtrl,
+              validator: (value) => AppValidator().nameValidator(value),
+              prefixicon: AppIcon.username,
+              prefixtext: AppString.enterName,
+            ),
             //pass form
             CustomTextform(
+              obscureText: _obscure,
               controller: _passwordCtrl,
               validator: (value) => AppValidator().passwordValidator(value),
               prefixicon: AppIcon.password,

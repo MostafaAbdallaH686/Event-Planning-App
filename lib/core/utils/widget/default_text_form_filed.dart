@@ -1,4 +1,3 @@
-
 import 'package:event_planning_app/core/utils/function/app_width_height.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
@@ -17,8 +16,10 @@ class DefaultTextFormFiled extends StatelessWidget {
     this.onTapSuffixIcon,
     this.maxLines = 1,
     this.minLines,
+    this.isPassword = false,
   });
   final int maxLines;
+  final bool isPassword;
   final int? minLines;
   final String? label;
   final String hint;
@@ -56,12 +57,15 @@ class DefaultTextFormFiled extends StatelessWidget {
         focusedBorder: outlineInputBorder(),
         errorBorder: outlineInputBorder(),
         focusedErrorBorder: outlineInputBorder(),
-        suffixIcon: passwordSuffixIcon != null
+        suffixIcon: isPassword
             ? GestureDetector(
                 onTap: onTapSuffixIcon,
-                child: passwordSuffixIcon,
+                child: Icon(
+                  obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: AppColor.colorbr80,
+                ),
               )
-            : null,
+            : passwordSuffixIcon,
       ),
     );
   }

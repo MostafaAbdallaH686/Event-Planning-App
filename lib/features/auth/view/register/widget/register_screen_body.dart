@@ -19,6 +19,7 @@ class RegisterScreenBody extends StatefulWidget {
 
 class _RegisterScreenBodyState extends State<RegisterScreenBody> {
   bool _obscure = true;
+  bool _obscureConfirmPass = true;
   final _formKey = GlobalKey<FormState>();
   final _nameCtrl = TextEditingController();
   final _passwordCtrl = TextEditingController();
@@ -66,6 +67,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
                 prefixicon: AppIcon.mail,
                 prefixtext: AppString.emailEx),
             CustomTextform(
+              obscureText: _obscure,
               controller: _passwordCtrl,
               validator: (value) => AppValidator().passwordValidator(value),
               prefixicon: AppIcon.password,
@@ -78,15 +80,17 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
               ),
             ),
             CustomTextform(
+              obscureText: _obscureConfirmPass,
               controller: _confirmPassCtrl,
               validator: (value) => AppValidator()
                   .confirmPasswordValidator(value, _passwordCtrl.text),
               prefixicon: AppIcon.password,
               prefixtext: AppString.confirmPass,
               suffixicon: IconButton(
-                onPressed: () => setState(() => _obscure = !_obscure),
+                onPressed: () =>
+                    setState(() => _obscureConfirmPass = !_obscureConfirmPass),
                 icon: Icon(
-                  _obscure ? Icons.visibility_off : Icons.visibility,
+                  _obscureConfirmPass ? Icons.visibility_off : Icons.visibility,
                 ),
               ),
             ),
