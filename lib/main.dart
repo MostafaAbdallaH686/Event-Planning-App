@@ -1,8 +1,11 @@
 import 'package:event_planning_app/core/utils/function/app_route.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
+import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
+import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
   //initialize firebase for project
@@ -17,11 +20,14 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      title: 'Event Planning App',
-      theme: AppThemeData.lightThemeData,
-      routerConfig: router,
+    return BlocProvider(
+      create: (_) => UserCubit(UserRepository()),
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        title: 'Event Planning App',
+        theme: AppThemeData.lightThemeData,
+        routerConfig: router,
+      ),
     );
   }
 }

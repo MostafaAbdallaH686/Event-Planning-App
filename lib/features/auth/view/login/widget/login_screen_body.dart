@@ -7,7 +7,12 @@ import 'package:event_planning_app/core/widgets/custom_firebasebutton.dart';
 import 'package:event_planning_app/core/widgets/custom_linedtext.dart';
 import 'package:event_planning_app/core/widgets/custom_textbutton.dart';
 import 'package:event_planning_app/core/widgets/custom_textform.dart';
+import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
+import 'package:event_planning_app/features/auth/cubit/user_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,6 +41,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
     final size = MediaQuery.of(context).size;
     return SingleChildScrollView(
       child: Form(
+        key: _formKey,
         child: Column(
           children: [
             //picture
@@ -91,23 +97,66 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
             ),
             SizedBox(height: size.height * 0.025),
             //login button
-            CustomTextbutton(
-                text: AppString.login,
-                onpressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.go('/home');
-                  }
-                }),
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserLoggedIn) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (BuildContext context, UserState state) {
+                if (state is UserLoadingUsername) {
+                  return const CircularProgressIndicator();
+                }
+                return CustomTextbutton(
+                    text: AppString.login,
+                    onpressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<UserCubit>().loginWithUsername(
+                              _nameCtrl.text.trim(),
+                              _passwordCtrl.text.trim(),
+                            );
+                      }
+                    });
+              },
+            ),
             SizedBox(width: size.height * 0.01),
             LinedText(
               text: AppString.or,
             ),
             //login with facebook
-            CustomFirebasebutton(
-                icon: AppIcon.fasebook, text: AppString.logFace),
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserLoggedIn) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                if (state is UserLoadingFacebook) {
+                  return const CircularProgressIndicator();
+                }
+                return CustomFirebasebutton(
+                  icon: AppIcon.fasebook,
+                  text: AppString.logFace,
+                  onpressed: () {
+                    context.read<UserCubit>().loginWithFacebook();
+                  },
+                );
+              },
+            ),
             //login with google
             CustomFirebasebutton(
-                icon: AppIcon.google, text: AppString.logGoogle),
+              icon: AppIcon.google,
+              text: AppString.logGoogle,
+              onpressed: () {},
+            ),
             SizedBox(height: size.height * 0.02),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

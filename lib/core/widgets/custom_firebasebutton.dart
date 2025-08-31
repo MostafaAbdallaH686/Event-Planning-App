@@ -5,9 +5,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomFirebasebutton extends StatelessWidget {
   const CustomFirebasebutton(
-      {super.key, required this.icon, required this.text});
+      {super.key,
+      required this.icon,
+      required this.text,
+      required this.onpressed});
   final String icon;
   final String text;
+  final VoidCallback? onpressed;
 
   @override
   Widget build(BuildContext context) {
@@ -22,9 +26,7 @@ class CustomFirebasebutton extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
-            onPressed: () {
-              //firebase action
-            },
+            onPressed: onpressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

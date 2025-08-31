@@ -22,9 +22,8 @@ class CustomTextbutton extends StatelessWidget {
           borderRadius: AppRadius.buttonRaduis,
         ),
         child: TextButton(
-            onPressed: () {
-              onpressed;
-            },
+            //بقالي ساعة فيها يسطا السطر ده
+            onPressed: onpressed,
             child: Text(
               text,
               style: AppTextStyle.reg18(AppColor.colorwEE),
