@@ -14,6 +14,20 @@ class AppValidator {
     return null;
   }
 
+  String? emailValidator(String? value) {
+    if (value == null || value.isEmpty) {
+      return "please enter email !";
+    }
+
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+    if (!emailRegex.hasMatch(value)) {
+      return "please enter a valid email like exp@email.com";
+    }
+
+    return null;
+  }
+
   String? passwordValidator(String? value) {
     if (value == null || value.isEmpty) {
       return "please enter password !";

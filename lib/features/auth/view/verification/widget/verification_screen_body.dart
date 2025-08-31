@@ -1,9 +1,7 @@
-//ToDO ::Hadeer
-
 import 'package:flutter/material.dart';
 
-class ForgetPasswordScreen extends StatelessWidget {
-  const ForgetPasswordScreen({super.key});
+class VerificationScreenBody extends StatelessWidget {
+  const VerificationScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {

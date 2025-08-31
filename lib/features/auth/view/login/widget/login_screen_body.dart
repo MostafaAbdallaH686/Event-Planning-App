@@ -1,17 +1,17 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
-import 'package:event_planning_app/core/widgets/custom_firebasebutton.dart';
-import 'package:event_planning_app/core/widgets/custom_linedtext.dart';
-import 'package:event_planning_app/core/widgets/custom_textbutton.dart';
-import 'package:event_planning_app/core/widgets/custom_textform.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
+import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreenBody extends StatefulWidget {
@@ -40,31 +40,35 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
     return SingleChildScrollView(
       child: Form(
         key: _formKey,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           children: [
             //picture
-            SvgPicture.asset(
-              AppIcon.tAppicon,
+            Image.asset(
+              AppImage.splash,
               width: double.infinity,
-              height: size.height * 0.30,
+              height: size.height * 0.20,
+              fit: BoxFit.cover,
             ),
             Text(
               AppString.welcome,
               style: AppTextStyle.bold24(AppColor.black),
             ),
-            SizedBox(height: size.height * 0.025),
+            SizedBox(height: size.height * 0.02),
             Text(
               AppString.describtion,
               style: AppTextStyle.reg14(AppColor.colorbA1),
             ),
             //name form
             CustomTextform(
-                controller: _nameCtrl,
-                validator: (value) => AppValidator().nameValidator(value),
-                prefixicon: AppIcon.username,
-                prefixtext: AppString.enterName),
+              controller: _nameCtrl,
+              validator: (value) => AppValidator().nameValidator(value),
+              prefixicon: AppIcon.username,
+              prefixtext: AppString.enterName,
+            ),
             //pass form
             CustomTextform(
+              obscureText: _obscure,
               controller: _passwordCtrl,
               validator: (value) => AppValidator().passwordValidator(value),
               prefixicon: AppIcon.password,
@@ -141,7 +145,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                   return const CircularProgressIndicator();
                 }
                 return CustomFirebasebutton(
-                  icon: AppIcon.fasebook,
+                  icon: AppIcon.facebook,
                   text: AppString.logFace,
                   onpressed: () {
                     context.read<UserCubit>().loginWithFacebook();
@@ -149,6 +153,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                 );
               },
             ),
+
             //login with google
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {

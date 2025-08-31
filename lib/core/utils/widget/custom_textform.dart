@@ -24,32 +24,24 @@ class CustomTextform extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Container(
-      width: double.infinity,
-      height: size.height * 0.07,
-      margin: EdgeInsets.only(
-        left: size.width * 0.0278,
-        right: size.width * 0.0278,
-        top: size.height * 0.025,
-      ),
-      padding: EdgeInsets.symmetric(
-        horizontal: size.width * 0.055,
-        vertical: size.height * 0.02,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(1),
-        border: Border.all(color: AppColor.border),
-      ),
+    return Padding(
+      padding: EdgeInsets.only(
+          left: size.width * 0.033,
+          top: size.height * 0.01875,
+          right: size.width * 0.033),
       child: TextFormField(
         controller: controller,
         validator: validator,
         obscureText: obscureText,
         decoration: InputDecoration(
-          prefixIcon: SvgPicture.asset(prefixicon),
+          prefixIcon: Padding(
+            padding: const EdgeInsets.all(10),
+            child: SvgPicture.asset(prefixicon, width: 20, height: 20),
+          ),
           hintText: prefixtext,
           hintStyle: AppTextStyle.reg14(AppColor.colorbA1),
-          suffixIcon: suffixicon ?? const SizedBox(),
-          border: InputBorder.none,
+          suffixIcon: suffixicon,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),
       ),
     );
