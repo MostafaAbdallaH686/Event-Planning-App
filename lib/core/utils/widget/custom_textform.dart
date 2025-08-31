@@ -25,7 +25,10 @@ class CustomTextform extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(left: 12, top: 15, right: 12),
+      padding: EdgeInsets.only(
+          left: size.width * 0.033,
+          top: size.height * 0.01875,
+          right: size.width * 0.033),
       child: TextFormField(
         controller: controller,
         validator: validator,
