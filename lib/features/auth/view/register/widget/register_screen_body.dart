@@ -109,10 +109,16 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
             ),
             //login with facebook
             CustomFirebasebutton(
-                icon: AppIcon.facebook, text: AppString.logFace),
+              icon: AppIcon.facebook,
+              text: AppString.logFace,
+              onpressed: () {},
+            ),
             //login with google
             CustomFirebasebutton(
-                icon: AppIcon.google, text: AppString.logGoogle),
+              icon: AppIcon.google,
+              text: AppString.logGoogle,
+              onpressed: () {},
+            ),
             SizedBox(height: size.height * 0.02),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
               Text(
