@@ -44,9 +44,16 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              AppString.signup,
-              style: AppTextStyle.bold24(AppColor.colorbA1),
+            Row(
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  AppString.signup,
+                  style: AppTextStyle.bold24(AppColor.colorbA1),
+                ),
+              ],
             ),
             CustomTextform(
                 controller: _nameCtrl,

@@ -42,7 +42,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
           children: [
             //picture
             SvgPicture.asset(
-              AppIcon.tAppicon,
+              AppIcon.splash,
               width: double.infinity,
               height: size.height * 0.30,
             ),
