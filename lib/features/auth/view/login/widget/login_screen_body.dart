@@ -1,6 +1,7 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
@@ -8,7 +9,6 @@ import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreenBody extends StatefulWidget {
@@ -41,16 +41,17 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
         child: Column(
           children: [
             //picture
-            SvgPicture.asset(
-              AppIcon.tAppicon,
+            Image.asset(
+              AppImage.splash,
               width: double.infinity,
-              height: size.height * 0.30,
+              height: size.height * 0.20,
+              fit: BoxFit.cover,
             ),
             Text(
               AppString.welcome,
               style: AppTextStyle.bold24(AppColor.black),
             ),
-            SizedBox(height: size.height * 0.025),
+            SizedBox(height: size.height * 0.02),
             Text(
               AppString.describtion,
               style: AppTextStyle.reg14(AppColor.colorbA1),
