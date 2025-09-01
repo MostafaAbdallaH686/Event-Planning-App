@@ -5,8 +5,10 @@ import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
+import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ForgetScreenBody extends StatefulWidget {
   const ForgetScreenBody({super.key});
@@ -53,14 +55,33 @@ class _ForgetScreenBodyState extends State<ForgetScreenBody> {
               prefixtext: AppString.emailEx,
             ),
             SizedBox(height: size.height * 0.05),
-            CustomTextbutton(
-                text: AppString.send,
-                onpressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // firebase code  will be  here
-                    context.go('/verification');
-                  }
-                })
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserEmailSent) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Email sent successfully'),
+                  ));
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                if (state is UserResettingPassword) {
+                  return Center(child: const CircularProgressIndicator());
+                }
+                return CustomTextbutton(
+                    text: AppString.send,
+                    onpressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context
+                            .read<UserCubit>()
+                            .resetPassword(email: _emailCtrl.text);
+                      }
+                    });
+              },
+            )
           ],
         ),
       )),

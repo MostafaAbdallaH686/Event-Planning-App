@@ -7,7 +7,10 @@ import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart'
 import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
+import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class RegisterScreenBody extends StatefulWidget {
@@ -96,28 +99,83 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
             ),
             SizedBox(height: size.height * 0.03),
 
-            CustomTextbutton(
-                text: AppString.signup,
-                onpressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.go('/home');
-                  }
-                }),
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserSignedUp) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                if (state is UserSigningUp) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return CustomTextbutton(
+                    text: AppString.signup,
+                    onpressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<UserCubit>().signUpWithUsernameAndEmail(
+                            username: _nameCtrl.text,
+                            email: _emailCtrl.text,
+                            password: _passwordCtrl.text);
+                      }
+                    });
+              },
+            ),
             SizedBox(width: size.height * 0.01),
             LinedText(
               text: AppString.or,
             ),
             //login with facebook
-            CustomFirebasebutton(
-              icon: AppIcon.facebook,
-              text: AppString.logFace,
-              onpressed: () {},
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserLoggedIn) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                if (state is UserLoadingFacebook) {
+                  return Center(child: const CircularProgressIndicator());
+                }
+                return CustomFirebasebutton(
+                  icon: AppIcon.facebook,
+                  text: AppString.logFace,
+                  onpressed: () {
+                    context.read<UserCubit>().loginWithFacebook();
+                  },
+                );
+              },
             ),
             //login with google
-            CustomFirebasebutton(
-              icon: AppIcon.google,
-              text: AppString.logGoogle,
-              onpressed: () {},
+            BlocConsumer<UserCubit, UserState>(
+              listener: (context, state) {
+                if (state is UserLoggedIn) {
+                  context.go('/home');
+                } else if (state is UserError) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text(state.message),
+                  ));
+                }
+              },
+              builder: (context, state) {
+                if (state is UserLoadingGoogle) {
+                  return const CircularProgressIndicator();
+                }
+                return CustomFirebasebutton(
+                  icon: AppIcon.google,
+                  text: AppString.logGoogle,
+                  onpressed: () {
+                    context.read<UserCubit>().loginWithGoogle();
+                  },
+                );
+              },
             ),
             SizedBox(height: size.height * 0.02),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [

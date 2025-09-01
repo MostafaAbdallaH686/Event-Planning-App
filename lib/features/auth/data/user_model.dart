@@ -3,14 +3,12 @@ class UserModel {
   final String email;
   final String username;
   final String? profilePicture;
-  final bool isFacebook;
 
   UserModel({
     required this.uid,
     required this.email,
     required this.username,
     this.profilePicture,
-    this.isFacebook = false,
   });
 
   factory UserModel.fromFirestore(Map<String, dynamic> data, String uid) {
@@ -27,7 +25,6 @@ class UserModel {
       email: data['email'] ?? '',
       username: data['name'] ?? '',
       profilePicture: data['picture']?['data']?['url'],
-      isFacebook: true,
     );
   }
 

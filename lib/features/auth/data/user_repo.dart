@@ -7,8 +7,11 @@ import 'user_model.dart';
 class UserRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FacebookAuth _facebook = FacebookAuth.instance;
+  final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
 
-  Future<UserModel> loginWithUsername(String username, String password) async {
+  Future<UserModel> loginWithUsername(
+      {required String username, required String password}) async {
     try {
       // Get user email from Firestore
       final query = await _firestore
@@ -38,12 +41,12 @@ class UserRepository {
   }
 
   Future<UserModel> loginWithFacebook() async {
-    final LoginResult result = await FacebookAuth.instance.login(
+    final LoginResult result = await _facebook.login(
       permissions: ['public_profile'],
     );
 
     if (result.status == LoginStatus.success) {
-      final userData = await FacebookAuth.instance.getUserData(
+      final userData = await _facebook.getUserData(
         fields: "id,name,email,picture.width(200)",
       );
       return UserModel.fromFacebook(userData);
@@ -56,33 +59,26 @@ class UserRepository {
     await _auth.signOut();
   }
 
-  Future<void> resetPassword(String email) async {
-    await _auth.sendPasswordResetEmail(email: email);
-  }
-
-  Future<void> updatePassword(String newPassword) async {
-    final user = _auth.currentUser;
-    if (user != null) {
-      await user.updatePassword(newPassword);
+  Future<void> resetPassword({required String email}) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+    } catch (e) {
+      throw Exception('Password reset failed: ${e.toString()}');
     }
   }
 
   Future<UserModel?> loginWithGoogle() async {
     try {
-      await GoogleSignIn.instance.signOut();
-      final account = await GoogleSignIn.instance.authenticate();
-      if (account == null) {
-        return null;
-      }
+      await _googleSignIn.signOut();
+      final account = await _googleSignIn.authenticate();
 
-      final googleAuth = await account.authentication;
+      final googleAuth = account.authentication;
 
       final credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      final userCred =
-          await FirebaseAuth.instance.signInWithCredential(credential);
+      final userCred = await _auth.signInWithCredential(credential);
       final user = userCred.user;
 
       if (user == null) return null;
@@ -96,6 +92,49 @@ class UserRepository {
       return UserModel.fromGoogle(data);
     } catch (e) {
       throw Exception('Google sign-in failed: $e ');
+    }
+  }
+
+  Future<UserModel> signUpWithUsernameAndEmail(
+      {required String username,
+      required String email,
+      required String password}) async {
+    try {
+      // Check if username exists
+      final query = await _firestore
+          .collection('users')
+          .where('username', isEqualTo: username)
+          .limit(1)
+          .get();
+
+      if (query.docs.isNotEmpty) {
+        throw Exception("Username already exists");
+      }
+
+      // Create user in Firebase Auth
+      UserCredential userCred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      final uid = userCred.user!.uid;
+
+      // Save user data in Firestore
+      final user = UserModel(
+        uid: uid,
+        email: email,
+        username: username,
+      );
+      //set user data in firebase
+      await _firestore.collection('users').doc(uid).set({
+        'email': email,
+        'username': username,
+        'profilePicture': null,
+      });
+
+      return user;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "Sign up failed");
     }
   }
 }

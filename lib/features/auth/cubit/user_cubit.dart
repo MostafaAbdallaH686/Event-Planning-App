@@ -8,10 +8,12 @@ class UserCubit extends Cubit<UserState> {
 
   UserCubit(this._repository) : super(UserInitial());
 
-  Future<void> loginWithUsername(String username, String password) async {
+  Future<void> loginWithUsername(
+      {required String username, required String password}) async {
     emit(UserLoadingUsername());
     try {
-      UserModel user = await _repository.loginWithUsername(username, password);
+      UserModel user = await _repository.loginWithUsername(
+          username: username, password: password);
       emit(UserLoggedIn(user));
     } catch (e) {
       emit(UserError(e.toString()));
@@ -34,10 +36,10 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoggedOut());
   }
 
-  Future<void> resetPassword(String email) async {
-    emit(UserLoadingEmail());
+  Future<void> resetPassword({required String email}) async {
+    emit(UserResettingPassword());
     try {
-      await _repository.resetPassword(email);
+      await _repository.resetPassword(email: email);
       emit(UserEmailSent());
     } catch (e) {
       emit(UserError(e.toString()));
@@ -51,11 +53,23 @@ class UserCubit extends Cubit<UserState> {
 
       if (user != null) {
         emit(UserLoggedIn(user));
-        print("Welcome ${user.username}");
       } else {
         emit(UserLoggedOut());
-        print("Sign-in canceled");
       }
+    } catch (e) {
+      emit(UserError(e.toString()));
+    }
+  }
+
+  Future<void> signUpWithUsernameAndEmail(
+      {required String username,
+      required String email,
+      required String password}) async {
+    emit(UserSigningUp());
+    try {
+      UserModel user = await _repository.signUpWithUsernameAndEmail(
+          username: username, email: email, password: password);
+      emit(UserSignedUp(user));
     } catch (e) {
       emit(UserError(e.toString()));
     }

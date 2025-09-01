@@ -118,8 +118,8 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                     onpressed: () {
                       if (_formKey.currentState!.validate()) {
                         context.read<UserCubit>().loginWithUsername(
-                              _nameCtrl.text.trim(),
-                              _passwordCtrl.text.trim(),
+                              username: _nameCtrl.text.trim(),
+                              password: _passwordCtrl.text.trim(),
                             );
                       }
                     });
@@ -142,7 +142,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
               },
               builder: (context, state) {
                 if (state is UserLoadingFacebook) {
-                  return const CircularProgressIndicator();
+                  return Center(child: const CircularProgressIndicator());
                 }
                 return CustomFirebasebutton(
                   icon: AppIcon.facebook,
@@ -166,6 +166,9 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                 }
               },
               builder: (context, state) {
+                if (state is UserLoadingGoogle) {
+                  return const CircularProgressIndicator();
+                }
                 return CustomFirebasebutton(
                   icon: AppIcon.google,
                   text: AppString.logGoogle,
