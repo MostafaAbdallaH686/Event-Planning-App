@@ -37,179 +37,177 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
-        child: Column(
-          children: [
-            //picture
-            SizedBox(height: size.height * 0.035),
+    return Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
+      child: Column(
+        children: [
+          //picture
+          SizedBox(height: size.height * 0.034),
 
-            Container(
-                width: double.infinity,
-                height: size.height * 0.20,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                  image: AssetImage(AppImage.splash),
-                  fit: BoxFit.cover,
-                ))),
-            // Image.asset(
-            //   AppImage.splash,
-            //   width: double.infinity,
-            //   height: size.height * 0.20,
-            //   fit: BoxFit.cover,
-            // ),
-            Text(
-              AppString.welcome,
-              style: AppTextStyle.bold24(AppColor.black),
-            ),
-            Text(
-              textAlign: TextAlign.center,
-              AppString.describtion,
-              style: AppTextStyle.reg14(AppColor.colorbA1),
-            ),
-            //name form
-            CustomTextform(
-              controller: _nameCtrl,
-              validator: (value) => AppValidator().nameValidator(value),
-              prefixicon: AppIcon.username,
-              prefixtext: AppString.enterName,
-            ),
-            //pass form
-            CustomTextform(
-              obscureText: _obscure,
-              controller: _passwordCtrl,
-              validator: (value) => AppValidator().passwordValidator(value),
-              prefixicon: AppIcon.password,
-              prefixtext: AppString.enterPass,
-              suffixicon: IconButton(
-                onPressed: () => setState(() => _obscure = !_obscure),
-                icon: Icon(
-                  _obscure ? Icons.visibility_off : Icons.visibility,
-                ),
+          Container(
+              width: double.infinity,
+              height: size.height * 0.20,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                image: AssetImage(AppImage.splash),
+                fit: BoxFit.cover,
+              ))),
+          // Image.asset(
+          //   AppImage.splash,
+          //   width: double.infinity,
+          //   height: size.height * 0.20,
+          //   fit: BoxFit.cover,
+          // ),
+          Text(
+            AppString.welcome,
+            style: AppTextStyle.bold24(AppColor.black),
+          ),
+          Text(
+            textAlign: TextAlign.center,
+            AppString.describtion,
+            style: AppTextStyle.medium14(AppColor.colorbA1),
+          ),
+          //name form
+          CustomTextform(
+            controller: _nameCtrl,
+            validator: (value) => AppValidator().nameValidator(value),
+            prefixicon: AppIcon.username,
+            prefixtext: AppString.enterName,
+          ),
+          //pass form
+          CustomTextform(
+            obscureText: _obscure,
+            controller: _passwordCtrl,
+            validator: (value) => AppValidator().passwordValidator(value),
+            prefixicon: AppIcon.password,
+            prefixtext: AppString.enterPass,
+            suffixicon: IconButton(
+              onPressed: () => setState(() => _obscure = !_obscure),
+              icon: Icon(
+                _obscure ? Icons.visibility_off : Icons.visibility,
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Spacer(),
-                TextButton(
-                  onPressed: () {
-                    context.go('/forgetpassword');
-                  },
-                  child: Text(
-                    AppString.forgetPass,
-                    style: AppTextStyle.reg14(AppColor.colorbA1),
-                  ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Spacer(),
+              TextButton(
+                onPressed: () {
+                  context.go('/forgetpassword');
+                },
+                child: Text(
+                  AppString.forgetPass,
+                  style: AppTextStyle.medium14(AppColor.colorbA1),
                 ),
-                SizedBox(width: size.height * 0.02),
-              ],
-            ),
-            //  SizedBox(height: size.height * 0.025),
-            //login button
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  context.go('/home');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (BuildContext context, UserState state) {
-                if (state is UserLoadingUsername) {
-                  return const CircularProgressIndicator();
-                }
-                return CustomTextbutton(
-                    text: AppString.login,
-                    onpressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<UserCubit>().loginWithUsername(
-                              username: _nameCtrl.text.trim(),
-                              password: _passwordCtrl.text.trim(),
-                            );
-                      }
-                    });
-              },
-            ),
-            // SizedBox(width: size.height * 0.04),
-            LinedText(
-              text: AppString.or,
-            ),
-            //login with facebook
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  context.go('/home');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (context, state) {
-                if (state is UserLoadingFacebook) {
-                  return Center(child: const CircularProgressIndicator());
-                }
-                return CustomFirebasebutton(
-                  icon: AppIcon.facebook,
-                  text: AppString.logFace,
+              ),
+              SizedBox(width: size.height * 0.02),
+            ],
+          ),
+          //  SizedBox(height: size.height * 0.025),
+          //login button
+          BlocConsumer<UserCubit, UserState>(
+            listener: (context, state) {
+              if (state is UserLoggedIn) {
+                context.go('/home');
+              } else if (state is UserError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            builder: (BuildContext context, UserState state) {
+              if (state is UserLoadingUsername) {
+                return const CircularProgressIndicator();
+              }
+              return CustomTextbutton(
+                  text: AppString.login,
                   onpressed: () {
-                    context.read<UserCubit>().loginWithFacebook();
-                  },
-                );
-              },
-            ),
+                    if (_formKey.currentState!.validate()) {
+                      context.read<UserCubit>().loginWithUsername(
+                            username: _nameCtrl.text.trim(),
+                            password: _passwordCtrl.text.trim(),
+                          );
+                    }
+                  });
+            },
+          ),
+          // SizedBox(width: size.height * 0.04),
+          LinedText(
+            text: AppString.or,
+          ),
+          //login with facebook
+          BlocConsumer<UserCubit, UserState>(
+            listener: (context, state) {
+              if (state is UserLoggedIn) {
+                context.go('/home');
+              } else if (state is UserError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            builder: (context, state) {
+              if (state is UserLoadingFacebook) {
+                return Center(child: const CircularProgressIndicator());
+              }
+              return CustomFirebasebutton(
+                icon: AppIcon.facebook,
+                text: AppString.logFace,
+                onpressed: () {
+                  context.read<UserCubit>().loginWithFacebook();
+                },
+              );
+            },
+          ),
 
-            //login with google
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  context.go('/home');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (context, state) {
-                if (state is UserLoadingGoogle) {
-                  return const CircularProgressIndicator();
-                }
-                return CustomFirebasebutton(
-                  icon: AppIcon.google,
-                  text: AppString.logGoogle,
-                  onpressed: () {
-                    context.read<UserCubit>().loginWithGoogle();
-                  },
-                );
-              },
-            ),
-            SizedBox(height: size.height * 0.02),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  AppString.noAcc,
-                  style: AppTextStyle.bold14(AppColor.colorbA1),
-                ),
-                TextButton(
-                  onPressed: () {
-                    context.go('/register');
-                  },
-                  child: Text(
-                    AppString.signup,
-                    style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(
-                      decoration: TextDecoration.underline,
-                    ),
+          //login with google
+          BlocConsumer<UserCubit, UserState>(
+            listener: (context, state) {
+              if (state is UserLoggedIn) {
+                context.go('/home');
+              } else if (state is UserError) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text(state.message),
+                ));
+              }
+            },
+            builder: (context, state) {
+              if (state is UserLoadingGoogle) {
+                return const CircularProgressIndicator();
+              }
+              return CustomFirebasebutton(
+                icon: AppIcon.google,
+                text: AppString.logGoogle,
+                onpressed: () {
+                  context.read<UserCubit>().loginWithGoogle();
+                },
+              );
+            },
+          ),
+          SizedBox(height: size.height * 0.02),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                AppString.noAcc,
+                style: AppTextStyle.bold14(AppColor.colorbA1),
+              ),
+              TextButton(
+                onPressed: () {
+                  context.go('/register');
+                },
+                child: Text(
+                  AppString.signup,
+                  style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(
+                    decoration: TextDecoration.underline,
                   ),
                 ),
-              ],
-            )
-          ],
-        ),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

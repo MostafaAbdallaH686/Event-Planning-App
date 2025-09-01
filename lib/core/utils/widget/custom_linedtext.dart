@@ -21,7 +21,7 @@ class LinedText extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Text(
             text,
-            style: AppTextStyle.reg11(AppColor.border),
+            style: AppTextStyle.medium11(AppColor.border),
           ),
         ),
         const Expanded(

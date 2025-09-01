@@ -2,8 +2,13 @@
 
 abstract class AppString {
   // start screen string
-  /// like this
-  //static const String kStartScreenTitle1 = "Task Management &";
+  static const String onboardingtitle1 = "Find your favourite\n events here";
+  static const String onboardingtitle2 = "Find your nearby\n event here";
+  static const String onboardingsubtitle1 =
+      "The customer is very important, the\n customer will be followed by the customer.";
+  static const String onboardingsubtitle2 =
+      "The customer is very important, the customer will be followed by the customer.";
+  static const String onboardingbtn = "Next";
 
   // Auth
 

@@ -1,3 +1,4 @@
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/function/app_route.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
@@ -11,6 +12,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 void main() async {
   //initialize firebase for project
   WidgetsFlutterBinding.ensureInitialized();
+  await CacheHelper().init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );

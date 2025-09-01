@@ -118,21 +118,28 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w500,
         color: color,
       );
+  static TextStyle medium18(Color color) =>
+      TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: color);
   static TextStyle medium16(Color color) => TextStyle(
         fontSize: 16,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w400,
         color: color,
       );
   static TextStyle medium15(Color color) => TextStyle(
         fontSize: 15,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w400,
         color: color,
       );
+  static TextStyle medium14(Color color) =>
+      TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color);
   static TextStyle medium12(Color color) => TextStyle(
         fontSize: 12,
-        fontWeight: FontWeight.normal,
+        fontWeight: FontWeight.w400,
         color: color,
       );
+  static TextStyle medium11(Color color) =>
+      TextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: color);
+
   static TextStyle light16(Color color) => TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w300,
@@ -163,12 +170,4 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w200,
         color: color,
       );
-  static TextStyle reg14(Color color) =>
-      TextStyle(fontSize: 14, fontWeight: FontWeight.w400, color: color);
-  static TextStyle reg18(Color color) =>
-      TextStyle(fontSize: 18, fontWeight: FontWeight.w400, color: color);
-  static TextStyle reg11(Color color) =>
-      TextStyle(fontSize: 11, fontWeight: FontWeight.w400, color: color);
-  static TextStyle reg16(Color color) =>
-      TextStyle(fontSize: 16, fontWeight: FontWeight.w400, color: color);
 }

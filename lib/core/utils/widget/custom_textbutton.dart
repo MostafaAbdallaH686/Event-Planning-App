@@ -27,7 +27,7 @@ class CustomTextbutton extends StatelessWidget {
             },
             child: Text(
               text,
-              style: AppTextStyle.reg18(AppColor.colorwEE),
+              style: AppTextStyle.medium18(AppColor.colorwEE),
             )),
       ),
     );
