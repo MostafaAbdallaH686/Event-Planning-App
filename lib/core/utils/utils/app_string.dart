@@ -17,7 +17,7 @@ abstract class AppString {
   static const String or = " Or ";
   static const String logFace = " Login with Facebook";
   static const String logGoogle = "Login with Google";
-  static const String noAcc = "Don't have an account ";
+  static const String noAcc = "Don't have an account?";
   static const String signup = "Signup";
 
   // Register

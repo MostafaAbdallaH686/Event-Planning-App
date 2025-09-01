@@ -189,7 +189,9 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
                 },
                 child: Text(
                   AppString.login,
-                  style: AppTextStyle.bold14(AppColor.colorbr80),
+                  style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
             ]),

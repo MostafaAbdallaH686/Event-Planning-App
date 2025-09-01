@@ -44,18 +44,28 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
         child: Column(
           children: [
             //picture
-            Image.asset(
-              AppImage.splash,
-              width: double.infinity,
-              height: size.height * 0.20,
-              fit: BoxFit.cover,
-            ),
+            SizedBox(height: size.height * 0.035),
+
+            Container(
+                width: double.infinity,
+                height: size.height * 0.20,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                  image: AssetImage(AppImage.splash),
+                  fit: BoxFit.cover,
+                ))),
+            // Image.asset(
+            //   AppImage.splash,
+            //   width: double.infinity,
+            //   height: size.height * 0.20,
+            //   fit: BoxFit.cover,
+            // ),
             Text(
               AppString.welcome,
               style: AppTextStyle.bold24(AppColor.black),
             ),
-            SizedBox(height: size.height * 0.02),
             Text(
+              textAlign: TextAlign.center,
               AppString.describtion,
               style: AppTextStyle.reg14(AppColor.colorbA1),
             ),
@@ -80,7 +90,6 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                 ),
               ),
             ),
-            SizedBox(height: size.height * 0.025),
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -97,7 +106,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                 SizedBox(width: size.height * 0.02),
               ],
             ),
-            SizedBox(height: size.height * 0.025),
+            //  SizedBox(height: size.height * 0.025),
             //login button
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
@@ -125,7 +134,7 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                     });
               },
             ),
-            SizedBox(width: size.height * 0.01),
+            // SizedBox(width: size.height * 0.04),
             LinedText(
               text: AppString.or,
             ),
@@ -192,7 +201,9 @@ class _LoginScreenBodyState extends State<LoginScreenBody> {
                   },
                   child: Text(
                     AppString.signup,
-                    style: AppTextStyle.bold14(AppColor.colorbr80),
+                    style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                 ),
               ],
