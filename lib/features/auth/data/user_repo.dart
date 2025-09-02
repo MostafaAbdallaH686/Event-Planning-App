@@ -101,8 +101,8 @@ class UserRepository {
   Future<void> resetPassword({required String email}) async {
     try {
       await _auth.sendPasswordResetEmail(email: email);
-    } catch (e) {
-      throw Exception('Password reset failed: ${e.toString()}');
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.message ?? "rest password failed");
     }
   }
 

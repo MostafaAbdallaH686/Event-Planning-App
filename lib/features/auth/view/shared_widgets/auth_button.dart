@@ -6,6 +6,7 @@ import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
@@ -23,7 +24,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<UserCubit, UserState>(
       builder: (context, state) {
-        if (state is UserLoadingUsername) {
+        if (state is UserLoadingUsername || state is UserSigningUp) {
           return const Center(child: CustomCircleProgressInicator());
         }
         return CustomTextbutton(
@@ -36,6 +37,12 @@ class LoginButton extends StatelessWidget {
         );
       },
       listener: (context, state) {
+        if (state is UserSignedUp) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Signed up successfully')),
+          );
+          context.push('/login');
+        }
         if (state is UserError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),

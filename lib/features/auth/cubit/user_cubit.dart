@@ -9,6 +9,7 @@ class UserCubit extends Cubit<UserState> {
   UserCubit(this._repository) : super(UserInitial());
   final TextEditingController confirmPassCtrl = TextEditingController();
   final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController forgetPemailCtrl = TextEditingController();
   final TextEditingController registerNameCtrl = TextEditingController();
   final TextEditingController registerPasswordCtrl = TextEditingController();
   final TextEditingController loginNameCtrl = TextEditingController();
@@ -28,6 +29,7 @@ class UserCubit extends Cubit<UserState> {
 
   @override
   Future<void> close() {
+    forgetPemailCtrl.dispose();
     registerNameCtrl.dispose();
     registerPasswordCtrl.dispose();
     loginNameCtrl.dispose();

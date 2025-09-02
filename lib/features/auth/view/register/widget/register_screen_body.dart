@@ -72,7 +72,7 @@ class RegisterScreenBody extends StatelessWidget {
                 cubit.signUpWithUsernameAndEmail(
                   username: cubit.registerNameCtrl.text,
                   email: cubit.emailCtrl.text,
-                  password: cubit.registerNameCtrl.text,
+                  password: cubit.registerPasswordCtrl.text,
                 );
               },
             ),

@@ -33,7 +33,7 @@ abstract class AppString {
   static const String confirmPass = "Confirm password ";
   // forget password
   static const String forgetDesc =
-      "Please enter your email address to\nrequest a password reset";
+      "Please enter your email address to request a password reset";
   static const String send = "Send";
   // Home Page
 
