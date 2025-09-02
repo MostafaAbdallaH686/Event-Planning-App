@@ -19,7 +19,7 @@ void main() async {
   );
   await GoogleSignIn.instance.initialize(
     serverClientId:
-        '229484552631-tuupqshucmh9spj48gr7qlj3u0rs9te2.apps.googleusercontent.com', // اختياري للخوادم
+        '229484552631-tuupqshucmh9spj48gr7qlj3u0rs9te2.apps.googleusercontent.com',
   );
   runApp(const MyApp());
 }

@@ -1,3 +1,5 @@
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -29,10 +31,19 @@ class UserRepository {
       final email = data['email'];
 
       // Login with email & password
-      await _auth.signInWithEmailAndPassword(
+      final userCred = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      //save token in cache
+      final token = await userCred.user!.getIdToken();
+
+      if (token != null) {
+        await CacheHelper().saveData(
+          key: SharedPrefereneceKey.accesstoken,
+          value: token,
+        );
+      }
 
       return UserModel.fromFirestore(data, uid);
     } on FirebaseAuthException catch (e) {
@@ -46,6 +57,15 @@ class UserRepository {
     );
 
     if (result.status == LoginStatus.success) {
+      //save token in cache
+      final accessToken = result.accessToken;
+      if (accessToken != null) {
+        await CacheHelper().saveData(
+          key: SharedPrefereneceKey.accesstoken,
+          value: accessToken.tokenString,
+        );
+      }
+
       final userData = await _facebook.getUserData(
         fields: "id,name,email,picture.width(200)",
       );
@@ -80,6 +100,16 @@ class UserRepository {
 
       final userCred = await _auth.signInWithCredential(credential);
       final user = userCred.user;
+
+      //save token in cache
+      final token = await user!.getIdToken();
+
+      if (token != null) {
+        await CacheHelper().saveData(
+          key: SharedPrefereneceKey.accesstoken,
+          value: token,
+        );
+      }
 
       if (user == null) return null;
       final data = {
@@ -116,6 +146,16 @@ class UserRepository {
         email: email,
         password: password,
       );
+
+      //save token in cache
+      final token = await userCred.user!.getIdToken();
+
+      if (token != null) {
+        await CacheHelper().saveData(
+          key: SharedPrefereneceKey.accesstoken,
+          value: token,
+        );
+      }
 
       final uid = userCred.user!.uid;
 
