@@ -11,7 +11,7 @@ class UserRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FacebookAuth _facebook = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-
+  CacheHelper cacheHelper = CacheHelper();
   Future<UserModel> loginWithUsername(
       {required String username, required String password}) async {
     try {
@@ -44,6 +44,7 @@ class UserRepository {
           value: token,
         );
       }
+      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
 
       return UserModel.fromFirestore(data, uid);
     } on FirebaseAuthException catch (e) {
@@ -65,6 +66,7 @@ class UserRepository {
           value: accessToken.tokenString,
         );
       }
+      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
 
       final userData = await _facebook.getUserData(
         fields: "id,name,email,picture.width(200)",
@@ -103,6 +105,7 @@ class UserRepository {
 
       //save token in cache
       final token = await user!.getIdToken();
+      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
 
       if (token != null) {
         await CacheHelper().saveData(
@@ -111,7 +114,6 @@ class UserRepository {
         );
       }
 
-      if (user == null) return null;
       final data = {
         'id': user.uid,
         'email': user.email,

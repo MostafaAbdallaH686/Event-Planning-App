@@ -1,12 +1,26 @@
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'user_state.dart';
 
 class UserCubit extends Cubit<UserState> {
   final UserRepository _repository;
-
   UserCubit(this._repository) : super(UserInitial());
+  final TextEditingController nameCtrl = TextEditingController();
+  final TextEditingController passwordCtrl = TextEditingController();
+  bool obscureText = true;
+  void toggleObscure() {
+    obscureText = !obscureText;
+    emit(UserObscureToggled(obscureText));
+  }
+
+  @override
+  Future<void> close() {
+    nameCtrl.dispose();
+    passwordCtrl.dispose();
+    return super.close();
+  }
 
   Future<void> loginWithUsername(
       {required String username, required String password}) async {

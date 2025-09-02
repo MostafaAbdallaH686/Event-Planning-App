@@ -102,7 +102,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
                 if (state is UserSignedUp) {
-                  context.go('/home');
+                  context.go('/login');
                 } else if (state is UserError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.message),
@@ -133,7 +133,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
                 if (state is UserLoggedIn) {
-                  context.go('/home');
+                  context.pushReplacement('/home');
                 } else if (state is UserError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.message),
@@ -157,7 +157,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
                 if (state is UserLoggedIn) {
-                  context.go('/home');
+                  context.pushReplacement('/home');
                 } else if (state is UserError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.message),
@@ -185,7 +185,7 @@ class _RegisterScreenBodyState extends State<RegisterScreenBody> {
               ),
               TextButton(
                 onPressed: () {
-                  context.go('/login');
+                  context.pushReplacement('/login');
                 },
                 child: Text(
                   AppString.login,

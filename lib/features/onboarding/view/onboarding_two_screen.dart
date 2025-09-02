@@ -1,5 +1,7 @@
 //Todo: Mostafa Do not Touch Please
 
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/onboarding/widget/custom_onboarding.dart';
@@ -11,6 +13,9 @@ class OnboardingSecondScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cacheHelper = CacheHelper();
+    cacheHelper.saveData(key: SharedPrefereneceKey.isFirstTime, value: false);
+
     return CustomOnboarding(
         imagePath: AppImage.onborading2,
         title: AppString.onboardingtitle2,

@@ -2,59 +2,67 @@ import 'package:equatable/equatable.dart';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 
 abstract class UserState extends Equatable {
+  const UserState();
+
   @override
   List<Object?> get props => [];
 }
 
+// Initial state
 class UserInitial extends UserState {}
 
-//used in sign in with username (loading)
+// Loading states
 class UserLoadingUsername extends UserState {}
 
-//used in sign in with facebook (loading)
 class UserLoadingFacebook extends UserState {}
 
-//used if the user logged in with username, facebook or google (success)
+class UserLoadingGoogle extends UserState {}
+
+class UserSigningUp extends UserState {}
+
+class UserResettingPassword extends UserState {}
+
+class UserLoggingOut extends UserState {}
+
+// Success states
 class UserLoggedIn extends UserState {
   final UserModel user;
-  UserLoggedIn(this.user);
+
+  const UserLoggedIn(this.user);
 
   @override
   List<Object?> get props => [user];
 }
 
-//used in logout (loading)
-class UserLoggingOut extends UserState {}
+class UserSignedUp extends UserState {
+  final UserModel user;
 
-//used in logout (success)
+  const UserSignedUp(this.user);
+
+  @override
+  List<Object?> get props => [user];
+}
+
+class UserEmailSent extends UserState {}
+
 class UserLoggedOut extends UserState {}
 
-//used in user error in all cases
+// UI toggle state
+class UserObscureToggled extends UserState {
+  final bool obscure;
+
+  const UserObscureToggled(this.obscure);
+
+  @override
+  List<Object?> get props => [obscure];
+}
+
+// Error state
 class UserError extends UserState {
   final String message;
-  UserError(this.message);
+
+  const UserError(this.message);
 
   @override
   List<Object?> get props => [message];
-}
-
-//used in reset password (loading)
-class UserResettingPassword extends UserState {}
-
-//used in reset password (just know if email sent) (success) => i can't know if the user reset password successfully or not
-class UserEmailSent extends UserState {}
-
-//used in login with google (loading)
-class UserLoadingGoogle extends UserState {}
-
-//used in sign up (loading)
-class UserSigningUp extends UserState {}
-
-//used in sign up (success)
-class UserSignedUp extends UserState {
-  final UserModel user;
-  UserSignedUp(this.user);
-
-  @override
-  List<Object?> get props => [user];
 }
