@@ -54,24 +54,41 @@ class UserRepository {
 
   Future<UserModel> loginWithFacebook() async {
     final LoginResult result = await _facebook.login(
-      permissions: ['public_profile'],
+      permissions: ["email", "public_profile"],
     );
 
     if (result.status == LoginStatus.success) {
-      //save token in cache
       final accessToken = result.accessToken;
+
       if (accessToken != null) {
+        // sign in with Firebase
+        final facebookAuthCredential =
+            FacebookAuthProvider.credential(accessToken.tokenString);
+
+        final userCredential = await FirebaseAuth.instance
+            .signInWithCredential(facebookAuthCredential);
+
+        // save token in cache
         await CacheHelper().saveData(
           key: SharedPrefereneceKey.accesstoken,
           value: accessToken.tokenString,
         );
-      }
-      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
 
-      final userData = await _facebook.getUserData(
-        fields: "id,name,email,picture.width(200)",
-      );
-      return UserModel.fromFacebook(userData);
+        // get user from Firebase
+        final user = userCredential.user;
+
+        if (user == null) {
+          throw Exception("Failed to get Firebase user");
+        }
+        final userData = await _facebook.getUserData(
+          fields: "id,name,email,picture.width(200)",
+        );
+        return UserModel.fromFacebook(userData);
+      } else {
+        throw Exception("Access token is null");
+      }
+    } else if (result.status == LoginStatus.cancelled) {
+      throw Exception('Facebook login cancelled by user');
     } else {
       throw Exception(result.message ?? 'Facebook login failed');
     }
