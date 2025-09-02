@@ -1,200 +1,95 @@
+//ToDo :: Mostafa :: Refactor and Clean Code Please
+
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/utils/app_validator.dart';
-import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
 import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
+import 'package:event_planning_app/features/auth/view/register/widget/confirm_password_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_text.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/social_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
-class RegisterScreenBody extends StatefulWidget {
+class RegisterScreenBody extends StatelessWidget {
   const RegisterScreenBody({super.key});
-
-  @override
-  State<RegisterScreenBody> createState() => _RegisterScreenBodyState();
-}
-
-class _RegisterScreenBodyState extends State<RegisterScreenBody> {
-  bool _obscure = true;
-  bool _obscureConfirmPass = true;
-  final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  final _confirmPassCtrl = TextEditingController();
-  final _emailCtrl = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _passwordCtrl.dispose();
-    _confirmPassCtrl.dispose();
-    _emailCtrl.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final formKey = GlobalKey<FormState>();
+    final cubit = BlocProvider.of<UserCubit>(context);
+
     return SingleChildScrollView(
       child: Form(
-        key: _formKey,
+        key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
-                SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 15),
                 Text(
                   AppString.signup,
                   style: AppTextStyle.bold24(AppColor.colorbA1),
                 ),
               ],
             ),
-            CustomTextform(
-                controller: _nameCtrl,
-                validator: (value) => AppValidator().nameValidator(value),
-                prefixicon: AppIcon.username,
-                prefixtext: AppString.fullName),
-            CustomTextform(
-                controller: _emailCtrl,
-                validator: (value) => AppValidator().emailValidator(value),
-                prefixicon: AppIcon.mail,
-                prefixtext: AppString.emailEx),
-            CustomTextform(
-              obscureText: _obscure,
-              controller: _passwordCtrl,
-              validator: (value) => AppValidator().passwordValidator(value),
-              prefixicon: AppIcon.password,
-              prefixtext: AppString.yourPass,
-              suffixicon: IconButton(
-                onPressed: () => setState(() => _obscure = !_obscure),
-                icon: Icon(
-                  _obscure ? Icons.visibility_off : Icons.visibility,
-                ),
-              ),
+
+            // Use public reusable text fields
+            NameTextField(
+              cubit: cubit,
+              hintText: AppString.fullName,
+              controller: cubit.registerNameCtrl,
             ),
-            CustomTextform(
-              obscureText: _obscureConfirmPass,
-              controller: _confirmPassCtrl,
-              validator: (value) => AppValidator()
-                  .confirmPasswordValidator(value, _passwordCtrl.text),
-              prefixicon: AppIcon.password,
-              prefixtext: AppString.confirmPass,
-              suffixicon: IconButton(
-                onPressed: () =>
-                    setState(() => _obscureConfirmPass = !_obscureConfirmPass),
-                icon: Icon(
-                  _obscureConfirmPass ? Icons.visibility_off : Icons.visibility,
-                ),
-              ),
+            const SizedBox(height: 5),
+            EmailTextField(
+              cubit: cubit,
+              hintText: AppString.emailEx,
+              controller: cubit.emailCtrl,
             ),
+            const SizedBox(height: 5),
+            PasswordTextField(
+                cubit: cubit, controller: cubit.registerPasswordCtrl),
+            const SizedBox(height: 5),
+            ConfirmPasswordTextField(
+              cubit: cubit,
+              hintText: AppString.confirmPass,
+            ),
+
             SizedBox(height: size.height * 0.03),
 
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserSignedUp) {
-                  context.go('/login');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (context, state) {
-                if (state is UserSigningUp) {
-                  return Center(child: CircularProgressIndicator());
-                }
-                return CustomTextbutton(
-                    text: AppString.signup,
-                    onpressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<UserCubit>().signUpWithUsernameAndEmail(
-                            username: _nameCtrl.text,
-                            email: _emailCtrl.text,
-                            password: _passwordCtrl.text);
-                      }
-                    });
-              },
-            ),
-            SizedBox(width: size.height * 0.01),
-            LinedText(
-              text: AppString.or,
-            ),
-            //login with facebook
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  context.pushReplacement('/home');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (context, state) {
-                if (state is UserLoadingFacebook) {
-                  return Center(child: const CircularProgressIndicator());
-                }
-                return CustomFirebasebutton(
-                  icon: AppIcon.facebook,
-                  text: AppString.logFace,
-                  onpressed: () {
-                    context.read<UserCubit>().loginWithFacebook();
-                  },
+            // Use LoginButton but customize for sign-up logic
+            LoginButton(
+              formKey: formKey,
+              buttonText: AppString.signup,
+              onLogin: () {
+                cubit.signUpWithUsernameAndEmail(
+                  username: cubit.registerNameCtrl.text,
+                  email: cubit.emailCtrl.text,
+                  password: cubit.registerNameCtrl.text,
                 );
               },
             ),
-            //login with google
-            BlocConsumer<UserCubit, UserState>(
-              listener: (context, state) {
-                if (state is UserLoggedIn) {
-                  context.pushReplacement('/home');
-                } else if (state is UserError) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
-                }
-              },
-              builder: (context, state) {
-                if (state is UserLoadingGoogle) {
-                  return const CircularProgressIndicator();
-                }
-                return CustomFirebasebutton(
-                  icon: AppIcon.google,
-                  text: AppString.logGoogle,
-                  onpressed: () {
-                    context.read<UserCubit>().loginWithGoogle();
-                  },
-                );
-              },
-            ),
+
+            SizedBox(height: size.height * 0.01),
+            const LinedText(text: AppString.or),
+
+            // Social login (isLogin = false for sign-up context)
+            SocialLoginButtons(isLogin: false),
             SizedBox(height: size.height * 0.02),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                AppString.haveAcc,
-                style: AppTextStyle.bold14(AppColor.colorbA1),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.pushReplacement('/login');
-                },
-                child: Text(
-                  AppString.login,
-                  style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-              ),
-            ]),
+
+            // Redirect to login
+            RedirectLink(
+              questionText: AppString.haveAcc,
+              actionText: AppString.login,
+              route: '/login',
+            ),
           ],
         ),
       ),

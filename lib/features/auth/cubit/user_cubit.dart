@@ -7,18 +7,33 @@ import 'user_state.dart';
 class UserCubit extends Cubit<UserState> {
   final UserRepository _repository;
   UserCubit(this._repository) : super(UserInitial());
-  final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController passwordCtrl = TextEditingController();
+  final TextEditingController confirmPassCtrl = TextEditingController();
+  final TextEditingController emailCtrl = TextEditingController();
+  final TextEditingController registerNameCtrl = TextEditingController();
+  final TextEditingController registerPasswordCtrl = TextEditingController();
+  final TextEditingController loginNameCtrl = TextEditingController();
+  final TextEditingController loginPasswordCtrl = TextEditingController();
   bool obscureText = true;
+  bool obscureConfirmText = true;
+
   void toggleObscure() {
     obscureText = !obscureText;
     emit(UserObscureToggled(obscureText));
   }
 
+  void toggleObscureConfirm() {
+    obscureConfirmText = !obscureConfirmText;
+    emit(UserConfirmObscureToggled(obscureConfirmText));
+  }
+
   @override
   Future<void> close() {
-    nameCtrl.dispose();
-    passwordCtrl.dispose();
+    registerNameCtrl.dispose();
+    registerPasswordCtrl.dispose();
+    loginNameCtrl.dispose();
+    confirmPassCtrl.dispose();
+    emailCtrl.dispose();
+    loginPasswordCtrl.dispose();
     return super.close();
   }
 
@@ -29,6 +44,8 @@ class UserCubit extends Cubit<UserState> {
       UserModel user = await _repository.loginWithUsername(
           username: username, password: password);
       emit(UserLoggedIn(user));
+      loginNameCtrl.clear();
+      loginPasswordCtrl.clear();
     } catch (e) {
       emit(UserError(e.toString()));
     }
@@ -48,6 +65,13 @@ class UserCubit extends Cubit<UserState> {
     emit(UserLoggingOut());
     await _repository.logout();
     emit(UserLoggedOut());
+    // Clear all relevant fields on logout
+    loginNameCtrl.clear();
+    loginPasswordCtrl.clear();
+    registerNameCtrl.clear();
+    emailCtrl.clear();
+    registerPasswordCtrl.clear();
+    confirmPassCtrl.clear();
   }
 
   Future<void> resetPassword({required String email}) async {
@@ -55,6 +79,7 @@ class UserCubit extends Cubit<UserState> {
     try {
       await _repository.resetPassword(email: email);
       emit(UserEmailSent());
+      emailCtrl.clear(); // assuming this was used
     } catch (e) {
       emit(UserError(e.toString()));
     }
@@ -84,6 +109,10 @@ class UserCubit extends Cubit<UserState> {
       UserModel user = await _repository.signUpWithUsernameAndEmail(
           username: username, email: email, password: password);
       emit(UserSignedUp(user));
+      registerNameCtrl.clear();
+      emailCtrl.clear();
+      registerPasswordCtrl.clear();
+      confirmPassCtrl.clear();
     } catch (e) {
       emit(UserError(e.toString()));
     }

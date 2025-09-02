@@ -57,6 +57,15 @@ class UserObscureToggled extends UserState {
   List<Object?> get props => [obscure];
 }
 
+class UserConfirmObscureToggled extends UserState {
+  final bool confirmobscure;
+
+  const UserConfirmObscureToggled(this.confirmobscure);
+
+  @override
+  List<Object?> get props => [confirmobscure];
+}
+
 // Error state
 class UserError extends UserState {
   final String message;
