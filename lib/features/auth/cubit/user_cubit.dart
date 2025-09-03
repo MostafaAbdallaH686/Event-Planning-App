@@ -1,5 +1,6 @@
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'user_state.dart';
@@ -45,11 +46,16 @@ class UserCubit extends Cubit<UserState> {
     try {
       UserModel user = await _repository.loginWithUsername(
           username: username, password: password);
+      if (!user.emailVerified) {
+        emit(UserErrorNotVerified(
+            "Email not verified, please verify your email"));
+        return;
+      }
       emit(UserLoggedIn(user));
       loginNameCtrl.clear();
       loginPasswordCtrl.clear();
     } catch (e) {
-      emit(UserError(e.toString()));
+      emit(UserErrorLoginUsername(e.toString()));
     }
   }
 
@@ -59,7 +65,7 @@ class UserCubit extends Cubit<UserState> {
       UserModel user = await _repository.loginWithFacebook();
       emit(UserLoggedIn(user));
     } catch (e) {
-      emit(UserError(e.toString()));
+      emit(UserErrorLoginFacebook(e.toString()));
     }
   }
 
@@ -80,10 +86,10 @@ class UserCubit extends Cubit<UserState> {
     emit(UserResettingPassword());
     try {
       await _repository.resetPassword(email: email);
-      emit(UserEmailSent());
+      emit(UserResetPasswordSent());
       emailCtrl.clear(); // assuming this was used
     } catch (e) {
-      emit(UserError(e.toString()));
+      emit(UserErrorResetPassword(e.toString()));
     }
   }
 
@@ -98,7 +104,7 @@ class UserCubit extends Cubit<UserState> {
         emit(UserLoggedOut());
       }
     } catch (e) {
-      emit(UserError(e.toString()));
+      emit(UserErrorLoginGoogle(e.toString()));
     }
   }
 
@@ -110,13 +116,33 @@ class UserCubit extends Cubit<UserState> {
     try {
       UserModel user = await _repository.signUpWithUsernameAndEmail(
           username: username, email: email, password: password);
+
+      final userInstance = FirebaseAuth.instance.currentUser;
+
+      if (userInstance != null && userInstance.emailVerified == false) {
+        emit(UserErrorNotVerified(
+            "Email not verified, please verify your email"));
+      }
+      emit(UserVerificationSent());
       emit(UserSignedUp(user));
       registerNameCtrl.clear();
       emailCtrl.clear();
       registerPasswordCtrl.clear();
       confirmPassCtrl.clear();
     } catch (e) {
-      emit(UserError(e.toString()));
+      emit(UserErrorSignUp(e.toString()));
+    }
+  }
+
+  Future<void> sendVerificationEmail() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null && !user.emailVerified) {
+      try {
+        await _repository.sendVerificationEmail(user);
+        emit(UserVerificationSent());
+      } catch (e) {
+        emit(UserErrorVerificationSent(e.toString()));
+      }
     }
   }
 }

@@ -23,7 +23,7 @@ class SocialLoginButtons extends StatelessWidget {
           listener: (context, state) {
             if (state is UserLoggedIn) {
               context.go('/home');
-            } else if (state is UserError) {
+            } else if (state is UserErrorLoginFacebook) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );
@@ -44,7 +44,7 @@ class SocialLoginButtons extends StatelessWidget {
           listener: (context, state) {
             if (state is UserLoggedIn) {
               context.go('/home');
-            } else if (state is UserError) {
+            } else if (state is UserErrorLoginGoogle) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );

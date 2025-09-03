@@ -43,7 +43,7 @@ class LoginButton extends StatelessWidget {
           );
           context.push('/login');
         }
-        if (state is UserError) {
+        if (state is UserErrorSignUp) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );

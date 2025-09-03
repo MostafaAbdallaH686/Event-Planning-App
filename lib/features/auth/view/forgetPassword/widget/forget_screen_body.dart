@@ -56,11 +56,11 @@ class ForgetScreenBody extends StatelessWidget {
             SizedBox(height: size.height * 0.05),
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
-                if (state is UserEmailSent) {
+                if (state is UserResetPasswordSent) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Email sent successfully'),
                   ));
-                } else if (state is UserError) {
+                } else if (state is UserErrorResetPassword) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text(state.message),
                   ));

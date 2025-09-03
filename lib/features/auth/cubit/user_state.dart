@@ -43,7 +43,9 @@ class UserSignedUp extends UserState {
   List<Object?> get props => [user];
 }
 
-class UserEmailSent extends UserState {}
+class UserVerificationSent extends UserState {}
+
+class UserResetPasswordSent extends UserState {}
 
 class UserLoggedOut extends UserState {}
 
@@ -67,11 +69,39 @@ class UserConfirmObscureToggled extends UserState {
 }
 
 // Error state
-class UserError extends UserState {
+sealed class UserError extends UserState {
   final String message;
 
   const UserError(this.message);
 
   @override
   List<Object?> get props => [message];
+}
+
+class UserErrorSignUp extends UserError {
+  const UserErrorSignUp(super.message);
+}
+
+class UserErrorLoginUsername extends UserError {
+  const UserErrorLoginUsername(super.message);
+}
+
+class UserErrorLoginGoogle extends UserError {
+  const UserErrorLoginGoogle(super.message);
+}
+
+class UserErrorLoginFacebook extends UserError {
+  const UserErrorLoginFacebook(super.message);
+}
+
+class UserErrorNotVerified extends UserError {
+  const UserErrorNotVerified(super.message);
+}
+
+class UserErrorVerificationSent extends UserError {
+  const UserErrorVerificationSent(super.message);
+}
+
+class UserErrorResetPassword extends UserError {
+  const UserErrorResetPassword(super.message);
 }

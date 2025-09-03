@@ -35,22 +35,41 @@ class UserRepository {
         email: email,
         password: password,
       );
+
+      await userCred.user!.reload();
+
+      if (!userCred.user!.emailVerified) {
+        throw Exception("Email not verified, please verify your email");
+      }
+
       //save token in cache
       final token = await userCred.user!.getIdToken();
 
       if (token != null) {
-        await CacheHelper().saveData(
+        await cacheHelper.saveData(
           key: SharedPrefereneceKey.accesstoken,
           value: token,
         );
       }
       cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
 
-      return UserModel.fromFirestore(data, uid);
+      return UserModel.fromFirestore(
+          data: data, uid: uid, emailVerified: userCred.user!.emailVerified);
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message ?? "Login failed");
     }
   }
+
+  Future<void> sendVerificationEmail(User user) async {
+    await user.sendEmailVerification();
+  }
+
+  // Future<void> verifyEmail(UserCredential userCred) async {
+  //   final user = userCred.user!;
+  //   await user.reload();
+  //   if (user.emailVerified) return;
+  //   await user.sendEmailVerification();
+  // }
 
   Future<UserModel> loginWithFacebook() async {
     final LoginResult result = await _facebook.login(
@@ -83,7 +102,7 @@ class UserRepository {
         final userData = await _facebook.getUserData(
           fields: "id,name,email,picture.width(200)",
         );
-        return UserModel.fromFacebook(userData);
+        return UserModel.fromFacebook(data: userData);
       } else {
         throw Exception("Access token is null");
       }
@@ -165,6 +184,8 @@ class UserRepository {
         email: email,
         password: password,
       );
+
+      await userCred.user!.sendEmailVerification();
 
       //save token in cache
       final token = await userCred.user!.getIdToken();

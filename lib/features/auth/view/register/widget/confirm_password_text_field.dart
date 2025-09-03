@@ -27,7 +27,7 @@ class ConfirmPasswordTextField extends StatelessWidget {
           obscureText: cubit.obscureConfirmText,
           controller: cubit.confirmPassCtrl,
           validator: (value) => AppValidator()
-              .confirmPasswordValidator(value, cubit.confirmPassCtrl.text),
+              .confirmPasswordValidator(value, cubit.registerPasswordCtrl.text),
           prefixicon: AppIcon.password,
           prefixtext: hintText,
           suffixicon: IconButton(
