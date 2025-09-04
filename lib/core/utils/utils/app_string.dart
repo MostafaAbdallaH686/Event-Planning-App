@@ -15,7 +15,7 @@ abstract class AppString {
   // login
   static const String welcome = "Welcome Back!";
   static const String describtion = "Use Credentials to access your account";
-  static const String enterName = " Enter Username ";
+  static const String enterName = " Enter Username or Email";
   static const String enterPass = " Enter Password";
   static const String forgetPass = "Forget Password ?";
   static const String login = "Login";
@@ -27,7 +27,7 @@ abstract class AppString {
 
   // Register
   static const String haveAcc = "Already have a account ?";
-  static const String fullName = "Full name";
+  static const String fullName = "Username";
   static const String emailEx = "abc@email.com";
   static const String yourPass = "Your password";
   static const String confirmPass = "Confirm password ";

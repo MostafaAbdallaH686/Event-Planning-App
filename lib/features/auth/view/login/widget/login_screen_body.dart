@@ -33,18 +33,16 @@ class LoginScreenBody extends StatelessWidget {
         if (state is UserLoggedIn) {
           context.go('/home');
         } else if (state is UserErrorNotVerified) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            AppDialog.showConfirmDialog(
-                context: context,
-                title: 'Email Not Verified',
-                message: 'Please Verify Your Email',
-                confirmText: 'Resend',
-                cancelText: 'I did it',
-                onConfirm: () {
-                  cubit.sendVerificationEmail();
-                  Navigator.of(context).pop();
-                });
-          });
+          AppDialog.showConfirmDialog(
+              context: context,
+              title: 'Email Not Verified',
+              message: 'Please Verify Your Email',
+              confirmText: 'Resend',
+              cancelText: 'I did it',
+              onConfirm: () {
+                cubit.sendVerificationEmail();
+                Navigator.of(context).pop();
+              });
         } else if (state is UserErrorLoginFacebook ||
             state is UserErrorLoginGoogle ||
             state is UserErrorLoginUsername) {

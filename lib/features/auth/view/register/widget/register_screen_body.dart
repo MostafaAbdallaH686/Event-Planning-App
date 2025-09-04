@@ -1,7 +1,6 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/view/register/widget/confirm_password_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
@@ -10,7 +9,6 @@ import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_
 import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_text.dart';
-import 'package:event_planning_app/features/auth/view/shared_widgets/social_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

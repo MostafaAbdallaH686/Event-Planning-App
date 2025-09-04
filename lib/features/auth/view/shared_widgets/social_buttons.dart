@@ -1,7 +1,6 @@
 //ToDO ::Mostafa::Clean Code Please
 
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
-import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';

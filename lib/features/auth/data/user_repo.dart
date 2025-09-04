@@ -1,5 +1,6 @@
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
+import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -25,8 +26,8 @@ class UserRepository {
         email = usernameOrEmail;
 
         final query = await _firestore
-            .collection('users')
-            .where('email', isEqualTo: email)
+            .collection(ApiKeypoint.fireUsersCollection)
+            .where(ApiKeypoint.fireEmail, isEqualTo: email)
             .limit(1)
             .get();
         if (query.docs.isEmpty) {
@@ -37,8 +38,8 @@ class UserRepository {
       } else {
         // Get user email from Firestore
         final query = await _firestore
-            .collection('users')
-            .where('username', isEqualTo: usernameOrEmail)
+            .collection(ApiKeypoint.fireUsersCollection)
+            .where(ApiKeypoint.fireUsername, isEqualTo: usernameOrEmail)
             .limit(1)
             .get();
 
@@ -48,7 +49,7 @@ class UserRepository {
 
         userData = query.docs.first.data();
         uid = query.docs.first.id;
-        email = userData['email'];
+        email = userData[ApiKeypoint.fireEmail];
       }
 
       // Login with email & password
@@ -56,6 +57,11 @@ class UserRepository {
         email: email,
         password: password,
       );
+
+      final firebaseUser = userCred.user;
+      if (firebaseUser == null) {
+        throw Exception("Login failed, no user found");
+      }
 
       await userCred.user!.reload();
 
@@ -87,7 +93,7 @@ class UserRepository {
 
   Future<UserModel> loginWithFacebook() async {
     final LoginResult result = await _facebook.login(
-      permissions: ["email", "public_profile"],
+      permissions: [ApiKeypoint.fireEmail, ApiKeypoint.firePublicProfile],
     );
 
     if (result.status == LoginStatus.success) {
@@ -114,8 +120,22 @@ class UserRepository {
           throw Exception("Failed to get Firebase user");
         }
         final userData = await _facebook.getUserData(
-          fields: "id,name,email,picture.width(200)",
+          fields:
+              "${ApiKeypoint.fireId},${ApiKeypoint.fireName},${ApiKeypoint.fireEmail},${ApiKeypoint.firePictureFacebook}",
         );
+
+        await _firestore
+            .collection(ApiKeypoint.fireUsersCollection)
+            .doc(user.uid)
+            .set({
+          ApiKeypoint.fireId: user.uid,
+          ApiKeypoint.fireEmail: user.email,
+          ApiKeypoint.fireName:
+              user.displayName ?? userData[ApiKeypoint.fireName],
+          ApiKeypoint.firePhotoUrl:
+              user.photoURL ?? userData["picture"]["data"]["url"],
+        }, SetOptions(merge: true));
+
         return UserModel.fromFacebook(data: userData);
       } else {
         throw Exception("Access token is null");
@@ -167,11 +187,16 @@ class UserRepository {
       }
 
       final data = {
-        'id': user.uid,
-        'email': user.email,
-        'name': user.displayName,
-        'photoUrl': user.photoURL,
+        ApiKeypoint.fireId: user.uid,
+        ApiKeypoint.fireEmail: user.email,
+        ApiKeypoint.fireName: user.displayName,
+        ApiKeypoint.firePhotoUrl: user.photoURL,
       };
+
+      await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .doc(user.uid)
+          .set(data, SetOptions(merge: true));
 
       return UserModel.fromGoogle(data);
     } catch (e) {
@@ -186,8 +211,8 @@ class UserRepository {
     try {
       // Check if username exists
       final query = await _firestore
-          .collection('users')
-          .where('username', isEqualTo: username)
+          .collection(ApiKeypoint.fireUsersCollection)
+          .where(ApiKeypoint.fireUsername, isEqualTo: username)
           .limit(1)
           .get();
 
@@ -222,10 +247,13 @@ class UserRepository {
         username: username,
       );
       //set user data in firebase
-      await _firestore.collection('users').doc(uid).set({
-        'email': email,
-        'username': username,
-        'profilePicture': null,
+      await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .doc(uid)
+          .set({
+        ApiKeypoint.fireEmail: email,
+        ApiKeypoint.fireUsername: username,
+        ApiKeypoint.firePublicProfile: null,
       });
 
       return user;
