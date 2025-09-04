@@ -20,7 +20,7 @@ class OnboardingSecondScreen extends StatelessWidget {
         imagePath: AppImage.onborading2,
         title: AppString.onboardingtitle2,
         onPressed: () {
-          context.pushReplacement('/login');
+          context.pushReplacement('/register');
         });
   }
 }

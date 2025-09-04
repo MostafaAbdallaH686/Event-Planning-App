@@ -20,4 +20,7 @@ abstract class AppColor {
   static Color colorbrCC = Color(0xffCCCCCC);
   static Color colorbr9E = Color(0xff9E9E9E);
   static Color colorbr9B = Color(0xff9B9B9B);
+  static Color sharedbutton = Color(0xff0055FF);
+  static Color facebookbutton = Color(0xff4267B2);
+  static Color googlebutton = Color(0xffDB4437);
 }

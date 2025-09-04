@@ -1,6 +1,8 @@
 //ToDO ::Mostafa::Clean Code Please
 
+import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
@@ -33,7 +35,8 @@ class SocialLoginButtons extends StatelessWidget {
               return const Center(child: CustomCircleProgressInicator());
             }
             return CustomFirebasebutton(
-              icon: AppIcon.facebook,
+              color: AppColor.facebookbutton,
+              icon: AppImage.facebook,
               text: AppString.logFace,
               onpressed: () => context.read<UserCubit>().loginWithFacebook(),
             );
@@ -52,7 +55,8 @@ class SocialLoginButtons extends StatelessWidget {
               return const Center(child: CustomCircleProgressInicator());
             }
             return CustomFirebasebutton(
-              icon: AppIcon.google,
+              color: AppColor.googlebutton,
+              icon: AppImage.google,
               text: AppString.logGoogle,
               onpressed: () => context.read<UserCubit>().loginWithGoogle(),
             );

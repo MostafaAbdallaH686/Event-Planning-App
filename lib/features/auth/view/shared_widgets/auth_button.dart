@@ -13,12 +13,14 @@ class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final String buttonText;
   final Function() onLogin;
+  final bool isaddIcon;
 
   const LoginButton({
     super.key,
     required this.formKey,
     required this.buttonText,
     required this.onLogin,
+    this.isaddIcon = false,
   });
 
   @override
@@ -29,6 +31,7 @@ class LoginButton extends StatelessWidget {
           return const Center(child: CustomCircleProgressInicator());
         }
         return CustomTextbutton(
+          isIconAdded: isaddIcon,
           text: buttonText,
           onpressed: () {
             if (formKey.currentState!.validate()) {

@@ -1,12 +1,11 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
-import 'package:event_planning_app/core/utils/theme/app_colors.dart';
-import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/view/register/widget/confirm_password_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_image.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
@@ -31,15 +30,7 @@ class RegisterScreenBody extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                const SizedBox(width: 15),
-                Text(
-                  AppString.signup,
-                  style: AppTextStyle.bold24(AppColor.colorbA1),
-                ),
-              ],
-            ),
+            AuthImage(title: AppString.signup),
 
             // Use public reusable text fields
             NameTextField(
@@ -76,13 +67,6 @@ class RegisterScreenBody extends StatelessWidget {
                 );
               },
             ),
-
-            SizedBox(height: size.height * 0.01),
-            const LinedText(text: AppString.or),
-
-            // Social login (isLogin = false for sign-up context)
-            SocialLoginButtons(isLogin: false),
-            SizedBox(height: size.height * 0.02),
 
             // Redirect to login
             RedirectLink(

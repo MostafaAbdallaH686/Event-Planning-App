@@ -20,8 +20,8 @@ abstract class AppString {
   static const String forgetPass = "Forget Password ?";
   static const String login = "Login";
   static const String or = " Or ";
-  static const String logFace = " Login with Facebook";
-  static const String logGoogle = "Login with Google";
+  static const String logFace = " Connect with Facebook";
+  static const String logGoogle = "Connect with Google";
   static const String noAcc = "Don't have an account?";
   static const String signup = "Signup";
 

@@ -3,12 +3,12 @@
 import 'package:event_planning_app/core/utils/function/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_image.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_text.dart';
@@ -59,27 +59,28 @@ class LoginScreenBody extends StatelessWidget {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             children: [
-              SizedBox(height: size.height * 0.038),
-              Container(
-                width: double.infinity,
-                height: size.height * 0.20,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppImage.splash),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                AppString.welcome,
-                style: AppTextStyle.bold24(AppColor.black),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                AppString.describtion,
-                style: AppTextStyle.medium14(AppColor.colorbA1),
-              ),
+              AuthImage(title: AppString.login),
+              // SizedBox(height: size.height * 0.038),
+              // Container(
+              //   width: double.infinity,
+              //   height: size.height * 0.30,
+              //   decoration: BoxDecoration(
+              //     image: DecorationImage(
+              //       image: AssetImage(AppImage.auth),
+              //       fit: BoxFit.cover,
+              //     ),
+              //   ),
+              // ),
+              // Text(
+              //   textAlign: TextAlign.left,
+              //   AppString.login,
+              //   style: AppTextStyle.bold24(AppColor.black),
+              // ),
+              // Text(
+              //   textAlign: TextAlign.center,
+              //   AppString.describtion,
+              //   style: AppTextStyle.medium14(AppColor.colorbA1),
+              // ),
               // Name Field
               NameTextField(
                 cubit: cubit,
@@ -107,6 +108,7 @@ class LoginScreenBody extends StatelessWidget {
               ),
               // Login Button
               LoginButton(
+                isaddIcon: true,
                 formKey: formKey,
                 buttonText: AppString.login,
                 onLogin: () {

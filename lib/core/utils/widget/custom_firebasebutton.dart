@@ -8,10 +8,12 @@ class CustomFirebasebutton extends StatelessWidget {
       {super.key,
       required this.icon,
       required this.text,
-      required this.onpressed});
+      required this.onpressed,
+      required this.color});
   final String icon;
   final String text;
   final VoidCallback? onpressed;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -22,15 +24,19 @@ class CustomFirebasebutton extends StatelessWidget {
         width: size.width * 0.9571,
         height: size.height * 0.07,
         decoration: BoxDecoration(
+          color: color,
           border: Border.all(color: AppColor.border),
           borderRadius: BorderRadius.circular(10),
         ),
         child: TextButton(
             onPressed: onpressed,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SvgPicture.asset(icon),
+                Image.asset(
+                  icon,
+                  fit: BoxFit.contain,
+                ),
                 const SizedBox(width: 10),
                 Text(
                   text,
