@@ -3,7 +3,9 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
+import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_field.dart';
@@ -57,18 +59,14 @@ class ForgetScreenBody extends StatelessWidget {
             BlocConsumer<UserCubit, UserState>(
               listener: (context, state) {
                 if (state is UserResetPasswordSent) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Email sent successfully'),
-                  ));
+                  AppToast.show(message: 'Email sent successfully');
                 } else if (state is UserErrorResetPassword) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text(state.message),
-                  ));
+                  AppToast.show(message: state.message);
                 }
               },
               builder: (context, state) {
                 if (state is UserResettingPassword) {
-                  return Center(child: const CircularProgressIndicator());
+                  return Center(child: CustomCircleProgressInicator());
                 }
                 return CustomTextbutton(
                     text: AppString.send,

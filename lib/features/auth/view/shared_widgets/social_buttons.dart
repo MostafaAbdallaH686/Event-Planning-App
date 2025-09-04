@@ -4,6 +4,7 @@ import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -24,9 +25,7 @@ class SocialLoginButtons extends StatelessWidget {
             if (state is UserLoggedIn) {
               context.go('/home');
             } else if (state is UserErrorLoginFacebook) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              AppToast.show(message: state.message);
             }
           },
           builder: (context, state) {
@@ -45,9 +44,7 @@ class SocialLoginButtons extends StatelessWidget {
             if (state is UserLoggedIn) {
               context.go('/home');
             } else if (state is UserErrorLoginGoogle) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              AppToast.show(message: state.message);
             }
           },
           builder: (context, state) {

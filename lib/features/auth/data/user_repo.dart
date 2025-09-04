@@ -12,23 +12,44 @@ class UserRepository {
   final FacebookAuth _facebook = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
   CacheHelper cacheHelper = CacheHelper();
-  Future<UserModel> loginWithUsername(
-      {required String username, required String password}) async {
+  Future<UserModel> loginWithUsernameOrEmail(
+      {required String usernameOrEmail, required String password}) async {
     try {
-      // Get user email from Firestore
-      final query = await _firestore
-          .collection('users')
-          .where('username', isEqualTo: username)
-          .limit(1)
-          .get();
+      String email;
+      Map<String, dynamic> userData;
+      String uid;
+      final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
+      final isEmail = emailRegex.hasMatch(usernameOrEmail);
 
-      if (query.docs.isEmpty) {
-        throw Exception("Username not found");
+      if (isEmail) {
+        email = usernameOrEmail;
+
+        final query = await _firestore
+            .collection('users')
+            .where('email', isEqualTo: email)
+            .limit(1)
+            .get();
+        if (query.docs.isEmpty) {
+          throw Exception("User data not found");
+        }
+        userData = query.docs.first.data();
+        uid = query.docs.first.id;
+      } else {
+        // Get user email from Firestore
+        final query = await _firestore
+            .collection('users')
+            .where('username', isEqualTo: usernameOrEmail)
+            .limit(1)
+            .get();
+
+        if (query.docs.isEmpty) {
+          throw Exception("Username not found");
+        }
+
+        userData = query.docs.first.data();
+        uid = query.docs.first.id;
+        email = userData['email'];
       }
-
-      final data = query.docs.first.data();
-      final uid = query.docs.first.id;
-      final email = data['email'];
 
       // Login with email & password
       final userCred = await _auth.signInWithEmailAndPassword(
@@ -37,10 +58,6 @@ class UserRepository {
       );
 
       await userCred.user!.reload();
-
-      if (!userCred.user!.emailVerified) {
-        throw Exception("Email not verified, please verify your email");
-      }
 
       //save token in cache
       final token = await userCred.user!.getIdToken();
@@ -51,10 +68,14 @@ class UserRepository {
           value: token,
         );
       }
-      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
+      if (userCred.user!.emailVerified) {
+        cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
+      }
 
       return UserModel.fromFirestore(
-          data: data, uid: uid, emailVerified: userCred.user!.emailVerified);
+          data: userData,
+          uid: uid,
+          emailVerified: userCred.user!.emailVerified);
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message ?? "Login failed");
     }
@@ -63,13 +84,6 @@ class UserRepository {
   Future<void> sendVerificationEmail(User user) async {
     await user.sendEmailVerification();
   }
-
-  // Future<void> verifyEmail(UserCredential userCred) async {
-  //   final user = userCred.user!;
-  //   await user.reload();
-  //   if (user.emailVerified) return;
-  //   await user.sendEmailVerification();
-  // }
 
   Future<UserModel> loginWithFacebook() async {
     final LoginResult result = await _facebook.login(
@@ -141,7 +155,9 @@ class UserRepository {
 
       //save token in cache
       final token = await user!.getIdToken();
-      cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
+      if (userCred.user!.emailVerified) {
+        cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
+      }
 
       if (token != null) {
         await CacheHelper().saveData(

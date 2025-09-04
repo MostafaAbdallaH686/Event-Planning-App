@@ -1,9 +1,11 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
+import 'package:event_planning_app/core/utils/function/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
@@ -30,10 +32,23 @@ class LoginScreenBody extends StatelessWidget {
       listener: (context, state) {
         if (state is UserLoggedIn) {
           context.go('/home');
-        } else if (state is UserError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+        } else if (state is UserErrorNotVerified) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            AppDialog.showConfirmDialog(
+                context: context,
+                title: 'Email Not Verified',
+                message: 'Please Verify Your Email',
+                confirmText: 'Resend',
+                cancelText: 'I did it',
+                onConfirm: () {
+                  cubit.sendVerificationEmail();
+                  Navigator.of(context).pop();
+                });
+          });
+        } else if (state is UserErrorLoginFacebook ||
+            state is UserErrorLoginGoogle ||
+            state is UserErrorLoginUsername) {
+          AppToast.show(message: (state as UserError).message);
         }
       },
       builder: (context, state) {

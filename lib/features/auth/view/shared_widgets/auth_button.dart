@@ -2,6 +2,7 @@
 
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +32,7 @@ class LoginButton extends StatelessWidget {
           text: buttonText,
           onpressed: () {
             if (formKey.currentState!.validate()) {
+              FocusScope.of(context).unfocus(); // Hide the keyboard
               onLogin();
             }
           },
@@ -38,15 +40,11 @@ class LoginButton extends StatelessWidget {
       },
       listener: (context, state) {
         if (state is UserSignedUp) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Signed up successfully')),
-          );
+          AppToast.show(message: 'Please Confirm Your Email');
           context.push('/login');
         }
         if (state is UserErrorSignUp) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          AppToast.show(message: state.message);
         }
       },
     );
