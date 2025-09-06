@@ -12,76 +12,29 @@ class UserRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FacebookAuth _facebook = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  CacheHelper cacheHelper = CacheHelper();
-  Future<UserModel> loginWithUsernameOrEmail(
-      {required String usernameOrEmail, required String password}) async {
+  final CacheHelper _cacheHelper = CacheHelper();
+
+  Future<UserModel> loginWithUsernameOrEmail({
+    required String usernameOrEmail,
+    required String password,
+  }) async {
     try {
-      String email;
-      Map<String, dynamic> userData;
-      String uid;
-      final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$");
-      final isEmail = emailRegex.hasMatch(usernameOrEmail);
-
-      if (isEmail) {
-        email = usernameOrEmail;
-
-        final query = await _firestore
-            .collection(ApiKeypoint.fireUsersCollection)
-            .where(ApiKeypoint.fireEmail, isEqualTo: email)
-            .limit(1)
-            .get();
-        if (query.docs.isEmpty) {
-          throw Exception("User data not found");
-        }
-        userData = query.docs.first.data();
-        uid = query.docs.first.id;
-      } else {
-        // Get user email from Firestore
-        final query = await _firestore
-            .collection(ApiKeypoint.fireUsersCollection)
-            .where(ApiKeypoint.fireUsername, isEqualTo: usernameOrEmail)
-            .limit(1)
-            .get();
-
-        if (query.docs.isEmpty) {
-          throw Exception("Username not found");
-        }
-
-        userData = query.docs.first.data();
-        uid = query.docs.first.id;
-        email = userData[ApiKeypoint.fireEmail];
-      }
-
-      // Login with email & password
+      final email = await _getEmailFromInput(usernameOrEmail);
       final userCred = await _auth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
+      final user = userCred.user ?? (throw Exception("Login failed"));
+      final token = await user.getIdToken();
 
-      final firebaseUser = userCred.user;
-      if (firebaseUser == null) {
-        throw Exception("Login failed, no user found");
-      }
+      await _saveAuthData(token, user.emailVerified);
 
-      await userCred.user!.reload();
-
-      //save token in cache
-      final token = await userCred.user!.getIdToken();
-
-      if (token != null) {
-        await cacheHelper.saveData(
-          key: SharedPrefereneceKey.accesstoken,
-          value: token,
-        );
-      }
-      if (userCred.user!.emailVerified) {
-        cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
-      }
-
+      final userData = await _getUserData(user.uid);
       return UserModel.fromFirestore(
-          data: userData,
-          uid: uid,
-          emailVerified: userCred.user!.emailVerified);
+        data: userData,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+      );
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message ?? "Login failed");
     }
@@ -96,55 +49,14 @@ class UserRepository {
       permissions: [ApiKeypoint.fireEmail, ApiKeypoint.firePublicProfile],
     );
 
-    if (result.status == LoginStatus.success) {
-      final accessToken = result.accessToken;
-
-      if (accessToken != null) {
-        // sign in with Firebase
-        final facebookAuthCredential =
-            FacebookAuthProvider.credential(accessToken.tokenString);
-
-        final userCredential = await FirebaseAuth.instance
-            .signInWithCredential(facebookAuthCredential);
-
-        // save token in cache
-        await CacheHelper().saveData(
-          key: SharedPrefereneceKey.accesstoken,
-          value: accessToken.tokenString,
-        );
-
-        // get user from Firebase
-        final user = userCredential.user;
-
-        if (user == null) {
-          throw Exception("Failed to get Firebase user");
-        }
-        final userData = await _facebook.getUserData(
-          fields:
-              "${ApiKeypoint.fireId},${ApiKeypoint.fireName},${ApiKeypoint.fireEmail},${ApiKeypoint.firePictureFacebook}",
-        );
-
-        await _firestore
-            .collection(ApiKeypoint.fireUsersCollection)
-            .doc(user.uid)
-            .set({
-          ApiKeypoint.fireId: user.uid,
-          ApiKeypoint.fireEmail: user.email,
-          ApiKeypoint.fireName:
-              user.displayName ?? userData[ApiKeypoint.fireName],
-          ApiKeypoint.firePhotoUrl:
-              user.photoURL ?? userData["picture"]["data"]["url"],
-        }, SetOptions(merge: true));
-
-        return UserModel.fromFacebook(data: userData);
-      } else {
-        throw Exception("Access token is null");
-      }
-    } else if (result.status == LoginStatus.cancelled) {
-      throw Exception('Facebook login cancelled by user');
-    } else {
-      throw Exception(result.message ?? 'Facebook login failed');
+    if (result.status != LoginStatus.success) {
+      throw Exception('Facebook login failed: ${result.message}');
     }
+
+    final cred =
+        FacebookAuthProvider.credential(result.accessToken!.tokenString);
+
+    return _signInWithCredential(cred, provider: "facebook");
   }
 
   Future<void> logout() async {
@@ -166,39 +78,11 @@ class UserRepository {
 
       final googleAuth = account.authentication;
 
-      final credential = GoogleAuthProvider.credential(
+      final cred = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      final userCred = await _auth.signInWithCredential(credential);
-      final user = userCred.user;
-
-      //save token in cache
-      final token = await user!.getIdToken();
-      if (userCred.user!.emailVerified) {
-        cacheHelper.saveData(key: SharedPrefereneceKey.isLogin, value: true);
-      }
-
-      if (token != null) {
-        await CacheHelper().saveData(
-          key: SharedPrefereneceKey.accesstoken,
-          value: token,
-        );
-      }
-
-      final data = {
-        ApiKeypoint.fireId: user.uid,
-        ApiKeypoint.fireEmail: user.email,
-        ApiKeypoint.fireName: user.displayName,
-        ApiKeypoint.firePhotoUrl: user.photoURL,
-      };
-
-      await _firestore
-          .collection(ApiKeypoint.fireUsersCollection)
-          .doc(user.uid)
-          .set(data, SetOptions(merge: true));
-
-      return UserModel.fromGoogle(data);
+      return _signInWithCredential(cred, provider: "google");
     } catch (e) {
       throw Exception('Google sign-in failed: $e ');
     }
@@ -209,7 +93,6 @@ class UserRepository {
       required String email,
       required String password}) async {
     try {
-      // Check if username exists
       final query = await _firestore
           .collection(ApiKeypoint.fireUsersCollection)
           .where(ApiKeypoint.fireUsername, isEqualTo: username)
@@ -220,45 +103,95 @@ class UserRepository {
         throw Exception("Username already exists");
       }
 
-      // Create user in Firebase Auth
       UserCredential userCred = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
 
-      await userCred.user!.sendEmailVerification();
+      final user = userCred.user ?? (throw Exception("Sign up failed"));
 
-      //save token in cache
-      final token = await userCred.user!.getIdToken();
+      await user.sendEmailVerification();
 
-      if (token != null) {
-        await CacheHelper().saveData(
-          key: SharedPrefereneceKey.accesstoken,
-          value: token,
-        );
-      }
+      final token = await user.getIdToken();
+      await _saveAuthData(token, user.emailVerified);
 
-      final uid = userCred.user!.uid;
+      final data = {
+        ApiKeypoint.fireId: user.uid,
+        ApiKeypoint.fireEmail: email,
+        ApiKeypoint.fireUsername: username,
+      };
+      await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .doc(user.uid)
+          .set(data, SetOptions(merge: true));
 
-      // Save user data in Firestore
-      final user = UserModel(
-        uid: uid,
+      return UserModel(
+        uid: user.uid,
         email: email,
         username: username,
       );
-      //set user data in firebase
-      await _firestore
-          .collection(ApiKeypoint.fireUsersCollection)
-          .doc(uid)
-          .set({
-        ApiKeypoint.fireEmail: email,
-        ApiKeypoint.fireUsername: username,
-        ApiKeypoint.firePublicProfile: null,
-      });
-
-      return user;
     } on FirebaseAuthException catch (e) {
       throw Exception(e.message ?? "Sign up failed");
     }
+  }
+
+  Future<String> _getEmailFromInput(String input) async {
+    final isEmail = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(input);
+    if (isEmail) return input;
+
+    final query = await _firestore
+        .collection(ApiKeypoint.fireUsersCollection)
+        .where(ApiKeypoint.fireUsername, isEqualTo: input)
+        .limit(1)
+        .get();
+
+    if (query.docs.isEmpty) throw Exception("Username not found");
+    return query.docs.first.data()[ApiKeypoint.fireEmail];
+  }
+
+  Future<void> _saveAuthData(String? token, bool verified) async {
+    if (token != null) {
+      await _cacheHelper.saveData(
+        key: SharedPrefereneceKey.accesstoken,
+        value: token,
+      );
+    }
+    if (verified) {
+      await _cacheHelper.saveData(
+        key: SharedPrefereneceKey.isLogin,
+        value: true,
+      );
+    }
+  }
+
+  Future<Map<String, dynamic>> _getUserData(String uid) async {
+    final doc = await _firestore
+        .collection(ApiKeypoint.fireUsersCollection)
+        .doc(uid)
+        .get();
+    return doc.data() ?? {};
+  }
+
+  Future<UserModel> _signInWithCredential(AuthCredential cred,
+      {required String provider}) async {
+    final userCred = await _auth.signInWithCredential(cred);
+    final user = userCred.user ?? (throw Exception("No user found"));
+    final token = await user.getIdToken();
+    await _saveAuthData(token, user.emailVerified);
+
+    final data = {
+      ApiKeypoint.fireId: user.uid,
+      ApiKeypoint.fireEmail: user.email,
+      ApiKeypoint.fireName: user.displayName,
+      ApiKeypoint.firePhotoUrl: user.photoURL,
+    };
+    await _firestore
+        .collection(ApiKeypoint.fireUsersCollection)
+        .doc(user.uid)
+        .set(data, SetOptions(merge: true));
+
+    return provider == "google"
+        ? UserModel.fromGoogle(data: data)
+        : UserModel.fromFacebook(data: data);
   }
 }
