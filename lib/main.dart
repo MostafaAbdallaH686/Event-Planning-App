@@ -4,6 +4,7 @@ import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
+import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,8 +29,15 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => UserCubit(UserRepository()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => UserCubit(UserRepository()),
+        ),
+        BlocProvider(
+          create: (context) => OnBoardingCubit(),
+        ),
+      ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Event Planning App',

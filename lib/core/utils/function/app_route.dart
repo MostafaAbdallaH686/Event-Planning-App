@@ -6,7 +6,6 @@ import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
-import 'package:event_planning_app/features/onboarding/view/onboarding_two_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
 
@@ -21,9 +20,6 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen()),
-    GoRoute(
-        path: '/onboarding2',
-        builder: (context, state) => const OnboardingSecondScreen()),
     GoRoute(
         path: '/forgetpassword',
         builder: (context, state) => const ForgetPasswordScreen()),

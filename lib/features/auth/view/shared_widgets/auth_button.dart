@@ -1,5 +1,6 @@
 //ToDO ::Mostafa::Clean Code Please
 
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
@@ -44,7 +45,7 @@ class LoginButton extends StatelessWidget {
       listener: (context, state) {
         if (state is UserSignedUp) {
           AppToast.show(message: 'Please Confirm Your Email');
-          context.push('/login');
+          context.push(AppRoutes.login);
         }
         if (state is UserErrorSignUp) {
           AppToast.show(message: state.message);

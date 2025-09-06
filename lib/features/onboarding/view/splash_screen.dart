@@ -3,6 +3,7 @@
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -36,15 +37,15 @@ class _SplashScreenState extends State<SplashScreen> {
       await cacheHelper.saveData(
           key: SharedPrefereneceKey.isFirstTime, value: false);
       if (!mounted) return;
-      context.go('/onboarding');
+      context.pushReplacement(AppRoutes.onBoarding);
     } else if (isLoggedIn) {
       if (!mounted) return;
 
-      context.go('/home');
+      context.pushReplacement(AppRoutes.home);
     } else {
       if (!mounted) return;
 
-      context.go('/login');
+      context.pushReplacement(AppRoutes.login);
     }
   }
 

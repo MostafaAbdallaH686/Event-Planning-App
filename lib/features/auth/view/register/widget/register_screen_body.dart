@@ -1,5 +1,6 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/view/register/widget/confirm_password_text_field.dart';
@@ -70,7 +71,7 @@ class RegisterScreenBody extends StatelessWidget {
             RedirectLink(
               questionText: AppString.haveAcc,
               actionText: AppString.login,
-              route: '/login',
+              route: AppRoutes.login,
             ),
           ],
         ),

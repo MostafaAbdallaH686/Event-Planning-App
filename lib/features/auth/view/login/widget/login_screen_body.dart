@@ -3,6 +3,7 @@
 import 'package:event_planning_app/core/utils/function/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
@@ -19,19 +20,19 @@ import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreenBody extends StatelessWidget {
-  final formKey = GlobalKey<FormState>();
-
-  LoginScreenBody({super.key});
+  const LoginScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     final cubit = BlocProvider.of<UserCubit>(context);
     final size = MediaQuery.of(context).size;
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is UserLoggedIn) {
-          context.go('/home');
+          context.pushReplacement(AppRoutes.home);
         } else if (state is UserErrorNotVerified) {
           AppDialog.showConfirmDialog(
               context: context,
@@ -58,27 +59,7 @@ class LoginScreenBody extends StatelessWidget {
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             children: [
               AuthImage(title: AppString.login),
-              // SizedBox(height: size.height * 0.038),
-              // Container(
-              //   width: double.infinity,
-              //   height: size.height * 0.30,
-              //   decoration: BoxDecoration(
-              //     image: DecorationImage(
-              //       image: AssetImage(AppImage.auth),
-              //       fit: BoxFit.cover,
-              //     ),
-              //   ),
-              // ),
-              // Text(
-              //   textAlign: TextAlign.left,
-              //   AppString.login,
-              //   style: AppTextStyle.bold24(AppColor.black),
-              // ),
-              // Text(
-              //   textAlign: TextAlign.center,
-              //   AppString.describtion,
-              //   style: AppTextStyle.medium14(AppColor.colorbA1),
-              // ),
+
               // Name Field
               NameTextField(
                 cubit: cubit,
@@ -94,7 +75,7 @@ class LoginScreenBody extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      context.go('/forgetpassword');
+                      context.push(AppRoutes.forgetPassword);
                     },
                     child: Text(
                       AppString.forgetPass,
@@ -124,7 +105,7 @@ class LoginScreenBody extends StatelessWidget {
               RedirectLink(
                 questionText: AppString.noAcc,
                 actionText: AppString.signup,
-                route: '/register',
+                route: AppRoutes.register,
               ),
             ],
           ),

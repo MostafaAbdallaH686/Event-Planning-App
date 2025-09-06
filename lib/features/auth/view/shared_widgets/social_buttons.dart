@@ -2,6 +2,7 @@
 
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
@@ -24,7 +25,7 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.go('/home');
+              context.pushReplacement(AppRoutes.home);
             } else if (state is UserErrorLoginFacebook) {
               AppToast.show(message: state.message);
             }
@@ -44,7 +45,7 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.go('/home');
+              context.pushReplacement(AppRoutes.home);
             } else if (state is UserErrorLoginGoogle) {
               AppToast.show(message: state.message);
             }

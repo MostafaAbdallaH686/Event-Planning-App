@@ -1,21 +1,82 @@
 //ToDo :: Mostafa :: Do not Touch Please
 
-import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/onboarding/widget/custom_onboarding.dart';
+import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
+import 'package:event_planning_app/features/onboarding/cubit/on_boarding_state.dart';
+import 'package:event_planning_app/features/onboarding/widgets/custom_onboarding.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class OnboardingScreen extends StatelessWidget {
+class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
+}
+
+class _OnboardingScreenState extends State<OnboardingScreen> {
+  late ValueNotifier<int> indexNotifier;
+  late int finalIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    indexNotifier = ValueNotifier<int>(0);
+    indexNotifier.addListener(() {
+      setState(() {
+        finalIndex = indexNotifier.value;
+      });
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final cubit = context.read<OnBoardingCubit>();
+    indexNotifier.value = cubit.index ?? 0;
+  }
+
+  @override
+  void dispose() {
+    indexNotifier.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return CustomOnboarding(
-        imagePath: AppImage.onborading1,
-        title: AppString.onboardingtitle1,
-        onPressed: () {
-          context.push('/onboarding2');
-        });
+    return Scaffold(
+      body: BlocBuilder<OnBoardingCubit, OnBoardingState>(
+        builder: (context, state) {
+          return AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            child: CustomOnboarding(
+              index: indexNotifier.value,
+              key: ValueKey<int>(indexNotifier.value),
+              buttonText: indexNotifier.value == 2
+                  ? AppString.signup
+                  : AppString.onboardingbtn,
+              imagePath: state.onboardingContent.image,
+              title: state.onboardingContent.title,
+              onPressed: () {
+                if (indexNotifier.value == 2) {
+                  context.pushReplacement(AppRoutes.register);
+                  return;
+                }
+                context.read<OnBoardingCubit>().nextOnboarding();
+                indexNotifier.value = context.read<OnBoardingCubit>().index!;
+              },
+            ),
+          );
+        },
+      ),
+    );
   }
 }
