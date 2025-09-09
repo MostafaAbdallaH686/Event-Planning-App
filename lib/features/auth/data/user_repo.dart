@@ -1,5 +1,6 @@
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
+import 'package:event_planning_app/core/utils/failure/firebase_exception.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -24,7 +25,7 @@ class UserRepository {
         email: email,
         password: password,
       );
-      final user = userCred.user ?? (throw Exception("Login failed"));
+      final user = userCred.user ?? (throw FirebaseFailure("Login failed"));
       final token = await user.getIdToken();
 
       await _saveAuthData(token, user.emailVerified);
@@ -36,7 +37,9 @@ class UserRepository {
         emailVerified: user.emailVerified,
       );
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Login failed");
+      throw FirebaseFailure.fromAuthException(e);
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
     }
   }
 
@@ -45,18 +48,22 @@ class UserRepository {
   }
 
   Future<UserModel> loginWithFacebook() async {
-    final LoginResult result = await _facebook.login(
-      permissions: [ApiKeypoint.fireEmail, ApiKeypoint.firePublicProfile],
-    );
+    try {
+      final LoginResult result = await _facebook.login(
+        permissions: [ApiKeypoint.fireEmail, ApiKeypoint.firePublicProfile],
+      );
 
-    if (result.status != LoginStatus.success) {
-      throw Exception('Facebook login failed: ${result.message}');
+      if (result.status != LoginStatus.success) {
+        throw FirebaseFailure.fromFacebookLogin(result.status, result.message);
+      }
+
+      final cred =
+          FacebookAuthProvider.credential(result.accessToken!.tokenString);
+
+      return _signInWithCredential(cred, provider: "facebook");
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseFailure.fromAuthException(e);
     }
-
-    final cred =
-        FacebookAuthProvider.credential(result.accessToken!.tokenString);
-
-    return _signInWithCredential(cred, provider: "facebook");
   }
 
   Future<void> logout() async {
@@ -67,7 +74,7 @@ class UserRepository {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "rest password failed");
+      throw FirebaseFailure.fromAuthException(e);
     }
   }
 
@@ -83,8 +90,10 @@ class UserRepository {
       );
 
       return _signInWithCredential(cred, provider: "google");
-    } catch (e) {
-      throw Exception('Google sign-in failed: $e ');
+    } on GoogleSignInException catch (e) {
+      throw FirebaseFailure.fromGoogleSignInException(e);
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseFailure.fromAuthException(e);
     }
   }
 
@@ -100,7 +109,7 @@ class UserRepository {
           .get();
 
       if (query.docs.isNotEmpty) {
-        throw Exception("Username already exists");
+        throw FirebaseFailure("Username already exists");
       }
 
       UserCredential userCred = await _auth.createUserWithEmailAndPassword(
@@ -108,7 +117,7 @@ class UserRepository {
         password: password,
       );
 
-      final user = userCred.user ?? (throw Exception("Sign up failed"));
+      final user = userCred.user ?? (throw FirebaseFailure("Sign up failed"));
 
       await user.sendEmailVerification();
 
@@ -131,22 +140,27 @@ class UserRepository {
         username: username,
       );
     } on FirebaseAuthException catch (e) {
-      throw Exception(e.message ?? "Sign up failed");
+      throw FirebaseFailure.fromAuthException(e);
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
     }
   }
 
   Future<String> _getEmailFromInput(String input) async {
     final isEmail = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$").hasMatch(input);
     if (isEmail) return input;
+    try {
+      final query = await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .where(ApiKeypoint.fireUsername, isEqualTo: input)
+          .limit(1)
+          .get();
 
-    final query = await _firestore
-        .collection(ApiKeypoint.fireUsersCollection)
-        .where(ApiKeypoint.fireUsername, isEqualTo: input)
-        .limit(1)
-        .get();
-
-    if (query.docs.isEmpty) throw Exception("Username not found");
-    return query.docs.first.data()[ApiKeypoint.fireEmail];
+      if (query.docs.isEmpty) throw FirebaseFailure("Username not found");
+      return query.docs.first.data()[ApiKeypoint.fireEmail];
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
+    }
   }
 
   Future<void> _saveAuthData(String? token, bool verified) async {
@@ -165,33 +179,43 @@ class UserRepository {
   }
 
   Future<Map<String, dynamic>> _getUserData(String uid) async {
-    final doc = await _firestore
-        .collection(ApiKeypoint.fireUsersCollection)
-        .doc(uid)
-        .get();
-    return doc.data() ?? {};
+    try {
+      final doc = await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .doc(uid)
+          .get();
+      return doc.data() ?? {};
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
+    }
   }
 
   Future<UserModel> _signInWithCredential(AuthCredential cred,
       {required String provider}) async {
-    final userCred = await _auth.signInWithCredential(cred);
-    final user = userCred.user ?? (throw Exception("No user found"));
-    final token = await user.getIdToken();
-    await _saveAuthData(token, user.emailVerified);
+    try {
+      final userCred = await _auth.signInWithCredential(cred);
+      final user = userCred.user ?? (throw FirebaseFailure("No user found"));
+      final token = await user.getIdToken();
+      await _saveAuthData(token, user.emailVerified);
 
-    final data = {
-      ApiKeypoint.fireId: user.uid,
-      ApiKeypoint.fireEmail: user.email,
-      ApiKeypoint.fireName: user.displayName,
-      ApiKeypoint.firePhotoUrl: user.photoURL,
-    };
-    await _firestore
-        .collection(ApiKeypoint.fireUsersCollection)
-        .doc(user.uid)
-        .set(data, SetOptions(merge: true));
+      final data = {
+        ApiKeypoint.fireId: user.uid,
+        ApiKeypoint.fireEmail: user.email,
+        ApiKeypoint.fireName: user.displayName,
+        ApiKeypoint.firePhotoUrl: user.photoURL,
+      };
+      await _firestore
+          .collection(ApiKeypoint.fireUsersCollection)
+          .doc(user.uid)
+          .set(data, SetOptions(merge: true));
 
-    return provider == "google"
-        ? UserModel.fromGoogle(data: data)
-        : UserModel.fromFacebook(data: data);
+      return provider == "google"
+          ? UserModel.fromGoogle(data: data)
+          : UserModel.fromFacebook(data: data);
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseFailure.fromAuthException(e);
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
+    }
   }
 }
