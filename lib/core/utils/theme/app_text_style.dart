@@ -78,6 +78,11 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w600,
         color: color,
       );
+  static TextStyle semibold24(Color color) => TextStyle(
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: color,
+      );
   static TextStyle regular21(Color color) => TextStyle(
         fontSize: 21,
         fontWeight: FontWeight.w500,

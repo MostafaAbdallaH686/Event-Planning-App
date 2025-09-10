@@ -6,4 +6,5 @@ abstract class AppRadius {
   static final BorderRadius homeCardRaduis = BorderRadius.circular(20);
   static final BorderRadius homeContainerRaduis = BorderRadius.circular(24);
   static final BorderRadius dialogRadius = BorderRadius.circular(16);
+  static final BorderRadius segmentsRadius = BorderRadius.circular(100);
 }

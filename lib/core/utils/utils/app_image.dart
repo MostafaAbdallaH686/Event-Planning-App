@@ -10,4 +10,5 @@ abstract class AppImage {
   static const String onborading3 = "${_baseUrl}onboarding3.png";
   static const String splashLogo = "${_baseUrl}Splash_logo.png";
   static const String splash = "${_baseUrl}logo_black.png";
+  static const String emptyEvent = "${_baseUrl}empty_event.png";
 }

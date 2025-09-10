@@ -32,6 +32,13 @@ abstract class AppString {
   static const String forgetDesc =
       "Please enter your email address to request a password reset";
   static const String send = "Send";
+  // Empty Event Screen
+  static const String events = "Events";
+  static const String upcoming = "UPCOMING";
+  static const String pastEvents = "PAST EVENTS";
+  static const String noUpcomingEvents = "No Upcoming Events";
+  static const String noResult = "No Result Show";
+  static const String exploreEvent = "Explore Events";
   // Home Page
 
   // add screen
