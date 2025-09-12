@@ -85,7 +85,7 @@ flutter_icons:
   image_path_android: "assets/images/Bonita Events Logo.png" 
   image_path_ios: "assets/images/Bonita Events Logo.png" 
   adaptive_icon_background: "#FFFFFF"  
- # adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

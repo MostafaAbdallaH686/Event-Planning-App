@@ -27,8 +27,8 @@ class CustomFirebasebutton extends StatelessWidget {
           border: Border.all(color: AppColor.border),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: TextButton(
-            onPressed: onpressed,
+        child: GestureDetector(
+            onTap: onpressed,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -38,6 +38,7 @@ class CustomFirebasebutton extends StatelessWidget {
                 ),
                 const SizedBox(width: 10),
                 Text(
+                  textAlign: TextAlign.center,
                   text,
                   style: AppTextStyle.bold16(AppColor.colorbA1),
                 )
