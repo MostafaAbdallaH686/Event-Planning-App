@@ -39,7 +39,7 @@ class CustomTextform extends StatelessWidget {
             child: SvgPicture.asset(prefixicon, width: 20, height: 20),
           ),
           hintText: prefixtext,
-          hintStyle: AppTextStyle.reg14(AppColor.colorbA1),
+          hintStyle: AppTextStyle.medium14(AppColor.colorbA1),
           suffixIcon: suffixicon,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         ),

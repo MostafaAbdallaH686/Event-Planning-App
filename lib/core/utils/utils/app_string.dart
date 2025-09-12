@@ -2,34 +2,43 @@
 
 abstract class AppString {
   // start screen string
-  /// like this
-  //static const String kStartScreenTitle1 = "Task Management &";
+  static const String onboardingtitle1 = "Find your favourite events";
+  static const String onboardingtitle2 = "Find your nearby events";
+  static const String onboardingtitle3 = "Find yourSelf with us";
+  static const String onboardingbtn = "Next";
 
   // Auth
 
   // login
   static const String welcome = "Welcome Back!";
   static const String describtion = "Use Credentials to access your account";
-  static const String enterName = " Enter Username ";
+  static const String enterName = " Enter Username or Email";
   static const String enterPass = " Enter Password";
   static const String forgetPass = "Forget Password ?";
   static const String login = "Login";
   static const String or = " Or ";
-  static const String logFace = " Login with Facebook";
-  static const String logGoogle = "Login with Google";
-  static const String noAcc = "Don't have an account ";
+  static const String logFace = " Connect with Facebook";
+  static const String logGoogle = "Connect with Google";
+  static const String noAcc = "Don't have an account?";
   static const String signup = "Signup";
 
   // Register
   static const String haveAcc = "Already have a account ?";
-  static const String fullName = "Full name";
+  static const String fullName = "Username";
   static const String emailEx = "abc@email.com";
   static const String yourPass = "Your password";
   static const String confirmPass = "Confirm password ";
   // forget password
   static const String forgetDesc =
-      "Please enter your email address to\nrequest a password reset";
+      "Please enter your email address to request a password reset";
   static const String send = "Send";
+  // Empty Event Screen
+  static const String events = "Events";
+  static const String upcoming = "UPCOMING";
+  static const String pastEvents = "PAST EVENTS";
+  static const String noUpcomingEvents = "No Upcoming Events";
+  static const String noResult = "No Result Show";
+  static const String exploreEvent = "Explore Events";
   // Home Page
 
   // add screen

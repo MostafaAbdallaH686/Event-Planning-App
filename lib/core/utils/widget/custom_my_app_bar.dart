@@ -1,4 +1,6 @@
+import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -9,9 +11,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       leading: IconButton(
           onPressed: () {
-            context.go('/login');
+            context.pop();
           },
-          icon: Icon(Icons.arrow_back)),
+          icon: SvgPicture.asset(AppIcon.backArrow)),
     );
   }
 

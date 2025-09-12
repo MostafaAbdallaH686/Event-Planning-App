@@ -1,134 +1,78 @@
-import 'package:event_planning_app/core/utils/theme/app_colors.dart';
-import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+//ToDo :: Mostafa :: Refactor and Clean Code Please
+
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/utils/app_validator.dart';
-import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
-import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
+import 'package:event_planning_app/features/auth/view/register/widget/confirm_password_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_image.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_text.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RegisterScreenBody extends StatefulWidget {
+class RegisterScreenBody extends StatelessWidget {
   const RegisterScreenBody({super.key});
-
-  @override
-  State<RegisterScreenBody> createState() => _RegisterScreenBodyState();
-}
-
-class _RegisterScreenBodyState extends State<RegisterScreenBody> {
-  bool _obscure = true;
-  bool _obscureConfirmPass = true;
-  final _formKey = GlobalKey<FormState>();
-  final _nameCtrl = TextEditingController();
-  final _passwordCtrl = TextEditingController();
-  final _confirmPassCtrl = TextEditingController();
-  final _emailCtrl = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameCtrl.dispose();
-    _passwordCtrl.dispose();
-    _confirmPassCtrl.dispose();
-    _emailCtrl.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final formKey = GlobalKey<FormState>();
+    final cubit = BlocProvider.of<UserCubit>(context);
+
     return SingleChildScrollView(
       child: Form(
-        key: _formKey,
+        key: formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: 10,
-                ),
-                Text(
-                  AppString.signup,
-                  style: AppTextStyle.bold24(AppColor.colorbA1),
-                ),
-              ],
+            AuthImage(title: AppString.signup),
+
+            // Use public reusable text fields
+            NameTextField(
+              cubit: cubit,
+              hintText: AppString.fullName,
+              controller: cubit.registerNameCtrl,
             ),
-            CustomTextform(
-                controller: _nameCtrl,
-                validator: (value) => AppValidator().nameValidator(value),
-                prefixicon: AppIcon.username,
-                prefixtext: AppString.fullName),
-            CustomTextform(
-                controller: _emailCtrl,
-                validator: (value) => AppValidator().emailValidator(value),
-                prefixicon: AppIcon.mail,
-                prefixtext: AppString.emailEx),
-            CustomTextform(
-              obscureText: _obscure,
-              controller: _passwordCtrl,
-              validator: (value) => AppValidator().passwordValidator(value),
-              prefixicon: AppIcon.password,
-              prefixtext: AppString.yourPass,
-              suffixicon: IconButton(
-                onPressed: () => setState(() => _obscure = !_obscure),
-                icon: Icon(
-                  _obscure ? Icons.visibility_off : Icons.visibility,
-                ),
-              ),
+            const SizedBox(height: 5),
+            EmailTextField(
+              cubit: cubit,
+              hintText: AppString.emailEx,
+              controller: cubit.emailCtrl,
             ),
-            CustomTextform(
-              obscureText: _obscureConfirmPass,
-              controller: _confirmPassCtrl,
-              validator: (value) => AppValidator()
-                  .confirmPasswordValidator(value, _passwordCtrl.text),
-              prefixicon: AppIcon.password,
-              prefixtext: AppString.confirmPass,
-              suffixicon: IconButton(
-                onPressed: () =>
-                    setState(() => _obscureConfirmPass = !_obscureConfirmPass),
-                icon: Icon(
-                  _obscureConfirmPass ? Icons.visibility_off : Icons.visibility,
-                ),
-              ),
+            const SizedBox(height: 5),
+            PasswordTextField(
+                cubit: cubit, controller: cubit.registerPasswordCtrl),
+            const SizedBox(height: 5),
+            ConfirmPasswordTextField(
+              cubit: cubit,
+              hintText: AppString.confirmPass,
             ),
+
             SizedBox(height: size.height * 0.03),
 
-            CustomTextbutton(
-                text: AppString.signup,
-                onpressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    context.go('/home');
-                  }
-                }),
-            SizedBox(width: size.height * 0.01),
-            LinedText(
-              text: AppString.or,
+            // Use LoginButton but customize for sign-up logic
+            LoginButton(
+              formKey: formKey,
+              buttonText: AppString.signup,
+              onLogin: () {
+                cubit.signUpWithUsernameAndEmail(
+                  username: cubit.registerNameCtrl.text,
+                  email: cubit.emailCtrl.text,
+                  password: cubit.registerPasswordCtrl.text,
+                );
+              },
             ),
-            //login with facebook
-            CustomFirebasebutton(
-                icon: AppIcon.facebook, text: AppString.logFace),
-            //login with google
-            CustomFirebasebutton(
-                icon: AppIcon.google, text: AppString.logGoogle),
-            SizedBox(height: size.height * 0.02),
-            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Text(
-                AppString.haveAcc,
-                style: AppTextStyle.bold14(AppColor.colorbA1),
-              ),
-              TextButton(
-                onPressed: () {
-                  context.go('/login');
-                },
-                child: Text(
-                  AppString.login,
-                  style: AppTextStyle.bold14(AppColor.colorbr80),
-                ),
-              ),
-            ]),
+
+            // Redirect to login
+            RedirectLink(
+              questionText: AppString.haveAcc,
+              actionText: AppString.login,
+              route: AppRoutes.login,
+            ),
           ],
         ),
       ),

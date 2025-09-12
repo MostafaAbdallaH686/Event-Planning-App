@@ -14,10 +14,14 @@ abstract class AppColor {
   static Color colorbr88 = Color(0xff8B8688);
   static Color colorbr688 = Color(0xff747688);
   static Color colorbrD8 = Color(0xffD9D9D9);
+  static const Color colorb18 = Color(0xff060518);
   static const Color border = Color(0xff8B8688);
   static Color colorstack =
       Color.alphaBlend(Color(0xffB9DAFB), Color(0xff9895EE));
   static Color colorbrCC = Color(0xffCCCCCC);
   static Color colorbr9E = Color(0xff9E9E9E);
   static Color colorbr9B = Color(0xff9B9B9B);
+  static Color sharedbutton = Color(0xff0055FF);
+  static Color facebookbutton = Color(0xff4267B2);
+  static Color googlebutton = Color(0xffDB4437);
 }
