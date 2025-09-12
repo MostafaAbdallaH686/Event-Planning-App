@@ -1,5 +1,6 @@
 //ToDo :: Mohnd
 
+import 'package:event_planning_app/features/auth/view/login/widget/login_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -7,6 +8,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(body: SafeArea(child: const LoginScreenBody()));
   }
 }

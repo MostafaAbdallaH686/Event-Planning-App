@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 
 abstract class AppSvgImage {
   static Widget showSvgImage(
@@ -7,11 +7,23 @@ abstract class AppSvgImage {
       double? width,
       double? height,
       BoxFit fit = BoxFit.contain}) {
-    return SvgPicture.asset(
-      path,
+    return SvgPicture.asset(path, width: width, height: height, fit: fit);
+  }
+
+  static Widget showImage(
+      {required String path,
+      double? width,
+      double? height,
+      BoxFit fit = BoxFit.contain}) {
+    return Container(
       width: width,
       height: height,
-      fit: fit,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(path),
+          fit: fit,
+        ),
+      ),
     );
   }
 }

@@ -1,5 +1,6 @@
 //ToDo :: Mohnd
 
+import 'package:event_planning_app/features/auth/view/register/widget/register_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class RegisterScreen extends StatelessWidget {
@@ -7,6 +8,8 @@ class RegisterScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return Scaffold(
+      body: SafeArea(child: const RegisterScreenBody()),
+    );
   }
 }

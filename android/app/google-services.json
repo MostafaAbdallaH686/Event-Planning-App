@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "229484552631",
+    "project_id": "event-planning-27758",
+    "storage_bucket": "event-planning-27758.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:229484552631:android:5062ce2815e5abd5780832",
+        "android_client_info": {
+          "package_name": "com.example.weather_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD72q1HoI3oO7GwKoB1_8hyt9k_Wg97PWE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
