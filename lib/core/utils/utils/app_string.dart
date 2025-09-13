@@ -36,6 +36,13 @@ abstract class AppString {
       "Please enter your email address to request a password reset";
   static const String send = "Send";
   // Home Page
+  static const String search = "Search";
+  static const String upcomevent = "Upcoming Events";
+  static const String all = "See All";
+  static const String populr = "Popular Now";
+  static const String recommendation = "Recommendations for you";
+  static const String join = "Join";
+  static const String joined = "Joined";
 
   // add screen
 

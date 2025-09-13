@@ -8,4 +8,6 @@ abstract class AppIcon {
   static const String username = "${_baseUrl}Username.svg";
   static const String mail = "${_baseUrl}Mail.svg";
   static const String tAppicon = "${_baseUrl}Splash.svg";
+  static const String search = "${_baseUrl}Search.svg";
+  static const String filter = "${_baseUrl}Filter.svg";
 }

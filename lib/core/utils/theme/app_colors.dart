@@ -18,6 +18,6 @@ abstract class AppColor {
   static Color colorstack =
       Color.alphaBlend(Color(0xffB9DAFB), Color(0xff9895EE));
   static Color colorbrCC = Color(0xffCCCCCC);
-  static Color colorbr9E = Color(0xff9E9E9E);
+  static Color colorbr9E = Color(0xffE9E9E9);
   static Color colorbr9B = Color(0xff9B9B9B);
 }
