@@ -57,7 +57,6 @@ class HomeScreenBody extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // ================= Categories =================
                         if (categories.isNotEmpty)
                           SizedBox(
                             height: size.height * 0.05,
@@ -109,9 +108,7 @@ class HomeScreenBody extends StatelessWidget {
                               },
                             ),
                           ),
-
                         SizedBox(height: size.height * 0.05),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -159,95 +156,105 @@ class HomeScreenBody extends StatelessWidget {
                                         padding:
                                             const EdgeInsets.only(left: 10),
                                         decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                event.imageUrl,
-                                              ),
-                                              fit: BoxFit.cover,
-                                            )),
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          image: DecorationImage(
+                                            image: NetworkImage(event.imageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
                                       const SizedBox(width: 10),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            event.title,
-                                            style: AppTextStyle.bold16(
-                                                AppColor.colorbA1),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                          ),
-                                          SizedBox(
-                                            height: size.height * 0.01,
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.location_on,
-                                                  size: 14, color: Colors.grey),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                event.location,
-                                                style: AppTextStyle.regular12(
-                                                    AppColor.colorbr688),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
-                                              BlocBuilder<HomeCubit, HomeState>(
-                                                builder: (context, state) {
-                                                  if (state is HomeLoaded) {
-                                                    final isJoined = state
-                                                        .joinedEventIds
-                                                        .contains(event.id);
+                                      SizedBox(
+                                        width: size.width * 0.45,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              event.title,
+                                              style: AppTextStyle.bold16(
+                                                  AppColor.colorbA1),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Row(
+                                              children: [
+                                                const Icon(Icons.location_on,
+                                                    size: 14,
+                                                    color: Colors.grey),
+                                                const SizedBox(width: 4),
+                                                Expanded(
+                                                  child: Text(
+                                                    event.location,
+                                                    style:
+                                                        AppTextStyle.regular12(
+                                                            AppColor
+                                                                .colorbr688),
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                                BlocBuilder<HomeCubit,
+                                                    HomeState>(
+                                                  builder: (context, state) {
+                                                    if (state is HomeLoaded) {
+                                                      final isJoined = state
+                                                          .joinedEventIds
+                                                          .contains(event.id);
 
-                                                    return Container(
-                                                      width: size.width *
-                                                          0.1972222222,
-                                                      height:
-                                                          size.height * 0.0425,
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 5),
-                                                      decoration: BoxDecoration(
-                                                        color:
-                                                            AppColor.colorbr80,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                      child: TextButton(
-                                                        onPressed: isJoined
-                                                            ? null
-                                                            : () {
-                                                                context
-                                                                    .read<
-                                                                        HomeCubit>()
-                                                                    .joinEvent(
-                                                                        event
-                                                                            .id!);
-                                                              },
-                                                        child: Text(
-                                                          isJoined
-                                                              ? AppString.joined
-                                                              : AppString.join,
-                                                          style: AppTextStyle
-                                                              .regular12(
-                                                                  AppColor
-                                                                      .white),
+                                                      return Container(
+                                                        height:
+                                                            size.height * 0.04,
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 5),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: AppColor
+                                                              .colorbr80,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
                                                         ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  return const SizedBox
-                                                      .shrink();
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                                        child: TextButton(
+                                                          onPressed: isJoined
+                                                              ? null
+                                                              : () {
+                                                                  context
+                                                                      .read<
+                                                                          HomeCubit>()
+                                                                      .joinEvent(
+                                                                          event
+                                                                              .id!);
+                                                                },
+                                                          child: Center(
+                                                            child: Text(
+                                                              isJoined
+                                                                  ? AppString
+                                                                      .joined
+                                                                  : AppString
+                                                                      .join,
+                                                              style: AppTextStyle
+                                                                  .regular12(
+                                                                      AppColor
+                                                                          .white),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    }
+                                                    return const SizedBox
+                                                        .shrink();
+                                                  },
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
