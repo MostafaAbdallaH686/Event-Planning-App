@@ -7,6 +7,7 @@ import 'package:event_planning_app/features/auth/view/register/register_screen.d
 import 'package:event_planning_app/features/events/view/empty_event/empty_event_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view/map_view_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
+import 'package:event_planning_app/features/home/view/interests_events_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -19,6 +20,9 @@ final GoRouter router = GoRouter(
         path: '/register', builder: (context, state) => const RegisterScreen()),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
     GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+    GoRoute(
+        path: '/favEvent',
+        builder: (context, state) => const InterestsEventsScreen()),
     GoRoute(
         path: '/onboarding',
         builder: (context, state) => const OnboardingScreen()),

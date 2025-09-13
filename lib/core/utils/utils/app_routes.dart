@@ -8,6 +8,7 @@ abstract class AppRoutes {
   static const String mainScreen = '/mainScreen';
   static const String home = '/home';
   static const String search = '/search';
+  static const String favEvent = '/favEvent';
   static const String addEvent = '/addEvent';
   static const String favorite = '/favorite';
   static const String profile = '/profile';

@@ -39,6 +39,11 @@ abstract class AppString {
   static const String noUpcomingEvents = "No Upcoming Events";
   static const String noResult = "No Result Show";
   static const String exploreEvent = "Explore Events";
+  //favorite screen
+  static const String favEventsTitle = "Choose your favorite event";
+  static const String favEventsSubTitle =
+      "Get personalized event recomendation.";
+
   // Home Page
 
   // add screen
