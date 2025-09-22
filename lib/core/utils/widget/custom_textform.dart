@@ -12,6 +12,7 @@ class CustomTextform extends StatelessWidget {
     this.controller,
     this.validator,
     this.obscureText = false,
+    this.fillColor,
   });
 
   final String prefixicon;
@@ -20,6 +21,7 @@ class CustomTextform extends StatelessWidget {
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
   final bool obscureText;
+  final Color? fillColor;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,8 @@ class CustomTextform extends StatelessWidget {
           hintStyle: AppTextStyle.medium14(AppColor.colorbA1),
           suffixIcon: suffixicon,
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+          filled: true,
+          fillColor: fillColor ?? Colors.white,
         ),
       ),
     );
