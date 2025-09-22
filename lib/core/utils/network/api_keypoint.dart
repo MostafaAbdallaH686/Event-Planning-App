@@ -21,4 +21,16 @@ abstract class ApiKeypoint {
   // static const String createdAt = "createdAt";
   // static const String updatedAt = "updatedAt";
   // static const String authorization = "Authorization";
+
+  //firebase key points
+  static const String fireUsersCollection = "users";
+  static const String fireEmail = "email";
+  static const String fireUsername = "username";
+  static const String firePassword = "password";
+  static const String firePublicProfile = "public_profile";
+  static const String fireId = "id";
+  static const String fireName = "name";
+  static const String firePictureFacebook = "picture.width(200)";
+  static const String fireProfilePicture = "profilePicture";
+  static const String firePhotoUrl = "photoUrl";
 }

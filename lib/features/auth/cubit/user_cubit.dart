@@ -44,8 +44,8 @@ class UserCubit extends Cubit<UserState> {
       {required String username, required String password}) async {
     emit(UserLoadingUsername());
     try {
-      UserModel user = await _repository.loginWithUsername(
-          username: username, password: password);
+      UserModel user = await _repository.loginWithUsernameOrEmail(
+          usernameOrEmail: username, password: password);
       if (!user.emailVerified) {
         emit(UserErrorNotVerified(
             "Email not verified, please verify your email"));

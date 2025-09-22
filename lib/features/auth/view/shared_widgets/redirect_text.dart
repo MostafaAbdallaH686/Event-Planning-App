@@ -27,7 +27,7 @@ class RedirectLink extends StatelessWidget {
           style: AppTextStyle.bold14(AppColor.colorbA1),
         ),
         TextButton(
-          onPressed: () => context.pushReplacement(route),
+          onPressed: () => context.push(route),
           child: Text(
             actionText,
             style: AppTextStyle.bold14(AppColor.colorbr80).copyWith(

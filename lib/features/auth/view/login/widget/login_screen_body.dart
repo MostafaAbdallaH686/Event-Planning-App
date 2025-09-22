@@ -1,12 +1,15 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
+import 'package:event_planning_app/core/utils/function/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
+import 'package:event_planning_app/features/auth/view/shared_widgets/auth_image.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/password_text_field.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_text.dart';
@@ -17,23 +20,34 @@ import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreenBody extends StatelessWidget {
-  final formKey = GlobalKey<FormState>();
-
-  LoginScreenBody({super.key});
+  const LoginScreenBody({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final formKey = GlobalKey<FormState>();
+
     final cubit = BlocProvider.of<UserCubit>(context);
     final size = MediaQuery.of(context).size;
 
     return BlocConsumer<UserCubit, UserState>(
       listener: (context, state) {
         if (state is UserLoggedIn) {
-          context.go('/home');
-        } else if (state is UserError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message)),
-          );
+          context.pushReplacement(AppRoutes.home);
+        } else if (state is UserErrorNotVerified) {
+          AppDialog.showConfirmDialog(
+              context: context,
+              title: 'Email Not Verified',
+              message: 'Please Verify Your Email',
+              confirmText: 'Resend',
+              cancelText: 'I did it',
+              onConfirm: () {
+                cubit.sendVerificationEmail();
+                Navigator.of(context).pop();
+              });
+        } else if (state is UserErrorLoginFacebook ||
+            state is UserErrorLoginGoogle ||
+            state is UserErrorLoginUsername) {
+          AppToast.show(message: (state as UserError).message);
         }
       },
       builder: (context, state) {
@@ -44,27 +58,8 @@ class LoginScreenBody extends StatelessWidget {
             padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).viewInsets.bottom),
             children: [
-              SizedBox(height: size.height * 0.038),
-              Container(
-                width: double.infinity,
-                height: size.height * 0.20,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage(AppImage.splash),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                AppString.welcome,
-                style: AppTextStyle.bold24(AppColor.black),
-              ),
-              Text(
-                textAlign: TextAlign.center,
-                AppString.describtion,
-                style: AppTextStyle.medium14(AppColor.colorbA1),
-              ),
+              AuthImage(title: AppString.login),
+
               // Name Field
               NameTextField(
                 cubit: cubit,
@@ -80,7 +75,7 @@ class LoginScreenBody extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      context.go('/forgetpassword');
+                      context.push(AppRoutes.forgetPassword);
                     },
                     child: Text(
                       AppString.forgetPass,
@@ -92,6 +87,7 @@ class LoginScreenBody extends StatelessWidget {
               ),
               // Login Button
               LoginButton(
+                isaddIcon: true,
                 formKey: formKey,
                 buttonText: AppString.login,
                 onLogin: () {
@@ -109,7 +105,7 @@ class LoginScreenBody extends StatelessWidget {
               RedirectLink(
                 questionText: AppString.noAcc,
                 actionText: AppString.signup,
-                route: '/register',
+                route: AppRoutes.register,
               ),
             ],
           ),

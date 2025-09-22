@@ -35,7 +35,7 @@ class UserModel {
         emailVerified: true);
   }
 
-  factory UserModel.fromGoogle(Map<String, dynamic> data) {
+  factory UserModel.fromGoogle({required Map<String, dynamic> data}) {
     return UserModel(
         uid: data['id'] ?? '',
         email: data['email'] ?? '',

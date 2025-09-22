@@ -1,9 +1,12 @@
 //ToDO ::Mostafa::Clean Code Please
 
-import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+import 'package:event_planning_app/core/utils/theme/app_colors.dart';
+import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widget/custom_firebasebutton.dart';
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
@@ -22,11 +25,9 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.go('/home');
+              context.pushReplacement(AppRoutes.home);
             } else if (state is UserErrorLoginFacebook) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              AppToast.show(message: state.message);
             }
           },
           builder: (context, state) {
@@ -34,7 +35,8 @@ class SocialLoginButtons extends StatelessWidget {
               return const Center(child: CustomCircleProgressInicator());
             }
             return CustomFirebasebutton(
-              icon: AppIcon.facebook,
+              color: AppColor.facebookbutton,
+              icon: AppImage.facebook,
               text: AppString.logFace,
               onpressed: () => context.read<UserCubit>().loginWithFacebook(),
             );
@@ -43,11 +45,9 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.go('/home');
+              context.pushReplacement(AppRoutes.home);
             } else if (state is UserErrorLoginGoogle) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              AppToast.show(message: state.message);
             }
           },
           builder: (context, state) {
@@ -55,7 +55,8 @@ class SocialLoginButtons extends StatelessWidget {
               return const Center(child: CustomCircleProgressInicator());
             }
             return CustomFirebasebutton(
-              icon: AppIcon.google,
+              color: AppColor.googlebutton,
+              icon: AppImage.google,
               text: AppString.logGoogle,
               onpressed: () => context.read<UserCubit>().loginWithGoogle(),
             );

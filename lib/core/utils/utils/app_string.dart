@@ -2,12 +2,9 @@
 
 abstract class AppString {
   // start screen string
-  static const String onboardingtitle1 = "Find your favourite\n events here";
-  static const String onboardingtitle2 = "Find your nearby\n event here";
-  static const String onboardingsubtitle1 =
-      "The customer is very important, the\n customer will be followed by the customer.";
-  static const String onboardingsubtitle2 =
-      "The customer is very important, the customer will be followed by the customer.";
+  static const String onboardingtitle1 = "Find your favourite events";
+  static const String onboardingtitle2 = "Find your nearby events";
+  static const String onboardingtitle3 = "Find yourSelf with us";
   static const String onboardingbtn = "Next";
 
   // Auth
@@ -15,19 +12,19 @@ abstract class AppString {
   // login
   static const String welcome = "Welcome Back!";
   static const String describtion = "Use Credentials to access your account";
-  static const String enterName = " Enter Username ";
+  static const String enterName = " Enter Username or Email";
   static const String enterPass = " Enter Password";
   static const String forgetPass = "Forget Password ?";
   static const String login = "Login";
   static const String or = " Or ";
-  static const String logFace = " Login with Facebook";
-  static const String logGoogle = "Login with Google";
+  static const String logFace = " Connect with Facebook";
+  static const String logGoogle = "Connect with Google";
   static const String noAcc = "Don't have an account?";
   static const String signup = "Signup";
 
   // Register
   static const String haveAcc = "Already have a account ?";
-  static const String fullName = "Full name";
+  static const String fullName = "Username";
   static const String emailEx = "abc@email.com";
   static const String yourPass = "Your password";
   static const String confirmPass = "Confirm password ";
@@ -35,6 +32,18 @@ abstract class AppString {
   static const String forgetDesc =
       "Please enter your email address to request a password reset";
   static const String send = "Send";
+  // Empty Event Screen
+  static const String events = "Events";
+  static const String upcoming = "UPCOMING";
+  static const String pastEvents = "PAST EVENTS";
+  static const String noUpcomingEvents = "No Upcoming Events";
+  static const String noResult = "No Result Show";
+  static const String exploreEvent = "Explore Events";
+  //favorite screen
+  static const String favEventsTitle = "Choose your favorite event";
+  static const String favEventsSubTitle =
+      "Get personalized event recomendation.";
+
   // Home Page
   static const String search = "Search";
   static const String upcomevent = "Upcoming Events";
