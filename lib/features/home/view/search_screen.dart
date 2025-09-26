@@ -1,5 +1,7 @@
 //ToDo ::Mostafa:: Still have to clean code and make it reusable
 
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatelessWidget {

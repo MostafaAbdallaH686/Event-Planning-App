@@ -31,36 +31,52 @@ class HomeCubit extends Cubit<HomeState> {
                       joinedEventIds: {},
                     ));
                   },
-                  onError: (error) => emit(HomeError(error.toString())),
+                  onError: (error) {
+                    print("❌ Error fetching recommended events: $error");
+                    emit(HomeError(error.toString()));
+                  },
                 );
               },
-              onError: (error) => emit(HomeError(error.toString())),
+              onError: (error) {
+                print("❌ Error fetching popular events: $error");
+                emit(HomeError(error.toString()));
+              },
             );
           },
-          onError: (error) => emit(HomeError(error.toString())),
+          onError: (error) {
+            print("❌ Error fetching upcoming events: $error");
+            emit(HomeError(error.toString()));
+          },
         );
       },
-      onError: (error) => emit(HomeError(error.toString())),
+      onError: (error) {
+        print("❌ Error fetching categories: $error");
+        emit(HomeError(error.toString()));
+      },
     );
   }
 
-  Future<void> joinEvent(String eventId) async {
+  Future<void> joinEvent(String categoryId, String eventId) async {
     final currentState = state;
     if (currentState is HomeLoaded) {
-      if (currentState.joinedEventIds.contains(eventId)) return;
+      if (currentState.joinedEventIds.contains(eventId)) {
+        return;
+      }
 
       try {
         final userId = FirebaseAuth.instance.currentUser!.uid;
+        print("👤 Current userId: $userId");
 
-        await firestoreService.joinEvent(eventId, userId);
+        await firestoreService.joinEvent(categoryId, eventId, userId);
 
         final updatedJoined = Set<String>.from(currentState.joinedEventIds)
           ..add(eventId);
 
         emit(currentState.copyWith(joinedEventIds: updatedJoined));
+        print("✅ Event $eventId joined successfully");
       } catch (e) {
         print("❌ Error joining event: $e");
       }
-    }
+    } else {}
   }
 }

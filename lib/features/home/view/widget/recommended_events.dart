@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -13,7 +15,11 @@ class RecommendedEventsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoaded && state.recommendedEvents.isNotEmpty) {
+        if (state is HomeLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is HomeLoaded && state.recommendedEvents.isNotEmpty) {
           final events = state.recommendedEvents;
 
           return Column(
@@ -36,7 +42,6 @@ class RecommendedEventsSection extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final event = events[index];
                   final isJoined = state.joinedEventIds.contains(event.id);
-
                   return Container(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     padding: const EdgeInsets.all(10),
@@ -92,9 +97,8 @@ class RecommendedEventsSection extends StatelessWidget {
                                     onPressed: isJoined
                                         ? null
                                         : () {
-                                            context
-                                                .read<HomeCubit>()
-                                                .joinEvent(event.id!);
+                                            context.read<HomeCubit>().joinEvent(
+                                                event.id!, event.categoryId);
                                           },
                                     style: TextButton.styleFrom(
                                       backgroundColor: AppColor.colorbr80,
@@ -124,6 +128,7 @@ class RecommendedEventsSection extends StatelessWidget {
             ],
           );
         }
+
         return const SizedBox.shrink();
       },
     );

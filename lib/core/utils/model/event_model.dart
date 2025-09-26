@@ -50,7 +50,19 @@ class EventModel {
   }
 
   factory EventModel.fromDoc(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+    final data = doc.data() as Map<String, dynamic>? ?? {};
+
+    // parsing for attendeesCount
+    final rawAttendees = data['attendeesCount'];
+    int parsedAttendees = 0;
+    if (rawAttendees is int) {
+      parsedAttendees = rawAttendees;
+    } else if (rawAttendees is double) {
+      parsedAttendees = rawAttendees.toInt();
+    } else if (rawAttendees is String) {
+      parsedAttendees = int.tryParse(rawAttendees) ?? 0;
+    }
+
     return EventModel(
       id: doc.id,
       title: data['title'] ?? '',
@@ -58,11 +70,15 @@ class EventModel {
       categoryId: data['categoryId'] ?? '',
       categoryName: data['categoryName'] ?? '',
       location: data['location'] ?? '',
-      date: (data['date'] as Timestamp).toDate(),
-      createdAt: (data['createdAt'] as Timestamp).toDate(),
+      date: data['date'] is Timestamp
+          ? (data['date'] as Timestamp).toDate()
+          : DateTime.now(),
+      createdAt: data['createdAt'] is Timestamp
+          ? (data['createdAt'] as Timestamp).toDate()
+          : DateTime.now(),
       organizerId: data['organizerId'] ?? '',
       imageUrl: data['imageUrl'] ?? '',
-      attendeesCount: (data['attendeesCount'] ?? 0).toInt(),
+      attendeesCount: parsedAttendees,
       isPopular: data['isPopular'] ?? false,
       tags: List<String>.from(data['tags'] ?? []),
     );

@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -14,7 +16,11 @@ class CategoriesSection extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoaded && state.categories.isNotEmpty) {
+        if (state is HomeLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is HomeLoaded && state.categories.isNotEmpty) {
           return SizedBox(
             height: size.height * 0.05,
             child: ListView.builder(
@@ -23,7 +29,6 @@ class CategoriesSection extends StatelessWidget {
               itemBuilder: (context, index) {
                 final category = state.categories[index];
                 final categoryName = (category["name"] ?? "No name").toString();
-                final categoryIcon = (category["icon"] ?? "").toString();
 
                 return Container(
                   margin: const EdgeInsets.symmetric(horizontal: 8),
@@ -39,18 +44,10 @@ class CategoriesSection extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: Row(
-                    children: [
-                      categoryIcon.isNotEmpty
-                          ? Image.network(categoryIcon,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(Icons.category))
-                          : const Icon(Icons.category),
-                      const SizedBox(width: 5),
-                      Text(categoryName,
-                          style: AppTextStyle.regular14(AppColor.colorbA1),
-                          overflow: TextOverflow.ellipsis),
-                    ],
+                  child: Center(
+                    child: Text(categoryName,
+                        style: AppTextStyle.regular14(AppColor.colorbA1),
+                        overflow: TextOverflow.ellipsis),
                   ),
                 );
               },

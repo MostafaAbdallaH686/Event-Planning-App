@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -15,7 +17,11 @@ class PopularEventsSection extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoaded && state.popularEvents.isNotEmpty) {
+        if (state is HomeLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is HomeLoaded && state.popularEvents.isNotEmpty) {
           final events = state.popularEvents;
 
           return Column(
@@ -93,7 +99,8 @@ class PopularEventsSection extends StatelessWidget {
                                           : () {
                                               context
                                                   .read<HomeCubit>()
-                                                  .joinEvent(event.id!);
+                                                  .joinEvent(event.categoryId,
+                                                      event.id!);
                                             },
                                       style: TextButton.styleFrom(
                                         backgroundColor: AppColor.colorbr80,
@@ -124,7 +131,7 @@ class PopularEventsSection extends StatelessWidget {
               ),
             ],
           );
-        }
+        } else {}
         return const SizedBox.shrink();
       },
     );

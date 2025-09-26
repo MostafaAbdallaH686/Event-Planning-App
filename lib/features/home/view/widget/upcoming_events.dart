@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -15,7 +17,11 @@ class UpcomingEventsSection extends StatelessWidget {
 
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoaded && state.upcomingEvents.isNotEmpty) {
+        if (state is HomeLoading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else if (state is HomeLoaded && state.upcomingEvents.isNotEmpty) {
           final events = state.upcomingEvents;
 
           return Column(
@@ -103,7 +109,8 @@ class UpcomingEventsSection extends StatelessWidget {
                                             : () {
                                                 context
                                                     .read<HomeCubit>()
-                                                    .joinEvent(event.id!);
+                                                    .joinEvent(event.id!,
+                                                        event.categoryId);
                                               },
                                         child: Text(
                                           isJoined
@@ -128,6 +135,7 @@ class UpcomingEventsSection extends StatelessWidget {
             ],
           );
         }
+
         return const SizedBox.shrink();
       },
     );

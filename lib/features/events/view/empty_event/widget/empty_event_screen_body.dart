@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
