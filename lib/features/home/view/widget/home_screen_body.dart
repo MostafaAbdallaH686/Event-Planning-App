@@ -18,7 +18,6 @@ class HomeScreenBody extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: Column(
             children: [
-              // SizedBox(height: size.height * 0.02),
               const SearchBoxWidget(),
               SizedBox(height: size.height * 0.025),
               const CategoriesSection(),
