@@ -7,6 +7,7 @@ import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/home_state.dart';
+import 'package:go_router/go_router.dart';
 
 class UpcomingEventsSection extends StatelessWidget {
   const UpcomingEventsSection({super.key});
@@ -32,8 +33,13 @@ class UpcomingEventsSection extends StatelessWidget {
                   Text(AppString.upcomevent,
                       style: AppTextStyle.bold16(AppColor.colorbA1)),
                   const Spacer(),
-                  Text(AppString.all,
-                      style: AppTextStyle.semibold14(AppColor.colorbr80)),
+                  TextButton(
+                    onPressed: () {
+                      context.push('/SeeAllUpComing');
+                    },
+                    child: Text(AppString.all,
+                        style: AppTextStyle.semibold14(AppColor.colorbr80)),
+                  ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -41,7 +47,7 @@ class UpcomingEventsSection extends StatelessWidget {
                 height: size.height * 0.14,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: events.length,
+                  itemCount: events.length > 5 ? 5 : events.length,
                   itemBuilder: (context, index) {
                     final event = events[index];
                     final isJoined = state.joinedEventIds.contains(event.id);

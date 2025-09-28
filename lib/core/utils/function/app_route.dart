@@ -8,6 +8,9 @@ import 'package:event_planning_app/features/events/view/empty_event/empty_event_
 import 'package:event_planning_app/features/events/view/map_view/map_view_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/home/view/interests_events_screen.dart';
+import 'package:event_planning_app/features/home/view/see_all_popular.dart';
+import 'package:event_planning_app/features/home/view/see_all_recommendation_screen.dart';
+import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -37,5 +40,14 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/emptyEvent',
         builder: (context, state) => const EmptyEventScreen()),
+    GoRoute(
+        path: '/SeeAllRecommendation',
+        builder: (context, state) => const SeeAllRecommendationScreen()),
+    GoRoute(
+        path: '/SeeAllPopular',
+        builder: (context, state) => const SeeAllPopularScreen()),
+    GoRoute(
+        path: '/SeeAllUpComing',
+        builder: (context, state) => const SeeAllUpComingScreen()),
   ],
 );

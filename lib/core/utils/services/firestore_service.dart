@@ -106,11 +106,10 @@ class FirestoreService {
   }
 
   //  Get Popular Events
-  Stream<List<EventModel>> getPopularEvents({int limit = 10}) {
+  Stream<List<EventModel>> getPopularEvents() {
     return _firestore
         .collectionGroup('events')
         .orderBy('attendeesCount', descending: true)
-        .limit(limit)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -120,12 +119,11 @@ class FirestoreService {
   }
 
   //  Get Upcoming Events
-  Stream<List<EventModel>> getUpcomingEvents({int limit = 10}) {
+  Stream<List<EventModel>> getUpcomingEvents() {
     return _firestore
         .collectionGroup('events')
         .where('date', isGreaterThan: Timestamp.fromDate(DateTime.now()))
         .orderBy('date')
-        .limit(limit)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
@@ -135,15 +133,15 @@ class FirestoreService {
   }
 
   //  Search Events by title
-  Future<List<EventModel>> searchEvents(String q, {int limit = 20}) async {
-    print("🔍 Searching events by title: $q (limit=$limit)");
+  Future<List<EventModel>> searchEvents(
+    String q,
+  ) async {
     final start = q;
     final end = '$q\uf8ff';
     final snap = await _firestore
         .collectionGroup('events')
         .where('title', isGreaterThanOrEqualTo: start)
         .where('title', isLessThanOrEqualTo: end)
-        .limit(limit)
         .get();
     return snap.docs.map((doc) {
       return EventModel.fromDoc(doc);
@@ -151,8 +149,9 @@ class FirestoreService {
   }
 
   //  Recommended Events
-  Stream<List<EventModel>> getRecommendedEvents(List<String> prefs,
-      {int limit = 10}) {
+  Stream<List<EventModel>> getRecommendedEvents(
+    List<String> prefs,
+  ) {
     if (prefs.isEmpty) {
       return const Stream.empty();
     }
@@ -161,7 +160,6 @@ class FirestoreService {
     return _firestore
         .collectionGroup('events')
         .where('categoryId', whereIn: safePrefs)
-        .limit(limit)
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
