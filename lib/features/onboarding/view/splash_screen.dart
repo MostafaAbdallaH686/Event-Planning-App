@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
     } else if (isLoggedIn) {
       if (!mounted) return;
 
-      context.pushReplacement(AppRoutes.favEvent);
+      context.pushReplacement(AppRoutes.home);
     } else {
       if (!mounted) return;
 

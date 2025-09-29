@@ -20,30 +20,31 @@ class CustomTextbutton extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Center(
-      child: Container(
-        width: size.width * 0.6833,
-        height: size.height * 0.06625,
-        decoration: BoxDecoration(
-          color: AppColor.sharedbutton,
-          borderRadius: AppRadius.buttonRaduis,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextButton(
-                onPressed: () {
-                  onpressed();
-                },
-                child: Text(
-                  textAlign: TextAlign.center,
-                  text,
-                  style: AppTextStyle.medium18(AppColor.colorwEE),
-                )),
-            const SizedBox(width: 5),
-            isIconAdded == false
-                ? const SizedBox()
-                : SvgPicture.asset(AppIcon.forwardArrow),
-          ],
+      child: GestureDetector(
+        onTap: () {
+          onpressed();
+        },
+        child: Container(
+          width: size.width * 0.6833,
+          height: size.height * 0.06625,
+          decoration: BoxDecoration(
+            color: AppColor.sharedbutton,
+            borderRadius: AppRadius.buttonRaduis,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                text,
+                style: AppTextStyle.medium18(AppColor.colorwEE),
+              ),
+              const SizedBox(width: 5),
+              isIconAdded == false
+                  ? const SizedBox()
+                  : SvgPicture.asset(AppIcon.forwardArrow),
+            ],
+          ),
         ),
       ),
     );

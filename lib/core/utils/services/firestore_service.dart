@@ -1,7 +1,9 @@
 // ignore_for_file: unnecessary_null_comparison, avoid_print
+// ToDo :: Mohnd ::change all the static strings with firebaseConstants class
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/core/utils/model/event_model.dart';
+import 'package:event_planning_app/core/utils/utils/firebase_constants.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -179,5 +181,19 @@ class FirestoreService {
         return EventModel.fromDoc(doc);
       }).toList();
     });
+  }
+
+  Future<void> saveUserInterests(String userId, List<String> interests) async {
+    await _firestore
+        .collection('users')
+        .doc(userId)
+        .update({'interests': interests});
+  }
+
+  Future<void> markFirstLogCompleted(String userId) async {
+    await _firestore
+        .collection(FirebaseConstants.usersCollection)
+        .doc(userId)
+        .set({FirebaseConstants.firstlog: true}, SetOptions(merge: true));
   }
 }

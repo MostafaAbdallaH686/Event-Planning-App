@@ -1,6 +1,7 @@
 //ToDo ::Mostafa::almost done need to send the selections to backend
 
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
@@ -18,7 +19,9 @@ class InterestsEventsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => InterestsCubit(InterestsRepo(CacheHelper())),
+      create: (context) => InterestsCubit(
+        InterestsRepo(CacheHelper(), FirestoreService()),
+      ),
       child: const _InterestsEventsScreenView(),
     );
   }
@@ -55,7 +58,6 @@ class _InterestsEventsScreenView extends StatelessWidget {
   Widget _buildContent(BuildContext context, InterestsLoaded state) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
-    // final chipWidth = (screenWidth - 64) / 2;
 
     return Padding(
       padding: EdgeInsets.all(screenWidth * .044444),

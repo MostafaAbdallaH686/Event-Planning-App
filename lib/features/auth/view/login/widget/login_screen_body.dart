@@ -1,5 +1,7 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/function/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
@@ -30,9 +32,18 @@ class LoginScreenBody extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is UserLoggedIn) {
-          context.pushReplacement(AppRoutes.home);
+          final isFirstTime = !(await CacheHelper()
+                  .getData(key: SharedPrefereneceKey.isFirstLogin) ??
+              false);
+          if (isFirstTime) {
+            // Navigate to Interests screen
+            context.push(AppRoutes.favEvent);
+          } else {
+            // Go to Home
+            context.pushReplacement(AppRoutes.home);
+          }
         } else if (state is UserErrorNotVerified) {
           AppDialog.showConfirmDialog(
               context: context,

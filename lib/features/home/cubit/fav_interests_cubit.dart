@@ -1,9 +1,13 @@
 // lib/features/interests/presentation/cubit/interests_cubit.dart
 
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
+import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/features/home/cubit/fav_interests_state.dart';
 import 'package:event_planning_app/features/home/data/fav_interests_model.dart';
 import 'package:event_planning_app/features/home/data/fav_interests_repo.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -75,10 +79,21 @@ class InterestsCubit extends Cubit<InterestsState> {
     if (state is! InterestsLoaded) return;
 
     final currentState = state as InterestsLoaded;
+    final selectedIds = currentState.selectedCategoryIds.toList();
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      await FirestoreService().markFirstLogCompleted(user.uid);
+    }
 
     try {
-      await _repo
-          .saveSelectedCategories(currentState.selectedCategoryIds.toList());
+      // Save locally (for quick access)
+      await _repo.saveSelectedCategoriesLocally(selectedIds);
+
+      // Save to Firebase (for sync, backend, recommendations)
+      await _repo.saveSelectedCategoriesToFirebase(selectedIds);
+      await CacheHelper()
+          .saveData(key: SharedPrefereneceKey.isFirstLogin, value: true);
+
       if (context.mounted) {
         context.pushReplacement(AppRoutes.home);
       }
