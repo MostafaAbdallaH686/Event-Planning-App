@@ -15,7 +15,8 @@ class HomeScreenBody extends StatelessWidget {
     return SingleChildScrollView(
       child: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          padding: EdgeInsets.symmetric(
+              horizontal: size.width * 0.0256, vertical: size.height * 0.00625),
           child: Column(
             children: [
               const SearchBoxWidget(),

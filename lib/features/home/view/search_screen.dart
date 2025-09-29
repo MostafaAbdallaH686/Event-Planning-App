@@ -1,205 +1,145 @@
-//ToDo ::Mostafa:: Still have to clean code and make it reusable
+// ignore_for_file: deprecated_member_use, no_leading_underscores_for_local_identifiers
 
-// ignore_for_file: deprecated_member_use
-
+import 'package:event_planning_app/core/utils/theme/app_colors.dart';
+import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
+import 'package:event_planning_app/core/utils/utils/app_icon.dart';
+import 'package:event_planning_app/core/utils/utils/app_string.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
+import 'package:event_planning_app/features/home/cubit/search_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SearchScreen extends StatelessWidget {
-  const SearchScreen({super.key});
+  final String searchQuery;
+  final TextEditingController _searchController;
+
+  SearchScreen({super.key, required this.searchQuery})
+      : _searchController = TextEditingController(text: searchQuery);
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
-    final clamped = mq.copyWith(
-      textScaleFactor: mq.textScaleFactor.clamp(1.0, 1.2),
-    );
+    final size = MediaQuery.of(context).size;
 
-    final w = mq.size.width;
-    final hPadding = w * 0.06;
-    final gap = w * 0.04;
+    // تنفيذ البحث عند فتح الصفحة لأول مرة
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (_searchController.text.isNotEmpty) {
+        context.read<SearchCubit>().searchEvents(_searchController.text);
+      }
+    });
 
-    return MediaQuery(
-      data: clamped,
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        body: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hPadding, vertical: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Top row with back button
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.of(context).maybePop(),
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                  ],
-                ),
-                SizedBox(height: gap),
-
-                // Search bar with filter icon
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade100,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.search, color: Colors.grey),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: TextField(
-                          decoration: const InputDecoration(
-                            hintText: 'Search',
-                            border: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(Icons.tune, color: Colors.black),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: gap * 1.2),
-
-                // Location section
-                Text(
-                  'Location',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                      ),
-                ),
-                SizedBox(height: gap * 0.5),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined, size: 25),
-                    const SizedBox(width: 5),
-                    Text(
-                      'My Current Location',
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                  ],
-                ),
-                SizedBox(height: gap * 1.5),
-
-                // Events list
-                Expanded(
-                  child: ListView(
-                    children: [
-                      EventCard(
-                        image: 'assets/2.png',
-                        title: 'Dance party at the top of the town - 2022',
-                        location: 'Bapunagar',
-                      ),
-                      SizedBox(height: gap),
-                      EventCard(
-                        image: 'assets/3.png',
-                        title: 'Festival event at kudasan - 2022',
-                        location: 'Gota',
-                      ),
-                      SizedBox(height: gap),
-                      EventCard(
-                        image: 'assets/4.png',
-                        title: 'Party with friends at night - 2022',
-                        location: 'Chandlodiya',
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          AppString.search,
+          style: AppTextStyle.bold20(AppColor.black),
         ),
       ),
-    );
-  }
-}
-
-class EventCard extends StatelessWidget {
-  final String image;
-  final String title;
-  final String location;
-
-  const EventCard({
-    super.key,
-    required this.image,
-    required this.title,
-    required this.location,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context).size.width;
-    final gap = mq * 0.03;
-
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 6,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Row(
+      body: Column(
         children: [
-          // Event image
-          ClipRRect(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(12),
-              bottomLeft: Radius.circular(12),
-            ),
-            child: Image.asset(
-              image,
-              width: mq * 0.25,
-              height: mq * 0.25,
-              fit: BoxFit.cover,
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.0307),
+            child: CustomTextform(
+              controller: _searchController,
+              prefixicon: AppIcon.search,
+              prefixtext: AppString.search,
+              fillColor: AppColor.colorbr9E,
+              onChanged: (value) {
+                // البحث مباشرة عند الكتابة
+                context.read<SearchCubit>().searchEvents(value);
+              },
+              onFieldSubmitted: (value) {
+                // البحث عند الضغط على Enter
+                context.read<SearchCubit>().searchEvents(value);
+              },
             ),
           ),
-          SizedBox(width: gap),
-          // Event info
+          SizedBox(height: size.height * 0.015),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          fontWeight: FontWeight.w600,
+            child: BlocBuilder<SearchCubit, SearchState>(
+              builder: (context, state) {
+                if (state is SearchInitial) {
+                  return Center(child: Text(AppString.starttyping));
+                } else if (state is SearchLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is SearchLoaded) {
+                  final events = state.events;
+                  if (events.isEmpty) {
+                    return Center(child: Text(AppString.noresult));
+                  }
+                  return ListView.builder(
+                    itemCount: events.length,
+                    itemBuilder: (context, index) {
+                      final event = events[index];
+                      return Container(
+                        margin: EdgeInsets.symmetric(
+                          vertical: size.width * 0.02,
+                          horizontal: size.width * 0.04,
                         ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on_outlined, size: 18),
-                      const SizedBox(width: 4),
-                      Text(
-                        location,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                        padding: EdgeInsets.all(size.width * 0.02),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: size.width * 0.25,
+                              height: size.height * 0.1,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: NetworkImage(event.imageUrl),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: size.width * 0.0256),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    event.title,
+                                    style: AppTextStyle.bold14(AppColor.black),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  SizedBox(height: size.height * 0.005),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.location_on,
+                                          size: 14, color: Colors.grey),
+                                      SizedBox(width: size.width * 0.0102),
+                                      Text(
+                                        event.location,
+                                        style: AppTextStyle.regular12(
+                                            AppColor.colorbr688),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                } else if (state is SearchError) {
+                  return Center(child: Text("❌ ${state.message}"));
+                }
+                return const SizedBox.shrink();
+              },
             ),
-          ),
-          // Heart icon
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.favorite_border),
           ),
         ],
       ),

@@ -65,7 +65,6 @@ class HomeCubit extends Cubit<HomeState> {
 
       try {
         final userId = FirebaseAuth.instance.currentUser!.uid;
-        print("👤 Current userId: $userId");
 
         await firestoreService.joinEvent(categoryId, eventId, userId);
 

@@ -17,4 +17,9 @@ abstract class AppRoutes {
   static const String changePassword = '/changePassword';
   static const String mapView = '/mapView';
   static const String emptyEvent = '/emptyEvent';
+  static const String seeAllRecommendation = '/SeeAllRecommendation';
+  static const String seeAllPopular = '/SeeAllPopular';
+  static const String seeAllUpComing = '/SeeAllUpComing';
+  static const String searchScreen = '/SearchScreen';
+  static const String categoryEvents = '/categoryEvents/';
 }

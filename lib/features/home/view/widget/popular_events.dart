@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -35,7 +36,7 @@ class PopularEventsSection extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      context.push('/SeeAllPopular');
+                      context.push(AppRoutes.seeAllPopular);
                     },
                     child: Text(AppString.all,
                         style: AppTextStyle.semibold14(AppColor.colorbr80)),
@@ -44,7 +45,7 @@ class PopularEventsSection extends StatelessWidget {
               ),
               SizedBox(height: size.height * 0.01),
               SizedBox(
-                height: size.height * 0.35,
+                height: size.height * 0.38,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: events.length > 5 ? 5 : events.length,
@@ -54,13 +55,13 @@ class PopularEventsSection extends StatelessWidget {
 
                     return Container(
                       width: size.width * 0.7,
-                      margin: const EdgeInsets.only(right: 10),
+                      margin: EdgeInsets.only(right: size.width * 0.0256),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
                         color: AppColor.white,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withOpacity(0.2),
                             blurRadius: 6,
                             offset: const Offset(0, 3),
                           ),
@@ -70,7 +71,7 @@ class PopularEventsSection extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: size.height * 0.225,
+                            height: size.height * 0.22,
                             width: double.infinity,
                             decoration: BoxDecoration(
                               borderRadius: const BorderRadius.only(
@@ -84,7 +85,9 @@ class PopularEventsSection extends StatelessWidget {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: size.width * 0.0205,
+                                vertical: size.height * 0.009),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -110,7 +113,8 @@ class PopularEventsSection extends StatelessWidget {
                                             },
                                       style: TextButton.styleFrom(
                                         backgroundColor: AppColor.colorbr80,
-                                        minimumSize: const Size(80, 30),
+                                        minimumSize: Size(size.width * 0.2051,
+                                            size.height * 0.0375),
                                         shape: RoundedRectangleBorder(
                                           borderRadius:
                                               BorderRadius.circular(8),

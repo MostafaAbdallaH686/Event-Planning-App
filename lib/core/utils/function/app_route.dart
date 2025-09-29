@@ -6,8 +6,10 @@ import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event/empty_event_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view/map_view_screen.dart';
+import 'package:event_planning_app/features/home/view/category_events_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/home/view/interests_events_screen.dart';
+import 'package:event_planning_app/features/home/view/search_screen.dart';
 import 'package:event_planning_app/features/home/view/see_all_popular.dart';
 import 'package:event_planning_app/features/home/view/see_all_recommendation_screen.dart';
 import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.dart';
@@ -49,5 +51,23 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/SeeAllUpComing',
         builder: (context, state) => const SeeAllUpComingScreen()),
+    GoRoute(
+      path: '/SearchScreen',
+      builder: (context, state) {
+        final query = state.extra as String?;
+        return SearchScreen(searchQuery: query ?? '');
+      },
+    ),
+    GoRoute(
+      path: '/categoryEvents/:id/:name',
+      builder: (context, state) {
+        final categoryId = state.pathParameters['id']!;
+        final categoryName = state.pathParameters['name']!;
+        return CategoryEventsScreen(
+          categoryId: categoryId,
+          categoryName: categoryName,
+        );
+      },
+    ),
   ],
 );

@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -35,16 +36,16 @@ class UpcomingEventsSection extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      context.push('/SeeAllUpComing');
+                      context.push(AppRoutes.seeAllUpComing);
                     },
                     child: Text(AppString.all,
                         style: AppTextStyle.semibold14(AppColor.colorbr80)),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
+              SizedBox(height: size.height * 0.01),
               SizedBox(
-                height: size.height * 0.14,
+                height: size.height * 0.16,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: events.length > 5 ? 5 : events.length,
@@ -53,14 +54,17 @@ class UpcomingEventsSection extends StatelessWidget {
                     final isJoined = state.joinedEventIds.contains(event.id);
 
                     return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.all(10),
+                      margin:
+                          EdgeInsets.symmetric(horizontal: size.width * 0.0205),
+                      padding: EdgeInsets.symmetric(
+                          vertical: size.height * 0.008,
+                          horizontal: size.width * 0.0256),
                       decoration: BoxDecoration(
                         color: AppColor.white,
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
+                            color: Colors.black.withOpacity(0.2),
                             blurRadius: 6,
                             offset: const Offset(2, 2),
                           ),
@@ -70,7 +74,7 @@ class UpcomingEventsSection extends StatelessWidget {
                         children: [
                           Container(
                             width: size.width * 0.25,
-                            height: size.height * 0.1,
+                            height: size.height * 0.09,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               image: DecorationImage(
@@ -79,7 +83,7 @@ class UpcomingEventsSection extends StatelessWidget {
                               ),
                             ),
                           ),
-                          const SizedBox(width: 10),
+                          SizedBox(width: size.width * 0.0205),
                           SizedBox(
                             width: size.width * 0.45,
                             child: Column(
@@ -91,7 +95,7 @@ class UpcomingEventsSection extends StatelessWidget {
                                         AppTextStyle.bold16(AppColor.colorbA1),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis),
-                                const SizedBox(height: 4),
+                                SizedBox(height: size.height * 0.005),
                                 Row(
                                   children: [
                                     const Icon(Icons.location_on,

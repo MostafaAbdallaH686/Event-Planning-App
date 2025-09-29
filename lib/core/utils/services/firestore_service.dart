@@ -132,20 +132,33 @@ class FirestoreService {
     });
   }
 
+  //get events by special category
+  Stream<List<EventModel>> getEventsByCategory(String categoryId) {
+    return _firestore
+        .collection('categories')
+        .doc(categoryId)
+        .collection('events')
+        .snapshots()
+        .map(
+            (snap) => snap.docs.map((doc) => EventModel.fromDoc(doc)).toList());
+  }
+
   //  Search Events by title
-  Future<List<EventModel>> searchEvents(
-    String q,
-  ) async {
-    final start = q;
-    final end = '$q\uf8ff';
-    final snap = await _firestore
+  Stream<List<EventModel>> searchEventsStream(String query) {
+    if (query.isEmpty) {
+      return const Stream.empty();
+    }
+
+    final start = query;
+    final end = '$query\uf8ff';
+
+    return FirebaseFirestore.instance
         .collectionGroup('events')
         .where('title', isGreaterThanOrEqualTo: start)
         .where('title', isLessThanOrEqualTo: end)
-        .get();
-    return snap.docs.map((doc) {
-      return EventModel.fromDoc(doc);
-    }).toList();
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => EventModel.fromDoc(doc)).toList());
   }
 
   //  Recommended Events

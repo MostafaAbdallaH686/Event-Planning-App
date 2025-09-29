@@ -52,6 +52,9 @@ abstract class AppString {
   static const String recommendation = "Recommendations for you";
   static const String join = "Join";
   static const String joined = "Joined";
+  //search
+  static const String noresult = "No results found";
+  static const String starttyping = "Start typing to search for events...";
 
   // add screen
 

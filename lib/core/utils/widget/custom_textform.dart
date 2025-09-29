@@ -13,6 +13,8 @@ class CustomTextform extends StatelessWidget {
     this.validator,
     this.obscureText = false,
     this.fillColor,
+    this.onChanged,
+    this.onFieldSubmitted,
   });
 
   final String prefixicon;
@@ -22,6 +24,8 @@ class CustomTextform extends StatelessWidget {
   final FormFieldValidator<String>? validator;
   final bool obscureText;
   final Color? fillColor;
+  final ValueChanged<String>? onChanged;
+  final ValueChanged<String>? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +36,8 @@ class CustomTextform extends StatelessWidget {
           top: size.height * 0.01875,
           right: size.width * 0.033),
       child: TextFormField(
+        onFieldSubmitted: onFieldSubmitted,
+        onChanged: onChanged,
         controller: controller,
         validator: validator,
         obscureText: obscureText,

@@ -46,8 +46,8 @@ class SeeAllRecommendationScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
-                        blurRadius: 6,
+                        color: Colors.black.withOpacity(0.25),
+                        blurRadius: 8,
                         offset: const Offset(0, 3),
                       ),
                     ],

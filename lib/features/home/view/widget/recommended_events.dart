@@ -1,5 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -34,7 +35,7 @@ class RecommendedEventsSection extends StatelessWidget {
                   const Spacer(),
                   TextButton(
                     onPressed: () {
-                      context.push('/SeeAllRecommendation');
+                      context.push(AppRoutes.seeAllRecommendation);
                     },
                     child: Text(AppString.all,
                         style: AppTextStyle.semibold14(AppColor.colorbr80)),
@@ -51,13 +52,13 @@ class RecommendedEventsSection extends StatelessWidget {
                   final isJoined = state.joinedEventIds.contains(event.id);
                   return Container(
                     margin: EdgeInsets.symmetric(vertical: size.width * 0.02),
-                    padding: EdgeInsets.all(size.width * 00.01),
+                    padding: EdgeInsets.all(size.width * 0.01),
                     decoration: BoxDecoration(
                       color: AppColor.white,
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.05),
+                          color: Colors.black.withOpacity(0.2),
                           blurRadius: 6,
                           offset: const Offset(0, 3),
                         ),
