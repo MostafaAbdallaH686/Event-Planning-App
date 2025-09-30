@@ -29,6 +29,11 @@ abstract class ApiKeypoint {
   static const String firePassword = "password";
   static const String firePublicProfile = "public_profile";
   static const String fireId = "id";
+  static const String fireFollowers = "followers";
+  static const String fireFollowing = "following";
+  static const String fireAbout = "about";
+  static const String fireInterests = "interests";
+  static const String fireCreatedAt = "createdAt";
   static const String fireName = "name";
   static const String firePictureFacebook = "picture.width(200)";
   static const String fireProfilePicture = "profilePicture";
