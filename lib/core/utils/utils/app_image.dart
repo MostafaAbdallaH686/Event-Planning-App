@@ -12,5 +12,9 @@ abstract class AppImage {
   static const String splash = "${_baseUrl}logo_black.png";
   static const String emptyEvent = "${_baseUrl}empty_event.png";
   static const String eventDetils = "${_baseUrl}event_detils.png";
-
+  static const String map = "${_baseUrl}map.png";
+  static const String user1 = "${_baseUrl}user1.png";
+  static const String user2 = "${_baseUrl}user2.png";
+  static const String user3 = "${_baseUrl}user3.png";
+  static const String singer = "${_baseUrl}singer.png";
 }

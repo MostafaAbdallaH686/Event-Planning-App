@@ -24,7 +24,7 @@ class CustomTextbutton extends StatelessWidget {
         width: size.width * 0.6833,
         height: size.height * 0.06625,
         decoration: BoxDecoration(
-          color: AppColor.sharedbutton,
+          color: AppColor.primaryButton,
           borderRadius: AppRadius.buttonRaduis,
         ),
         child: Row(

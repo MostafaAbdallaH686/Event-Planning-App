@@ -16,6 +16,8 @@ abstract class AppRoutes {
   static const String changePassword = '/changePassword';
   static const String mapView = '/mapView';
   static const String emptyEvent = '/emptyEvent';
-  static const String bookingScreen = "/bookingScreen";
-  static const String eventDetailsScreen = "/eventDetailsScreen";
+ // static const String bookingScreen = "/bookingScreen";
+  //static const String eventDetailsScreen = "/eventDetailsScreen";
+  static const String booking = "/booking";
+  static const String eventDetails = "/event-details";
 }

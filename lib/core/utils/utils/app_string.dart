@@ -62,6 +62,19 @@ abstract class AppString {
   static const String readLess = "Read Less";
 
   // Details
+  static const String eventSpecificTitle = "Darshan Raval Music Show"; // ADDED
+  static const String eventDateSpecific = "03 May , 2023"; // ADDED
+  static const String eventTimeSpecific = "Tuesday, 4:00PM - 9:00PM"; // ADDED
+  static const String eventLocationName = "karnavati club"; // ADDED
+  static const String eventLocationAddress = "36 Rings Street New Ranip , Ahmedabad"; // ADDED
+  static const String eventFollow = "Follow"; // ADDED
+  static const String eventInvite = "Invite"; // ADDED
+  static const String eventGoing = "+20 Going"; // ADDED
+  static const String eventArtistName = "Darshan Raval"; // ADDED
+  static const String eventArtistRole = "Singer"; // ADDED
+
+  // ... rest of existing strings ...
+  static const String eventTitle = "Tech Conference 2025";
 
   // settings
 
@@ -74,13 +87,17 @@ abstract class AppString {
   static const String kupdateprofilesuccess = "update profile success";
 
 
-  static const String eventTitle = "Tech Conference 2025";
+
   static const String eventDate = "30 September 2025";
   static const String eventDescription =
   "Join us for an exciting tech conference where industry leaders "
   "will share insights on AI, Flutter, and the future of technology.";
   static const String eventLocation = "Cairo International Convention Center";
   static const String bookNow = "Book Now";
+  static const String aboutEvent = "About Event";
+  static const String location = "Location";
+  static const String buyTicket = "Buy Ticket";
+  static const String eventDetails = "Event Details";
 
 
 }
