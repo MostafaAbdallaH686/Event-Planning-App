@@ -13,9 +13,6 @@ import '../../../core/utils/utils/app_radius.dart';
 class EventsDetailsScreen extends StatelessWidget {
   const EventsDetailsScreen({super.key});
 
-
-  static const Color _primaryBlueColorValue = Color(0xff5F33E1);
-
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -24,10 +21,6 @@ class EventsDetailsScreen extends StatelessWidget {
     final double titleSize = isSmall ? 28 : 35;
     final double subTitleSize = isSmall ? 12 : 14;
     final double bodySize = isSmall ? 14 : 16;
-
-
-    const double avatarRadius = 14.0;
-    const double avatarOverlap = 18.0;
 
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
@@ -94,36 +87,19 @@ class EventsDetailsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Stack(
-                            alignment: Alignment.centerLeft,
                             children: [
-                              // الأفاتار الثالث في الخلف
-                              CircleAvatar(
-                                  radius: avatarRadius,
-                                  backgroundColor: AppColor.white,
-                                  backgroundImage: AssetImage(AppImage.user3)
-                              ),
-                              // الأفاتار الثاني متداخل
+                              CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user3)),
                               Positioned(
-                                left: avatarOverlap,
-                                child: CircleAvatar(
-                                    radius: avatarRadius,
-                                    backgroundColor: AppColor.white,
-                                    backgroundImage: AssetImage(AppImage.user2)
-                                ),
+                                left: AppWidth.w14,
+                                child: CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user2)),
                               ),
-                              // الأفاتار الأول في الأمام
                               Positioned(
-                                left: avatarOverlap * 2,
-                                child: CircleAvatar(
-                                    radius: avatarRadius,
-                                    backgroundColor: AppColor.white,
-                                    backgroundImage: AssetImage(AppImage.user1)
-                                ),
+                                left: AppWidth.w28,
+                                child: CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user1)),
                               ),
-                              SizedBox(width: avatarRadius * 2 + avatarOverlap * 2),
                             ],
                           ),
-                          const SizedBox(width: AppDistance.small),
+                          const SizedBox(width: AppDistance.medium - 4),
                           const Text(
                             AppString.eventGoing,
                             style: TextStyle(fontWeight: FontWeight.w600),
@@ -176,7 +152,7 @@ class EventsDetailsScreen extends StatelessWidget {
                             borderRadius: AppRadius.small,
                           ),
                           child: Center(
-                            child: SvgPicture.asset(AppIcon.calendar, width: AppWidth.w20, height: AppHeight.h20, colorFilter: const ColorFilter.mode(_primaryBlueColorValue, BlendMode.srcIn)),
+                            child: SvgPicture.asset(AppIcon.calendar, width: AppWidth.w20, height: AppHeight.h20),
                           ),
                         ),
                         const SizedBox(width: AppDistance.medium),
@@ -202,7 +178,7 @@ class EventsDetailsScreen extends StatelessWidget {
                             color: AppColor.colorblFF.withOpacity(0.12),
                             borderRadius: AppRadius.small,
                           ),
-                          child: Center(child: SvgPicture.asset(AppIcon.location, width: AppWidth.w20, height: AppHeight.h20, colorFilter: const ColorFilter.mode(_primaryBlueColorValue, BlendMode.srcIn))),
+                          child: Center(child: SvgPicture.asset(AppIcon.location, width: AppWidth.w20, height: AppHeight.h20)),
                         ),
                         const SizedBox(width: AppDistance.medium),
                         Expanded(
