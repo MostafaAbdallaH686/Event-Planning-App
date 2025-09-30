@@ -8,10 +8,26 @@ import '../../../core/utils/utils/app_padding.dart';
 import '../../../core/utils/theme/app_colors.dart';
 import '../../../core/utils/utils/app_string.dart';
 import '../../../core/utils/utils/app_radius.dart';
+import 'event_share_bottom_sheet.dart';
 
 
 class EventsDetailsScreen extends StatelessWidget {
   const EventsDetailsScreen({super.key});
+
+  static const Color _primaryBlueColorValue = Color(0xff5F33E1);
+
+  void _showShareSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: AppRadius.large.topLeft),
+      ),
+      builder: (BuildContext context) {
+        return const EventShareBottomSheet();
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +37,9 @@ class EventsDetailsScreen extends StatelessWidget {
     final double titleSize = isSmall ? 28 : 35;
     final double subTitleSize = isSmall ? 12 : 14;
     final double bodySize = isSmall ? 14 : 16;
+
+    const double avatarRadius = 14.0;
+    const double avatarOverlap = 18.0;
 
     return Scaffold(
       body: LayoutBuilder(builder: (context, constraints) {
@@ -87,19 +106,33 @@ class EventsDetailsScreen extends StatelessWidget {
                       child: Row(
                         children: [
                           Stack(
+                            alignment: Alignment.centerLeft,
                             children: [
-                              CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user3)),
-                              Positioned(
-                                left: AppWidth.w14,
-                                child: CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user2)),
+                              CircleAvatar(
+                                  radius: avatarRadius,
+                                  backgroundColor: AppColor.white,
+                                  backgroundImage: AssetImage(AppImage.user3)
                               ),
                               Positioned(
-                                left: AppWidth.w28,
-                                child: CircleAvatar(radius: AppWidth.w28 / 2, backgroundImage: AssetImage(AppImage.user1)),
+                                left: avatarOverlap,
+                                child: CircleAvatar(
+                                    radius: avatarRadius,
+                                    backgroundColor: AppColor.white,
+                                    backgroundImage: AssetImage(AppImage.user2)
+                                ),
                               ),
+                              Positioned(
+                                left: avatarOverlap * 2,
+                                child: CircleAvatar(
+                                    radius: avatarRadius,
+                                    backgroundColor: AppColor.white,
+                                    backgroundImage: AssetImage(AppImage.user1)
+                                ),
+                              ),
+                              SizedBox(width: avatarRadius * 2 + avatarOverlap * 2),
                             ],
                           ),
-                          const SizedBox(width: AppDistance.medium - 4),
+                          const SizedBox(width: AppDistance.small),
                           const Text(
                             AppString.eventGoing,
                             style: TextStyle(fontWeight: FontWeight.w600),
@@ -113,7 +146,7 @@ class EventsDetailsScreen extends StatelessWidget {
                                 borderRadius: AppRadius.small,
                               ),
                             ),
-                            onPressed: () {},
+                            onPressed: () => _showShareSheet(context),
                             child: const Text(AppString.eventInvite),
                           )
                         ],
@@ -152,7 +185,7 @@ class EventsDetailsScreen extends StatelessWidget {
                             borderRadius: AppRadius.small,
                           ),
                           child: Center(
-                            child: SvgPicture.asset(AppIcon.calendar, width: AppWidth.w20, height: AppHeight.h20),
+                            child: SvgPicture.asset(AppIcon.calendar, width: AppWidth.w20, height: AppHeight.h20, colorFilter: const ColorFilter.mode(_primaryBlueColorValue, BlendMode.srcIn)),
                           ),
                         ),
                         const SizedBox(width: AppDistance.medium),
@@ -178,7 +211,7 @@ class EventsDetailsScreen extends StatelessWidget {
                             color: AppColor.colorblFF.withOpacity(0.12),
                             borderRadius: AppRadius.small,
                           ),
-                          child: Center(child: SvgPicture.asset(AppIcon.location, width: AppWidth.w20, height: AppHeight.h20)),
+                          child: Center(child: SvgPicture.asset(AppIcon.location, width: AppWidth.w20, height: AppHeight.h20, colorFilter: const ColorFilter.mode(_primaryBlueColorValue, BlendMode.srcIn))),
                         ),
                         const SizedBox(width: AppDistance.medium),
                         Expanded(

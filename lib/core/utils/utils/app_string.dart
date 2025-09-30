@@ -98,6 +98,16 @@ abstract class AppString {
   static const String location = "Location";
   static const String buyTicket = "Buy Ticket";
   static const String eventDetails = "Event Details";
+  static const String shareWithFriends = "Share with friends";
+  static const String copyLink = "Copy Link";
+  static const String whatsapp = "WhatsApp";
+  static const String facebook = "Facebook";
+  static const String messenger = "Messenger";
+  static const String twitter = "Twitter";
+  static const String instagram = "Instagram";
+  static const String skype = "Skype";
+  static const String message = "Message"; 
+  static const String cancel = "Cancel";
 
 
 }
