@@ -7,4 +7,6 @@ abstract class AppIcon {
   static const String mail = "${_baseUrl}Mail.svg";
   static const String backArrow = "${_baseUrl}back_Icon.svg";
   static const String forwardArrow = "${_baseUrl}Forward_arrow.svg";
+  static const String location = "${_baseUrl}location.svg";
+  static const String calendar = "${_baseUrl}calendar.svg";
 }

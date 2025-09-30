@@ -11,4 +11,6 @@ abstract class AppImage {
   static const String splashLogo = "${_baseUrl}Splash_logo.png";
   static const String splash = "${_baseUrl}logo_black.png";
   static const String emptyEvent = "${_baseUrl}empty_event.png";
+  static const String eventDetils = "${_baseUrl}event_detils.png";
+
 }
