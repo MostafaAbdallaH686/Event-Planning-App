@@ -185,4 +185,9 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w200,
         color: color,
       );
+  static TextStyle semibold17(Color color) => TextStyle( //  NEWLY ADDED DEFINITION
+    fontSize: 17,
+    fontWeight: FontWeight.w600,
+    color: color,
+  );
 }

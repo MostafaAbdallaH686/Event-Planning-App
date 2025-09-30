@@ -26,6 +26,7 @@ abstract class AppHeight {
   static const double h56 = 56;
   static const double h36 = 36;
   static const double h6 = 6;
+  static const double h80 = 80;
 }
 
 abstract class AppWidth {
@@ -39,6 +40,7 @@ abstract class AppWidth {
   static const double w55 = 55;
   static const double w48 = 48;
   static const double w20 = 20;
+  static const double w80 = 80;
 }
 abstract class AppDistance {
   static const double small = 8.0;

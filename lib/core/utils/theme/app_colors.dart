@@ -54,4 +54,9 @@ abstract class AppColor {
   static const Color skypeColor = Color(0xFF58D3EE);
 
   static const Color messageColor = Color(0xFF5AF575);
+  static const Color starYellow = Color(0xFFFDD518);
+  static const Color subTitleGrey = Color(0xFF808080); 
+  static const Color darkText = Color(0xFF25131A);
+  static const Color cardShadowColor = Color(0x1F493E83);
+  static const Color redBorder = Color(0xFFFF0000);
 }

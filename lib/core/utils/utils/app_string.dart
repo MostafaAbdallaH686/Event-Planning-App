@@ -106,8 +106,13 @@ abstract class AppString {
   static const String twitter = "Twitter";
   static const String instagram = "Instagram";
   static const String skype = "Skype";
-  static const String message = "Message"; 
+  static const String message = "Message";
   static const String cancel = "Cancel";
+  static const String leaveAReview = "Leave a Review";
+  static const String giveYourRating = "Please give your rating with us";
+  static const String addAComment = "Add a Comment";
+  static const String submit = "Submit";
+
 
 
 }
