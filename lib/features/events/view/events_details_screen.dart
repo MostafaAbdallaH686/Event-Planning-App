@@ -88,7 +88,7 @@ class EventsDetailsScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                   ////////////////////////////// Navigator.pushNamed(context, AppRoutes.bookingScreen);
+                   // Navigator.pushNamed(context, AppRoutes.bookingScreen);
                   },
                   child: const Text("Book Now"),
                 ),
