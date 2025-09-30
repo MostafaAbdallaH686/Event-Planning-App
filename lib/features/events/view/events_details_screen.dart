@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../core/utils/utils/app_icon.dart';
 import '../../../core/utils/utils/app_image.dart';
-import '../../../core/utils/utils/app_routes.dart';
+
 
 
 class EventsDetailsScreen extends StatelessWidget {
@@ -88,7 +88,7 @@ class EventsDetailsScreen extends StatelessWidget {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                   // Navigator.pushNamed(context, AppRoutes.bookingScreen);
+                   /// Navigator.pushNamed(context, AppRoutes.bookingScreen);
                   },
                   child: const Text("Book Now"),
                 ),
