@@ -13,4 +13,5 @@ abstract class AppPadding {
       EdgeInsets.symmetric(vertical: 16, horizontal: 16);
   static const EdgeInsets taskContainerPadding =
       EdgeInsets.symmetric(vertical: 12, horizontal: 13);
+  static const double screen = 16.0;
 }

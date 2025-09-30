@@ -9,4 +9,5 @@ abstract class AppRadius {
   static final BorderRadius segmentsRadius = BorderRadius.circular(100);
   static final BorderRadius profileChipRadius = BorderRadius.circular(30);
   static final BorderRadius profileChangeRadius = BorderRadius.circular(28);
+  static const double image = 16.0;
 }
