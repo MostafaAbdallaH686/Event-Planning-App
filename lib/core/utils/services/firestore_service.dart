@@ -196,4 +196,24 @@ class FirestoreService {
         .doc(userId)
         .set({FirebaseConstants.firstlog: true}, SetOptions(merge: true));
   }
+
+  // Get eventby ID
+  Stream<EventModel?> getEventById({
+    required String categoryId,
+    required String eventId,
+  }) {
+    return _firestore
+        .collection('categories')
+        .doc(categoryId)
+        .collection('events')
+        .doc(eventId)
+        .snapshots()
+        .map((doc) {
+      if (doc.exists) {
+        return EventModel.fromDoc(doc);
+      } else {
+        return null;
+      }
+    });
+  }
 }

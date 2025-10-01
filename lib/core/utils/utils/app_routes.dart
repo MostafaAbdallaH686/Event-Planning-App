@@ -22,4 +22,5 @@ abstract class AppRoutes {
   static const String seeAllUpComing = '/SeeAllUpComing';
   static const String searchScreen = '/SearchScreen';
   static const String categoryEvents = '/categoryEvents/';
+  static const String eventDetails = '/eventDetails';
 }

@@ -53,90 +53,102 @@ class UpcomingEventsSection extends StatelessWidget {
                     final event = events[index];
                     final isJoined = state.joinedEventIds.contains(event.id);
 
-                    return Container(
-                      margin:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.0205),
-                      padding: EdgeInsets.symmetric(
-                          vertical: size.height * 0.008,
-                          horizontal: size.width * 0.0256),
-                      decoration: BoxDecoration(
-                        color: AppColor.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 6,
-                            offset: const Offset(2, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: size.width * 0.25,
-                            height: size.height * 0.09,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              image: DecorationImage(
-                                image: NetworkImage(event.imageUrl),
-                                fit: BoxFit.cover,
+                    return InkWell(
+                      onTap: () {
+                        context.push(
+                          AppRoutes.eventDetails,
+                          extra: {
+                            "categoryId": event.categoryId,
+                            "eventId": event.id!,
+                          },
+                        );
+                      },
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.0205),
+                        padding: EdgeInsets.symmetric(
+                            vertical: size.height * 0.008,
+                            horizontal: size.width * 0.0256),
+                        decoration: BoxDecoration(
+                          color: AppColor.white,
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(2, 2),
+                            ),
+                          ],
+                        ),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: size.width * 0.25,
+                              height: size.height * 0.09,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                  image: NetworkImage(event.imageUrl),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(width: size.width * 0.0205),
-                          SizedBox(
-                            width: size.width * 0.45,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(event.title,
-                                    style:
-                                        AppTextStyle.bold16(AppColor.colorbA1),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis),
-                                SizedBox(height: size.height * 0.005),
-                                Row(
-                                  children: [
-                                    const Icon(Icons.location_on,
-                                        size: 14, color: Colors.grey),
-                                    const SizedBox(width: 4),
-                                    Expanded(
-                                      child: Text(event.location,
-                                          style: AppTextStyle.regular12(
-                                              AppColor.colorbr688),
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    Container(
-                                      height: size.height * 0.04,
-                                      decoration: BoxDecoration(
-                                        color: AppColor.colorbr80,
-                                        borderRadius: BorderRadius.circular(8),
+                            SizedBox(width: size.width * 0.0205),
+                            SizedBox(
+                              width: size.width * 0.45,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(event.title,
+                                      style: AppTextStyle.bold16(
+                                          AppColor.colorbA1),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  SizedBox(height: size.height * 0.005),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.location_on,
+                                          size: 14, color: Colors.grey),
+                                      const SizedBox(width: 4),
+                                      Expanded(
+                                        child: Text(event.location,
+                                            style: AppTextStyle.regular12(
+                                                AppColor.colorbr688),
+                                            overflow: TextOverflow.ellipsis),
                                       ),
-                                      child: TextButton(
-                                        onPressed: isJoined
-                                            ? null
-                                            : () {
-                                                context
-                                                    .read<HomeCubit>()
-                                                    .joinEvent(event.id!,
-                                                        event.categoryId);
-                                              },
-                                        child: Text(
-                                          isJoined
-                                              ? AppString.joined
-                                              : AppString.join,
-                                          style: AppTextStyle.regular12(
-                                              AppColor.white),
+                                      Container(
+                                        height: size.height * 0.04,
+                                        decoration: BoxDecoration(
+                                          color: AppColor.colorbr80,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: TextButton(
+                                          onPressed: isJoined
+                                              ? null
+                                              : () {
+                                                  context
+                                                      .read<HomeCubit>()
+                                                      .joinEvent(event.id!,
+                                                          event.categoryId);
+                                                },
+                                          child: Text(
+                                            isJoined
+                                                ? AppString.joined
+                                                : AppString.join,
+                                            style: AppTextStyle.regular12(
+                                                AppColor.white),
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

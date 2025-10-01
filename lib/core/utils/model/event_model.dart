@@ -15,6 +15,7 @@ class EventModel {
   final int attendeesCount;
   final bool isPopular;
   final List<String> tags;
+  final double price;
 
   EventModel({
     this.id,
@@ -30,6 +31,7 @@ class EventModel {
     required this.attendeesCount,
     required this.isPopular,
     required this.tags,
+    required this.price,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,13 +48,14 @@ class EventModel {
       'attendeesCount': attendeesCount,
       'isPopular': isPopular,
       'tags': tags,
+      'price': price,
     };
   }
 
   factory EventModel.fromDoc(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>? ?? {};
 
-    // parsing for attendeesCount
+    // attendeesCount parsing
     final rawAttendees = data['attendeesCount'];
     int parsedAttendees = 0;
     if (rawAttendees is int) {
@@ -61,6 +64,17 @@ class EventModel {
       parsedAttendees = rawAttendees.toInt();
     } else if (rawAttendees is String) {
       parsedAttendees = int.tryParse(rawAttendees) ?? 0;
+    }
+
+    // price parsing
+    final rawPrice = data['price'];
+    double parsedPrice = 0.0;
+    if (rawPrice is int) {
+      parsedPrice = rawPrice.toDouble();
+    } else if (rawPrice is double) {
+      parsedPrice = rawPrice;
+    } else if (rawPrice is String) {
+      parsedPrice = double.tryParse(rawPrice) ?? 0.0;
     }
 
     return EventModel(
@@ -81,6 +95,7 @@ class EventModel {
       attendeesCount: parsedAttendees,
       isPopular: data['isPopular'] ?? false,
       tags: List<String>.from(data['tags'] ?? []),
+      price: parsedPrice,
     );
   }
 }

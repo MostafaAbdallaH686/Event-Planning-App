@@ -53,87 +53,99 @@ class PopularEventsSection extends StatelessWidget {
                     final event = events[index];
                     final isJoined = state.joinedEventIds.contains(event.id);
 
-                    return Container(
-                      width: size.width * 0.7,
-                      margin: EdgeInsets.only(right: size.width * 0.0256),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: AppColor.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 6,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: size.height * 0.22,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                              ),
-                              image: DecorationImage(
-                                image: NetworkImage(event.imageUrl),
-                                fit: BoxFit.cover,
+                    return InkWell(
+                      onTap: () {
+                        context.push(
+                          AppRoutes.eventDetails,
+                          extra: {
+                            "categoryId": event.categoryId,
+                            "eventId": event.id!,
+                          },
+                        );
+                      },
+                      child: Container(
+                        width: size.width * 0.7,
+                        margin: EdgeInsets.only(right: size.width * 0.0256),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: AppColor.white,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              height: size.height * 0.22,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(10),
+                                  topRight: Radius.circular(10),
+                                ),
+                                image: DecorationImage(
+                                  image: NetworkImage(event.imageUrl),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.0205,
-                                vertical: size.height * 0.009),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(event.title,
-                                    style: AppTextStyle.bold14(AppColor.black),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis),
-                                const SizedBox(height: 4),
-                                Row(
-                                  children: [
-                                    Text(event.location,
-                                        style: AppTextStyle.regular12(
-                                            AppColor.colorbr80)),
-                                    const Spacer(),
-                                    TextButton(
-                                      onPressed: isJoined
-                                          ? null
-                                          : () {
-                                              context
-                                                  .read<HomeCubit>()
-                                                  .joinEvent(event.categoryId,
-                                                      event.id!);
-                                            },
-                                      style: TextButton.styleFrom(
-                                        backgroundColor: AppColor.colorbr80,
-                                        minimumSize: Size(size.width * 0.2051,
-                                            size.height * 0.0375),
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.0205,
+                                  vertical: size.height * 0.009),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(event.title,
+                                      style:
+                                          AppTextStyle.bold14(AppColor.black),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis),
+                                  const SizedBox(height: 4),
+                                  Row(
+                                    children: [
+                                      Text(event.location,
+                                          style: AppTextStyle.regular12(
+                                              AppColor.colorbr80)),
+                                      const Spacer(),
+                                      TextButton(
+                                        onPressed: isJoined
+                                            ? null
+                                            : () {
+                                                context
+                                                    .read<HomeCubit>()
+                                                    .joinEvent(event.categoryId,
+                                                        event.id!);
+                                              },
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: AppColor.colorbr80,
+                                          minimumSize: Size(size.width * 0.2051,
+                                              size.height * 0.0375),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          isJoined
+                                              ? AppString.joined
+                                              : AppString.join,
+                                          style: AppTextStyle.regular12(
+                                              AppColor.white),
                                         ),
                                       ),
-                                      child: Text(
-                                        isJoined
-                                            ? AppString.joined
-                                            : AppString.join,
-                                        style: AppTextStyle.regular12(
-                                            AppColor.white),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     );
                   },

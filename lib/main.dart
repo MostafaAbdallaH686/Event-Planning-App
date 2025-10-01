@@ -7,6 +7,7 @@ import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
+import 'package:event_planning_app/features/events/cubit/event_details_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
@@ -45,6 +46,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (_) => SearchCubit(FirestoreService()),
+        ),
+        BlocProvider(
+          create: (_) => EventCubit(FirestoreService()),
         ),
         BlocProvider(
           create: (context) => OnBoardingCubit(),

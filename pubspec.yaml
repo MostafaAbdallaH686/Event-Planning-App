@@ -48,6 +48,7 @@ dependencies:
   flutter_facebook_auth: ^7.1.2
   google_sign_in: ^7.1.1
   fluttertoast: ^8.2.12
+  intl: 
   
   
 

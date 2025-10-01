@@ -56,6 +56,14 @@ abstract class AppString {
   static const String noresult = "No results found";
   static const String starttyping = "Start typing to search for events...";
 
+  //event Screen
+  static const String eventDetails = "Event Details";
+  static const String going = "Going";
+  static const String invite = "invite";
+  static const String buytecket = "Buy Ticket";
+  static const String aboutEvent = "About Event";
+  static const String location = "Location";
+
   // add screen
 
   // button String

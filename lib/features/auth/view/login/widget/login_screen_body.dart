@@ -1,5 +1,7 @@
 //ToDo :: Mostafa :: Refactor and Clean Code Please
 
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/function/app_dialog.dart';

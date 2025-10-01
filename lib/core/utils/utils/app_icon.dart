@@ -10,4 +10,6 @@ abstract class AppIcon {
   static const String filter = "${_baseUrl}Filter.svg";
   static const String backArrow = "${_baseUrl}back_Icon.svg";
   static const String forwardArrow = "${_baseUrl}Forward_arrow.svg";
+  static const String date = "${_baseUrl}Date.svg";
+  static const String location = "${_baseUrl}Location.svg";
 }

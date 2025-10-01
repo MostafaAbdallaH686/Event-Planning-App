@@ -5,6 +5,7 @@ import 'package:event_planning_app/features/auth/view/forgetPassword/forget_pass
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event/empty_event_screen.dart';
+import 'package:event_planning_app/features/events/view/event_datails/event_details_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view/map_view_screen.dart';
 import 'package:event_planning_app/features/home/view/category_events_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
@@ -56,6 +57,20 @@ final GoRouter router = GoRouter(
       builder: (context, state) {
         final query = state.extra as String?;
         return SearchScreen(searchQuery: query ?? '');
+      },
+    ),
+    GoRoute(
+      path: '/eventDetails',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>?;
+
+        final categoryId = extra?['categoryId'] as String? ?? '';
+        final eventId = extra?['eventId'] as String? ?? '';
+
+        return EventDetailsScreen(
+          categoryId: categoryId,
+          eventId: eventId,
+        );
       },
     ),
     GoRoute(
