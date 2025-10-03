@@ -6,24 +6,14 @@ abstract class AppSvgImage {
       {required String path,
       double? width,
       double? height,
+      Color? color,
       BoxFit fit = BoxFit.contain}) {
-    return SvgPicture.asset(path, width: width, height: height, fit: fit);
-  }
-
-  static Widget showImage(
-      {required String path,
-      double? width,
-      double? height,
-      BoxFit fit = BoxFit.contain}) {
-    return Container(
+    return SvgPicture.asset(
+      color: color,
+      path,
       width: width,
       height: height,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(path),
-          fit: fit,
-        ),
-      ),
+      fit: fit,
     );
   }
 }

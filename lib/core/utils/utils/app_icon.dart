@@ -12,4 +12,8 @@ abstract class AppIcon {
   static const String forwardArrow = "${_baseUrl}Forward_arrow.svg";
   static const String date = "${_baseUrl}Date.svg";
   static const String location = "${_baseUrl}Location.svg";
+  static const String home = "${_baseUrl}home_Icon.svg";
+  static const String events = "${_baseUrl}events_Icon.svg";
+  static const String orders = "${_baseUrl}orders_Icon.svg";
+  static const String profile = "${_baseUrl}profile_Icon.svg";
 }

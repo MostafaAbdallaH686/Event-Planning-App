@@ -44,7 +44,7 @@ class LoginScreenBody extends StatelessWidget {
             context.push(AppRoutes.favEvent);
           } else {
             // Go to Home
-            context.pushReplacement(AppRoutes.home);
+            context.pushReplacement(AppRoutes.navBar);
           }
         } else if (state is UserErrorNotVerified) {
           AppDialog.showConfirmDialog(

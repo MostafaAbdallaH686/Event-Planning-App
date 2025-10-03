@@ -1,4 +1,4 @@
-import 'package:event_planning_app/features/home/view/widget/home_screen_body.dart';
+import 'package:event_planning_app/features/home/view/widgets/home_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {

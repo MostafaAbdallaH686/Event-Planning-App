@@ -55,6 +55,11 @@ abstract class AppString {
   //search
   static const String noresult = "No results found";
   static const String starttyping = "Start typing to search for events...";
+// navigation bar
+  static const String homeNav = "Home";
+  static const String eventsNav = "Events";
+  static const String ordersNav = "Orders";
+  static const String profileNav = "Profile";
 
   //event Screen
   static const String eventDetails = "Event Details";

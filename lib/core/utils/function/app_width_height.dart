@@ -1,40 +1,28 @@
-import 'package:get/get.dart';
-
-abstract class AppWidthHeight {
-  static final double width = Get.width;
-  static final double height = Get.height;
-
-  static double persantageOfWidth(double persentage) {
-    if (persentage > 100 || persentage <= 0) {
-      return width;
-    }
-    return ((width * persentage) / 100);
-  }
-
-  static double persantageOfHeight(double persentage) {
-    if (persentage > 100 || persentage <= 0) {
-      return height;
-    }
-    return ((height * persentage) / 100);
-  }
-}
-
-abstract class DeviceWidthHeight {
-  static final double width = Get.width;
-  static final double height = Get.height;
-
-  static double perentageOfWidth(double wdt) {
-    double percentageFromDesign = ((wdt * width) / DesignWidthHeight.width);
-    return percentageFromDesign;
-  }
-
-  static double perentageOfHeight(double hei) {
-    double percentageFromDesign = ((hei * height) / DesignWidthHeight.height);
-    return percentageFromDesign;
-  }
-}
+import 'package:flutter/material.dart';
 
 abstract class DesignWidthHeight {
-  static const double width = 360;
-  static const double height = 800;
+  static const double width = 375;
+  static const double height = 812;
+}
+
+abstract class AppWidthHeight {
+  static double percentageOfWidth(BuildContext context, double num) {
+    assert(num >= 0, 'Number must be non-negative');
+    final mediaQuery = MediaQuery.maybeOf(context);
+    if (mediaQuery == null) {
+      throw FlutterError(
+          'AppWidthHeight.percentageOfWidth requires a MediaQuery ancestor in the widget tree');
+    }
+    return (mediaQuery.size.width * (num / DesignWidthHeight.width));
+  }
+
+  static double percentageOfHeight(BuildContext context, double num) {
+    assert(num >= 0, 'Number must be non-negative');
+    final mediaQuery = MediaQuery.maybeOf(context);
+    if (mediaQuery == null) {
+      throw FlutterError(
+          'AppWidthHeight.percentageOfHeight requires a MediaQuery ancestor in the widget tree');
+    }
+    return (mediaQuery.size.height * (num / DesignWidthHeight.height));
+  }
 }

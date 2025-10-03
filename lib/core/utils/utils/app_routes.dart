@@ -23,4 +23,5 @@ abstract class AppRoutes {
   static const String searchScreen = '/SearchScreen';
   static const String categoryEvents = '/categoryEvents/';
   static const String eventDetails = '/eventDetails';
+  static const String navBar = '/navigationBar';
 }

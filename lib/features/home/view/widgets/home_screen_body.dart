@@ -1,8 +1,8 @@
-import 'package:event_planning_app/features/home/view/widget/category_sections.dart';
-import 'package:event_planning_app/features/home/view/widget/popular_events.dart';
-import 'package:event_planning_app/features/home/view/widget/recommended_events.dart';
-import 'package:event_planning_app/features/home/view/widget/search_box.dart';
-import 'package:event_planning_app/features/home/view/widget/upcoming_events.dart';
+import 'package:event_planning_app/features/home/view/widgets/category_sections.dart';
+import 'package:event_planning_app/features/home/view/widgets/popular_events.dart';
+import 'package:event_planning_app/features/home/view/widgets/recommended_events.dart';
+import 'package:event_planning_app/features/home/view/widgets/search_box.dart';
+import 'package:event_planning_app/features/home/view/widgets/upcoming_events.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreenBody extends StatelessWidget {

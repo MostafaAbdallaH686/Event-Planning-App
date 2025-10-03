@@ -25,7 +25,7 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.pushReplacement(AppRoutes.home);
+              context.pushReplacement(AppRoutes.navBar);
             } else if (state is UserErrorLoginFacebook) {
               AppToast.show(message: state.message);
             }
@@ -45,7 +45,7 @@ class SocialLoginButtons extends StatelessWidget {
         BlocConsumer<UserCubit, UserState>(
           listener: (context, state) {
             if (state is UserLoggedIn) {
-              context.pushReplacement(AppRoutes.home);
+              context.pushReplacement(AppRoutes.navBar);
             } else if (state is UserErrorLoginGoogle) {
               AppToast.show(message: state.message);
             }
