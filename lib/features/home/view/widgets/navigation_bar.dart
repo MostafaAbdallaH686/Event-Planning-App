@@ -4,7 +4,7 @@ import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/booking/view/booking_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
-import 'package:event_planning_app/features/home/view/widgets/popular_events.dart';
+import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.dart';
 import 'package:event_planning_app/features/home/view/widgets/recommended_events.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +23,7 @@ class _MainNavigationState extends State<MainNavigation> {
     HomeScreen(),
     RecommendedEventsSection(),
     BookingScreen(),
-    PopularEventsSection()
+    SeeAllUpComingScreen()
   ];
 
   @override
