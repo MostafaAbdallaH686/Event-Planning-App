@@ -4,7 +4,7 @@ import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_state.dart';
-import 'package:event_planning_app/features/onboarding/widgets/custom_onboarding.dart';
+import 'package:event_planning_app/features/onboarding/view/widgets/custom_onboarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

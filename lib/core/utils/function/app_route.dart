@@ -4,9 +4,9 @@ import 'package:event_planning_app/features/auth/view/verification/verification_
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
-import 'package:event_planning_app/features/events/view/empty_event/empty_event_screen.dart';
-import 'package:event_planning_app/features/events/view/event_datails/event_details_screen.dart';
-import 'package:event_planning_app/features/events/view/map_view/map_view_screen.dart';
+import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
+import 'package:event_planning_app/features/events/view/event_details_screen.dart';
+import 'package:event_planning_app/features/events/view/map_view_screen.dart';
 import 'package:event_planning_app/features/home/view/category_events_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/home/view/interests_events_screen.dart';

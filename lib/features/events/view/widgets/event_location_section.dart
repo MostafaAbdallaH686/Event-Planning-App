@@ -42,7 +42,7 @@ class EventLocationSection extends StatelessWidget {
         Padding(
           padding: EdgeInsets.symmetric(horizontal: size.width * 0.1461538),
           child: CustomTextbutton(
-            text: "${AppString.buytecket} ${event.price}",
+            text: "${AppString.buytecket}  ${event.price} \$",
             onpressed: () {},
           ),
         ),

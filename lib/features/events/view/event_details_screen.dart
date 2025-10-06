@@ -1,4 +1,4 @@
-import 'package:event_planning_app/features/events/view/event_datails/widget/event_details_screen_body.dart';
+import 'package:event_planning_app/features/events/view/widgets/event_details_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class EventDetailsScreen extends StatelessWidget {

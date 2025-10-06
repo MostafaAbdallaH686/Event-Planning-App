@@ -74,9 +74,54 @@ abstract class AppString {
   // button String
 
   // profile
-
+  static const String profile = "Profile";
+  static const String editProfile = "Edit Profile";
+  static const String change = "CHANGE";
+  static const String aboutMe = "About Me";
+  static const String interests = "Interests";
+  static const String following = "Following";
+  static const String followers = "Followers";
+  static const String noSession = 'No user session. Please log in.';
+  static const String noAbout =
+      'There is no about me available. You can add one.';
+  static const String noInterests =
+      'No interests selected. You can add some interests.';
+  static const String readMore = "Read More";
+  static const String readLess = "Read Less";
   // Details
-
+  static const String eventSpecificTitle = "Darshan Raval Music Show";
+  static const String eventDateSpecific = "03 May , 2023";
+  static const String eventTimeSpecific = "Tuesday, 4:00PM - 9:00PM";
+  static const String eventLocationName = "karnavati club";
+  static const String eventLocationAddress =
+      "36 Rings Street New Ranip , Ahmedabad";
+  static const String eventFollow = "Follow";
+  static const String eventInvite = "Invite";
+  static const String eventGoing = "+20 Going";
+  static const String eventArtistName = "Darshan Raval";
+  static const String eventArtistRole = "Singer";
+  static const String eventTitle = "Tech Conference 2025";
+  static const String eventDate = "30 September 2025";
+  static const String eventDescription =
+      "Join us for an exciting tech conference where industry leaders "
+      "will share insights on AI, Flutter, and the future of technology.";
+  static const String eventLocation = "Cairo International Convention Center";
+  static const String bookNow = "Book Now";
+  static const String buyTicket = "Buy Ticket";
+  static const String shareWithFriends = "Share with friends";
+  static const String copyLink = "Copy Link";
+  static const String whatsapp = "WhatsApp";
+  static const String facebook = "Facebook";
+  static const String messenger = "Messenger";
+  static const String twitter = "Twitter";
+  static const String instagram = "Instagram";
+  static const String skype = "Skype";
+  static const String message = "Message";
+  static const String cancel = "Cancel";
+  static const String leaveAReview = "Leave a Review";
+  static const String giveYourRating = "Please give your rating with us";
+  static const String addAComment = "Add a Comment";
+  static const String submit = "Submit";
   // settings
 
   // change password

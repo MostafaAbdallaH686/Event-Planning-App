@@ -1,4 +1,4 @@
-import 'package:event_planning_app/features/onboarding/cubit/content_model.dart';
+import 'package:event_planning_app/features/onboarding/data/content_model.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

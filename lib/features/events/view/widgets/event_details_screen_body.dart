@@ -1,10 +1,10 @@
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/features/events/cubit/event_details_cubit.dart';
 import 'package:event_planning_app/features/events/cubit/event_details_state.dart';
-import 'package:event_planning_app/features/events/view/event_datails/widget/event_description_section.dart';
-import 'package:event_planning_app/features/events/view/event_datails/widget/event_header_section.dart';
-import 'package:event_planning_app/features/events/view/event_datails/widget/event_info_section.dart';
-import 'package:event_planning_app/features/events/view/event_datails/widget/event_location_section.dart';
+import 'package:event_planning_app/features/events/view/widgets/event_description_section.dart';
+import 'package:event_planning_app/features/events/view/widgets/event_header_section.dart';
+import 'package:event_planning_app/features/events/view/widgets/event_info_section.dart';
+import 'package:event_planning_app/features/events/view/widgets/event_location_section.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

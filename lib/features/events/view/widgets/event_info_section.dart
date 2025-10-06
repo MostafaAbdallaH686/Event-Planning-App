@@ -16,14 +16,12 @@ class EventInfoSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Center(
-          child: Text(
-            event.title.replaceFirstMapped(
-              RegExp(r'^(\S+\s+\S+)'),
-              (match) => "${match.group(1)}\n",
-            ),
-            style: AppTextStyle.bold35(AppColor.colorb26),
+        Text(
+          event.title.replaceFirstMapped(
+            RegExp(r'^(\S+\s+\S+)'),
+            (match) => "${match.group(1)}\n",
           ),
+          style: AppTextStyle.bold35(AppColor.colorb26),
         ),
         SizedBox(height: size.height * 0.01),
         Row(
