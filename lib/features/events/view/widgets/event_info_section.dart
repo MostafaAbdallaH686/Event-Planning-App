@@ -1,3 +1,4 @@
+import 'package:event_planning_app/core/utils/utils/app_text_scaler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +22,7 @@ class EventInfoSection extends StatelessWidget {
             RegExp(r'^(\S+\s+\S+)'),
             (match) => "${match.group(1)}\n",
           ),
+          textScaler: AppTextScaler.standard,
           style: AppTextStyle.bold35(AppColor.colorb26),
         ),
         SizedBox(height: size.height * 0.01),

@@ -17,19 +17,34 @@ class EventDetailsScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     context.read<EventCubit>().getEventById(categoryId, eventId);
-    return Scaffold(
-      body: BlocBuilder<EventCubit, EventState>(
-        builder: (context, state) {
-          if (state is EventLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (state is EventLoaded) {
-            final event = state.event;
-            return _buildEventDetails(context, event);
-          } else if (state is EventError) {
-            return Center(child: Text(state.message));
-          }
-          return const SizedBox();
-        },
+    return GestureDetector(
+      onHorizontalDragStart: (details) {
+        // Only trigger if swipe starts from the left edge (within 50px)
+        if (details.globalPosition.dx < 50) {
+          // Optional: you can add haptic feedback or visual cue here
+        }
+      },
+      onHorizontalDragEnd: (details) {
+        final velocity = details.primaryVelocity ?? 0.0;
+        // Swipe right with enough velocity → go back
+        if (velocity > 300) {
+          Navigator.maybePop(context);
+        }
+      },
+      child: Scaffold(
+        body: BlocBuilder<EventCubit, EventState>(
+          builder: (context, state) {
+            if (state is EventLoading) {
+              return const Center(child: CircularProgressIndicator());
+            } else if (state is EventLoaded) {
+              final event = state.event;
+              return _buildEventDetails(context, event);
+            } else if (state is EventError) {
+              return Center(child: Text(state.message));
+            }
+            return const SizedBox();
+          },
+        ),
       ),
     );
   }
@@ -43,17 +58,17 @@ class EventDetailsScreenBody extends StatelessWidget {
           EventHeaderSection(event: event),
           SizedBox(height: size.height * 0.03),
           Padding(
-            padding: EdgeInsets.only(left: size.width * 0.051282),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.051282),
             child: EventInfoSection(event: event),
           ),
           SizedBox(height: size.height * 0.02875),
           Padding(
-            padding: EdgeInsets.only(left: size.width * 0.0435),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.0435),
             child: EventDescriptionSection(event: event),
           ),
           SizedBox(height: size.height * 0.02),
           Padding(
-            padding: EdgeInsets.only(left: size.width * 0.0435),
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.0435),
             child: EventLocationSection(event: event),
           ),
           SizedBox(height: size.height * 0.01),
