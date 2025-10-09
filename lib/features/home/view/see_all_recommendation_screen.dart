@@ -31,8 +31,8 @@ class SeeAllRecommendationScreen extends StatelessWidget {
               child: CircularProgressIndicator(),
             );
           } else if (state is HomeLoaded &&
-              state.recommendedEvents.isNotEmpty) {
-            final events = state.recommendedEvents;
+              state.data.recommendedEvents.isNotEmpty) {
+            final events = state.data.recommendedEvents;
 
             return ListView.builder(
               shrinkWrap: true,

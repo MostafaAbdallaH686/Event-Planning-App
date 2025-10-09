@@ -23,8 +23,8 @@ class PopularEventsSection extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is HomeLoaded && state.popularEvents.isNotEmpty) {
-          final events = state.popularEvents;
+        } else if (state is HomeLoaded && state.data.popularEvents.isNotEmpty) {
+          final events = state.data.popularEvents;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

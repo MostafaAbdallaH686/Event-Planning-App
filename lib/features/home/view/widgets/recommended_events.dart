@@ -22,8 +22,9 @@ class RecommendedEventsSection extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(),
           );
-        } else if (state is HomeLoaded && state.recommendedEvents.isNotEmpty) {
-          final events = state.recommendedEvents;
+        } else if (state is HomeLoaded &&
+            state.data.recommendedEvents.isNotEmpty) {
+          final events = state.data.recommendedEvents;
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,

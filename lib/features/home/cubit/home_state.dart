@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:event_planning_app/core/utils/model/event_model.dart';
+import 'package:event_planning_app/features/home/data/home_model.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -8,8 +8,33 @@ abstract class HomeState extends Equatable {
   List<Object?> get props => [];
 }
 
+class HomeInitial extends HomeState {}
+
 class HomeLoading extends HomeState {
   const HomeLoading();
+}
+
+class HomeLoaded extends HomeState {
+  final HomeData data;
+  final Set<String> joinedEventIds;
+
+  const HomeLoaded({
+    required this.data,
+    this.joinedEventIds = const {},
+  });
+
+  HomeLoaded copyWith({
+    HomeData? data,
+    Set<String>? joinedEventIds,
+  }) {
+    return HomeLoaded(
+      data: data ?? this.data,
+      joinedEventIds: joinedEventIds ?? this.joinedEventIds,
+    );
+  }
+
+  @override
+  List<Object?> get props => [data, joinedEventIds];
 }
 
 class HomeError extends HomeState {
@@ -18,45 +43,4 @@ class HomeError extends HomeState {
 
   @override
   List<Object?> get props => [message];
-}
-
-class HomeLoaded extends HomeState {
-  final List<Map<String, dynamic>> categories;
-  final List<EventModel> upcomingEvents;
-  final Set<String> joinedEventIds;
-  final List<EventModel> popularEvents;
-  final List<EventModel> recommendedEvents;
-
-  const HomeLoaded({
-    required this.popularEvents,
-    required this.categories,
-    required this.upcomingEvents,
-    this.joinedEventIds = const {},
-    required this.recommendedEvents,
-  });
-
-  HomeLoaded copyWith({
-    List<Map<String, dynamic>>? categories,
-    List<EventModel>? upcomingEvents,
-    Set<String>? joinedEventIds,
-    List<EventModel>? popularEvents,
-    List<EventModel>? recommendedEvents,
-  }) {
-    return HomeLoaded(
-      categories: categories ?? this.categories,
-      recommendedEvents: recommendedEvents ?? this.recommendedEvents,
-      popularEvents: popularEvents ?? this.popularEvents,
-      upcomingEvents: upcomingEvents ?? this.upcomingEvents,
-      joinedEventIds: joinedEventIds ?? this.joinedEventIds,
-    );
-  }
-
-  @override
-  List<Object?> get props => [
-        categories,
-        upcomingEvents,
-        popularEvents,
-        recommendedEvents,
-        joinedEventIds
-      ];
 }

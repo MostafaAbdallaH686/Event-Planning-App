@@ -30,8 +30,9 @@ class SeeAllUpComingScreen extends StatelessWidget {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else if (state is HomeLoaded && state.upcomingEvents.isNotEmpty) {
-            final events = state.upcomingEvents;
+          } else if (state is HomeLoaded &&
+              state.data.upcomingEvents.isNotEmpty) {
+            final events = state.data.upcomingEvents;
 
             return ListView.builder(
               shrinkWrap: true,

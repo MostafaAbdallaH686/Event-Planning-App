@@ -4,6 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/utils/firebase_constants.dart';
+import 'package:event_planning_app/features/home/data/catagory_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -67,30 +68,30 @@ class FirestoreService {
   }
 
   //  Get Categories
-  Stream<List<Map<String, dynamic>>> getCategories() {
+  Stream<List<CategoryModel>> getCategories() {
     return _firestore.collection('categories').snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         final data = doc.data();
-        return {
+        return CategoryModel.fromJson({
           'id': doc.id,
           'name': data['name'] ?? 'No name',
           'icon': data['icon'] ?? '',
           'description': data['description'] ?? '',
-        };
+        });
       }).toList();
     });
   }
 
-  Future<List<Map<String, dynamic>>> getCategoriesOnce() async {
+  Future<List<CategoryModel>> getCategoriesOnce() async {
     final snapshot = await _firestore.collection('categories').get();
     return snapshot.docs.map((doc) {
       final data = doc.data();
-      return {
+      return CategoryModel.fromJson({
         'id': doc.id,
         'name': data['name'] ?? 'No name',
         'icon': data['icon'] ?? '',
         'description': data['description'] ?? '',
-      };
+      });
     }).toList();
   }
 

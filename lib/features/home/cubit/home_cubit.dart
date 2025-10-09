@@ -1,56 +1,29 @@
 // ignore_for_file: avoid_print, depend_on_referenced_packages
+import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:event_planning_app/core/utils/services/firestore_service.dart';
+import 'package:event_planning_app/features/home/data/home_model.dart';
+import 'package:event_planning_app/features/home/data/home_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  final FirestoreService firestoreService;
+  final HomeRepo _repo;
+  StreamSubscription<HomeData>? _dataSubscription;
 
-  HomeCubit(this.firestoreService) : super(const HomeLoading()) {
+  HomeCubit(this._repo) : super(HomeInitial()) {
     loadData();
   }
 
   void loadData() {
-    emit(const HomeLoading());
+    emit(HomeLoading());
 
-    firestoreService.getCategories().listen(
-      (categories) {
-        firestoreService.getUpcomingEvents().listen(
-          (upcomingEvents) {
-            firestoreService.getPopularEvents().listen(
-              (popularEvents) {
-                firestoreService.getRecommendedEvents(
-                    ["Design", "Family", "sports", "food", "music"]).listen(
-                  (recommendedEvents) {
-                    emit(HomeLoaded(
-                      categories: categories,
-                      upcomingEvents: upcomingEvents,
-                      popularEvents: popularEvents,
-                      recommendedEvents: recommendedEvents,
-                      joinedEventIds: {},
-                    ));
-                  },
-                  onError: (error) {
-                    print("❌ Error fetching recommended events: $error");
-                    emit(HomeError(error.toString()));
-                  },
-                );
-              },
-              onError: (error) {
-                print("❌ Error fetching popular events: $error");
-                emit(HomeError(error.toString()));
-              },
-            );
-          },
-          onError: (error) {
-            print("❌ Error fetching upcoming events: $error");
-            emit(HomeError(error.toString()));
-          },
-        );
+    _dataSubscription?.cancel();
+    _dataSubscription = _repo.loadHomeData().listen(
+      (data) {
+        emit(HomeLoaded(data: data));
       },
       onError: (error) {
-        print("❌ Error fetching categories: $error");
+        print("❌ Error loading home data: $error");
         emit(HomeError(error.toString()));
       },
     );
@@ -58,24 +31,30 @@ class HomeCubit extends Cubit<HomeState> {
 
   Future<void> joinEvent(String categoryId, String eventId) async {
     final currentState = state;
-    if (currentState is HomeLoaded) {
-      if (currentState.joinedEventIds.contains(eventId)) {
-        return;
-      }
+    if (currentState is! HomeLoaded) return;
 
-      try {
-        final userId = FirebaseAuth.instance.currentUser!.uid;
+    if (currentState.joinedEventIds.contains(eventId)) return;
 
-        await firestoreService.joinEvent(categoryId, eventId, userId);
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) return;
 
-        final updatedJoined = Set<String>.from(currentState.joinedEventIds)
-          ..add(eventId);
+      await _repo.joinEvent(categoryId, eventId, userId);
 
-        emit(currentState.copyWith(joinedEventIds: updatedJoined));
-        print("✅ Event $eventId joined successfully");
-      } catch (e) {
-        print("❌ Error joining event: $e");
-      }
-    } else {}
+      final updatedJoined = Set<String>.from(currentState.joinedEventIds)
+        ..add(eventId);
+
+      emit(currentState.copyWith(joinedEventIds: updatedJoined));
+      print("✅ Event $eventId joined successfully");
+    } catch (e) {
+      print("❌ Error joining event: $e");
+      // Optionally emit an error state or snackbar
+    }
+  }
+
+  @override
+  Future<void> close() {
+    _dataSubscription?.cancel();
+    return super.close();
   }
 }
