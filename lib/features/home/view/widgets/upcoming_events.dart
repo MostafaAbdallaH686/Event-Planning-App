@@ -1,10 +1,10 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/features/home/view/widgets/horizontal_event_card.dart';
+import 'package:event_planning_app/features/home/view/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:event_planning_app/core/utils/theme/app_colors.dart';
-import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/home_state.dart';
@@ -15,46 +15,40 @@ class UpcomingEventsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         if (state is HomeLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is HomeLoaded &&
-            state.data.upcomingEvents.isNotEmpty) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (state is HomeLoaded) {
           final events = state.data.upcomingEvents;
+          if (events.isEmpty) return const SizedBox.shrink();
+
+          final visibleEvents = events.take(5).toList();
 
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Text(AppString.upcomevent,
-                      style: AppTextStyle.bold16(AppColor.colorbA1)),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      context.push(AppRoutes.seeAllUpComing);
-                    },
-                    child: Text(AppString.all,
-                        style: AppTextStyle.semibold14(AppColor.colorbr80)),
-                  ),
-                ],
+              SectionHeader(
+                title: AppString.upcomevent,
+                actionText: AppString.all,
+                onActionPressed: () {
+                  context.push(AppRoutes.seeAllUpComing);
+                },
               ),
-              SizedBox(height: size.height * 0.01),
+              const SizedBox(height: 8),
               SizedBox(
-                height: size.height * 0.16,
+                height: MediaQuery.of(context).size.height * 0.16,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: events.length > 5 ? 5 : events.length,
+                  itemCount: visibleEvents.length,
                   itemBuilder: (context, index) {
-                    final event = events[index];
+                    final event = visibleEvents[index];
                     final isJoined = state.joinedEventIds.contains(event.id);
-
-                    return InkWell(
+                    return HorizontalEventCard(
+                      event: event,
+                      isJoined: isJoined,
                       onTap: () {
                         context.push(
                           AppRoutes.eventDetails,
@@ -64,93 +58,12 @@ class UpcomingEventsSection extends StatelessWidget {
                           },
                         );
                       },
-                      child: Container(
-                        margin: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.0205),
-                        padding: EdgeInsets.symmetric(
-                            vertical: size.height * 0.008,
-                            horizontal: size.width * 0.0256),
-                        decoration: BoxDecoration(
-                          color: AppColor.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 6,
-                              offset: const Offset(2, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              width: size.width * 0.25,
-                              height: size.height * 0.09,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                image: DecorationImage(
-                                  image: NetworkImage(event.imageUrl),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: size.width * 0.0205),
-                            SizedBox(
-                              width: size.width * 0.45,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(event.title,
-                                      style: AppTextStyle.bold16(
-                                          AppColor.colorbA1),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis),
-                                  SizedBox(height: size.height * 0.005),
-                                  Row(
-                                    children: [
-                                      const Icon(Icons.location_on,
-                                          size: 14, color: Colors.grey),
-                                      const SizedBox(width: 4),
-                                      Expanded(
-                                        child: Text(event.location,
-                                            style: AppTextStyle.regular12(
-                                                AppColor.colorbr688),
-                                            overflow: TextOverflow.ellipsis),
-                                      ),
-                                      Container(
-                                        height: size.height * 0.04,
-                                        decoration: BoxDecoration(
-                                          color: AppColor.colorbr80,
-                                          borderRadius:
-                                              BorderRadius.circular(8),
-                                        ),
-                                        child: TextButton(
-                                          onPressed: isJoined
-                                              ? null
-                                              : () {
-                                                  context
-                                                      .read<HomeCubit>()
-                                                      .joinEvent(event.id!,
-                                                          event.categoryId);
-                                                },
-                                          child: Text(
-                                            isJoined
-                                                ? AppString.joined
-                                                : AppString.join,
-                                            style: AppTextStyle.regular12(
-                                                AppColor.white),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
+                      onJoinPressed: () {
+                        context.read<HomeCubit>().joinEvent(
+                              event.categoryId,
+                              event.id!,
+                            );
+                      },
                     );
                   },
                 ),

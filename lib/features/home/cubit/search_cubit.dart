@@ -27,7 +27,6 @@ class SearchCubit extends Cubit<SearchState> {
         emit(SearchLoaded(events));
       });
     } catch (e) {
-      print("❌ Error while searching: $e");
       emit(SearchError(e.toString()));
     }
   }
@@ -40,7 +39,6 @@ class SearchCubit extends Cubit<SearchState> {
         emit(CategoryEventsLoaded(categoryId, events));
       });
     } catch (e) {
-      print("❌ Error loading category events: $e");
       emit(CategoryEventsError(e.toString()));
     }
   }

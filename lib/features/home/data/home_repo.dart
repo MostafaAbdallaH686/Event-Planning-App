@@ -11,19 +11,11 @@ class HomeRepo {
   HomeRepo(this._firestoreService);
 
   Stream<HomeData> loadHomeData() {
-    final categoriesStream =
-        _firestoreService.getCategories(); // Stream<List<Category>>
-    final upcomingStream =
-        _firestoreService.getUpcomingEvents(); // Stream<List<EventModel>>
-    final popularStream =
-        _firestoreService.getPopularEvents(); // Stream<List<EventModel>>
-    final recommendedStream = _firestoreService.getRecommendedEvents([
-      "Design",
-      "Family",
-      "sports",
-      "food",
-      "music"
-    ]); // Stream<List<EventModel>>
+    final categoriesStream = _firestoreService.getCategories();
+    final upcomingStream = _firestoreService.getUpcomingEvents();
+    final popularStream = _firestoreService.getPopularEvents();
+    final recommendedStream = _firestoreService
+        .getRecommendedEvents(["Design", "Family", "sports", "food", "music"]);
 
     return StreamZip([
       categoriesStream,

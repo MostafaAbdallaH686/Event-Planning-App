@@ -1,6 +1,11 @@
 // ignore_for_file: deprecated_member_use
 
+import 'package:event_planning_app/core/utils/function/app_width_height.dart';
+import 'package:event_planning_app/core/utils/model/event_model.dart';
+import 'package:event_planning_app/core/utils/utils/app_distance.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/features/home/view/widgets/event_card.dart';
+import 'package:event_planning_app/features/home/view/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -15,147 +20,128 @@ class PopularEventsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoading) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (state is HomeLoaded && state.data.popularEvents.isNotEmpty) {
-          final events = state.data.popularEvents;
-
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Text(AppString.populr,
-                      style: AppTextStyle.bold16(AppColor.colorbA1)),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () {
-                      context.push(AppRoutes.seeAllPopular);
-                    },
-                    child: Text(AppString.all,
-                        style: AppTextStyle.semibold14(AppColor.colorbr80)),
-                  ),
-                ],
-              ),
-              SizedBox(height: size.height * 0.01),
-              SizedBox(
-                height: size.height * 0.38,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: events.length > 5 ? 5 : events.length,
-                  itemBuilder: (context, index) {
-                    final event = events[index];
-                    final isJoined = state.joinedEventIds.contains(event.id);
-
-                    return InkWell(
-                      onTap: () {
-                        context.push(
-                          AppRoutes.eventDetails,
-                          extra: {
-                            "categoryId": event.categoryId,
-                            "eventId": event.id!,
-                          },
-                        );
-                      },
-                      child: Container(
-                        width: size.width * 0.7,
-                        margin: EdgeInsets.only(right: size.width * 0.0256),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: AppColor.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 6,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: size.height * 0.22,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.only(
-                                  topLeft: Radius.circular(10),
-                                  topRight: Radius.circular(10),
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(event.imageUrl),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: size.width * 0.0205,
-                                  vertical: size.height * 0.009),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(event.title,
-                                      style:
-                                          AppTextStyle.bold14(AppColor.black),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Text(event.location,
-                                          style: AppTextStyle.regular12(
-                                              AppColor.colorbr80)),
-                                      const Spacer(),
-                                      TextButton(
-                                        onPressed: isJoined
-                                            ? null
-                                            : () {
-                                                context
-                                                    .read<HomeCubit>()
-                                                    .joinEvent(event.categoryId,
-                                                        event.id!);
-                                              },
-                                        style: TextButton.styleFrom(
-                                          backgroundColor: AppColor.colorbr80,
-                                          minimumSize: Size(size.width * 0.2051,
-                                              size.height * 0.0375),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                        ),
-                                        child: Text(
-                                          isJoined
-                                              ? AppString.joined
-                                              : AppString.join,
-                                          style: AppTextStyle.regular12(
-                                              AppColor.white),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-        } else {}
-        return const SizedBox.shrink();
+        return switch (state) {
+          HomeLoading() => const _LoadingView(),
+          HomeLoaded(:final data, :final joinedEventIds)
+              when data.popularEvents.isNotEmpty =>
+            _PopularEventsContent(
+              events: data.popularEvents,
+              joinedEventIds: joinedEventIds,
+            ),
+          HomeError(:final message) => _ErrorView(message: message),
+          _ => const _EmptyView(),
+        };
       },
     );
+  }
+}
+
+// Loading state
+class _LoadingView extends StatelessWidget {
+  const _LoadingView();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(child: CircularProgressIndicator());
+  }
+}
+
+// Error state
+class _ErrorView extends StatelessWidget {
+  final String message;
+
+  const _ErrorView({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'Error: $message',
+        style: AppTextStyle.regular12(Colors.red),
+      ),
+    );
+  }
+}
+
+// Empty state
+class _EmptyView extends StatelessWidget {
+  const _EmptyView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        'No popular events available',
+        style: AppTextStyle.regular12(AppColor.colorbr80),
+      ),
+    );
+  }
+}
+
+// Content with events
+class _PopularEventsContent extends StatelessWidget {
+  final List<EventModel> events;
+  final Set<String> joinedEventIds;
+
+  const _PopularEventsContent({
+    required this.events,
+    required this.joinedEventIds,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final displayEvents = events.take(5).toList();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeader(
+          title: AppString.populr,
+          actionText: AppString.all,
+          onActionPressed: () => context.push(AppRoutes.seeAllPopular),
+        ),
+        SizedBox(
+            height:
+                AppWidthHeight.percentageOfHeight(context, AppDistance.d10)),
+        SizedBox(
+          height: AppWidthHeight.percentageOfHeight(context, AppDistance.d190),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: displayEvents.length,
+            itemBuilder: (context, index) => _buildEventCard(
+              context,
+              displayEvents[index],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEventCard(BuildContext context, EventModel event) {
+    final isJoined = joinedEventIds.contains(event.id);
+
+    return EventCard(
+      event: event,
+      isJoined: isJoined,
+      onTap: () => _navigateToDetails(context, event),
+      onJoinPressed: () => _handleJoinEvent(context, event),
+    );
+  }
+
+  void _navigateToDetails(BuildContext context, EventModel event) {
+    context.push(
+      AppRoutes.eventDetails,
+      extra: {
+        "categoryId": event.categoryId,
+        "eventId": event.id!,
+      },
+    );
+  }
+
+  void _handleJoinEvent(BuildContext context, EventModel event) {
+    context.read<HomeCubit>().joinEvent(event.categoryId, event.id!);
   }
 }

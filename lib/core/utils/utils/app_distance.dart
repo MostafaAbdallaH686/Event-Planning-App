@@ -1,33 +1,42 @@
 //ToDo:: Put your distance values here
 
-abstract class AppHeight {
-  static const double h67 = 67;
-  static const double h54 = 54;
-  static const double h40 = 40;
-  static const double h16 = 16;
-  static const double h5 = 5;
-  static const double h7 = 7;
-
-  static const double h31 = 31;
-  static const double h20 = 20;
-  static const double h23 = 23;
-  static const double h24 = 24;
-  static const double h25 = 25;
-  static const double h27 = 27;
-  static const double h15 = 15;
-  static const double h12 = 12;
-  static const double h8 = 8;
-  static const double h10 = 10;
-  static const double h32 = 32;
-}
-
-abstract class AppWidth {
-  static const double w40 = 40;
-  static const double w24 = 24;
-  static const double w22 = 22;
-  static const double w8 = 8;
-
-  static const double w14 = 14;
-  static const double w16 = 16;
-  static const double w55 = 55;
+abstract class AppDistance {
+  static const double d67 = 67;
+  static const double d54 = 54;
+  static const double d40 = 40;
+  static const double d16 = 16;
+  static const double d5 = 5;
+  static const double d8 = 8;
+  static const double d4 = 4;
+  static const double d10 = 10;
+  static const double d20 = 20;
+  static const double d30 = 30;
+  static const double d25 = 25;
+  static const double d12 = 12;
+  static const double d15 = 15;
+  static const double d7 = 7;
+  static const double d31 = 31;
+  static const double d6 = 6;
+  static const double d23 = 23;
+  static const double d24 = 24;
+  static const double d27 = 27;
+  static const double d32 = 32;
+  static const double d22 = 22;
+  static const double d14 = 14;
+  static const double d55 = 55;
+  static const double d120 = 120;
+  static const double d170 = 170;
+  static const double d60 = 60;
+  static const double d50 = 50;
+  static const double d18 = 18;
+  static const double d45 = 45;
+  static const double d3 = 3;
+  static const double d2 = 2;
+  static const double d1 = 1;
+  static const double d220 = 220;
+  static const double d13 = 13;
+  static const double d290 = 290;
+  static const double d190 = 190;
+  static const double d28 = 28;
+  static const double d11 = 11;
 }
