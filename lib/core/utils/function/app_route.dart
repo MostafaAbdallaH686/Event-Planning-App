@@ -1,5 +1,7 @@
 // Mohnd::TODO: Refactor this file to use named routes instead of passing Widget instances directly.
 
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/view/verification/verification_screen.dart';
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
@@ -26,7 +28,11 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/register', builder: (context, state) => const RegisterScreen()),
     GoRoute(path: '/home', builder: (context, state) => const HomeScreen()),
-    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
+    GoRoute(
+        path: '/splash',
+        builder: (context, state) => SplashScreen(
+              cacheHelper: getIt<CacheHelper>(),
+            )),
     GoRoute(
         path: '/favEvent',
         builder: (context, state) => const InterestsEventsScreen()),

@@ -2,6 +2,7 @@ import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/failure/firebase_exception.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
@@ -13,7 +14,7 @@ class UserRepository {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FacebookAuth _facebook = FacebookAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
-  final CacheHelper _cacheHelper = CacheHelper();
+  final CacheHelper _cacheHelper = getIt<CacheHelper>();
 
   Future<UserModel> loginWithUsernameOrEmail({
     required String usernameOrEmail,

@@ -8,7 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Duration delay;
+  final CacheHelper cacheHelper;
+
+  const SplashScreen({
+    super.key,
+    this.delay = const Duration(seconds: 1),
+    required this.cacheHelper,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -27,15 +34,15 @@ class _SplashScreenState extends State<SplashScreen> {
 
     // ToDo :: MOstafa ::  caching and login logic
     // check cache for first time and login status
-    final cacheHelper = CacheHelper();
     final isFirstTime =
-        cacheHelper.getData(key: SharedPrefereneceKey.isFirstTime) ?? true;
+        widget.cacheHelper.getData(key: SharedPrefereneceKey.isFirstTime) ??
+            true;
     final isLoggedIn =
-        cacheHelper.getData(key: SharedPrefereneceKey.isLogin) ?? false;
+        widget.cacheHelper.getData(key: SharedPrefereneceKey.isLogin) ?? false;
 // check if first time or logged in
     if (isFirstTime) {
-      await cacheHelper.saveData(
-          key: SharedPrefereneceKey.isFirstTime, value: false);
+      await widget.cacheHelper
+          .saveData(key: SharedPrefereneceKey.isFirstTime, value: false);
       if (!mounted) return;
       context.pushReplacement(AppRoutes.onBoarding);
     } else if (isLoggedIn) {
