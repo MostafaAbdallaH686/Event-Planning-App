@@ -32,8 +32,27 @@ class HomeRepo {
     });
   }
 
-  Future<void> joinEvent(
-      String categoryId, String eventId, String userId) async {
-    await _firestoreService.joinEvent(categoryId, eventId, userId);
+  Future<void> addInterestedEvent({
+    required String userId,
+    required String categoryId,
+    required String eventId,
+    required EventModel event,
+  }) async {
+    await _firestoreService.addInterestedEvent(
+      userId: userId,
+      categoryId: categoryId,
+      eventId: eventId,
+      event: event,
+    );
+  }
+
+  Future<void> removeInterestedEvent({
+    required String userId,
+    required String eventId,
+  }) async {
+    await _firestoreService.removeInterestedEvent(
+      userId: userId,
+      eventId: eventId,
+    );
   }
 }

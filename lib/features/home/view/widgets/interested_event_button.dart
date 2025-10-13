@@ -4,19 +4,21 @@ import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:flutter/material.dart';
 
 class InterestedEventButton extends StatefulWidget {
-  final bool isJoined;
-  final VoidCallback? onPressed;
+  final bool isInterested;
+  final VoidCallback? onAdd;
+  final VoidCallback? onRemove;
   final Size? size;
-  final String joinText;
-  final String joinedText;
+  final String addText;
+  final String removeText;
 
   const InterestedEventButton({
     super.key,
-    required this.isJoined,
-    required this.onPressed,
+    required this.isInterested,
+    this.onAdd,
+    this.onRemove,
     this.size,
-    this.joinText = AppString.join,
-    this.joinedText = AppString.joined,
+    this.addText = AppString.join,
+    this.removeText = AppString.joined,
   });
 
   @override
@@ -24,6 +26,26 @@ class InterestedEventButton extends StatefulWidget {
 }
 
 class _InterestedEventButtonState extends State<InterestedEventButton> {
+  late bool _isInterested;
+
+  @override
+  void initState() {
+    super.initState();
+    _isInterested = widget.isInterested;
+  }
+
+  void _toggleInterest() {
+    setState(() {
+      _isInterested = !_isInterested;
+    });
+
+    if (_isInterested) {
+      widget.onAdd?.call();
+    } else {
+      widget.onRemove?.call();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -34,19 +56,19 @@ class _InterestedEventButtonState extends State<InterestedEventButton> {
         );
 
     return TextButton(
-      onPressed: widget.isJoined ? null : widget.onPressed,
+      onPressed: _toggleInterest,
       style: TextButton.styleFrom(
-        backgroundColor: widget.isJoined ? Colors.grey : AppColor.colorbr80,
-        disabledBackgroundColor: Colors.grey.shade300,
+        backgroundColor:
+            _isInterested ? Colors.grey.shade300 : AppColor.colorbr80,
         minimumSize: buttonSize,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
       ),
       child: Text(
-        widget.isJoined ? widget.joinedText : widget.joinText,
+        _isInterested ? widget.removeText : widget.addText,
         style: AppTextStyle.regular12(
-          widget.isJoined ? Colors.grey.shade600 : AppColor.white,
+          _isInterested ? Colors.grey.shade700 : AppColor.white,
         ),
       ),
     );

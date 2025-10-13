@@ -105,8 +105,13 @@ class SeeAllPopularScreen extends StatelessWidget {
                                     onPressed: isJoined
                                         ? null
                                         : () {
-                                            context.read<HomeCubit>().joinEvent(
-                                                event.id!, event.categoryId);
+                                            context
+                                                .read<HomeCubit>()
+                                                .toggleInterestEvent(
+                                                  categoryId: event.categoryId,
+                                                  eventId: event.id!,
+                                                  event: event,
+                                                );
                                           },
                                     style: TextButton.styleFrom(
                                       backgroundColor: AppColor.colorbr80,

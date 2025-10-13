@@ -26,15 +26,23 @@ class RecommendedEventsSection extends StatelessWidget {
             title: AppString.recommendation,
             seeAllRoute: AppRoutes.seeAllRecommendation,
             events: state.data.recommendedEvents,
-            joinedEventIds: state.joinedEventIds,
+            interestedEventIds: state.joinedEventIds,
             onEventTap: (event) => context.push(
               AppRoutes.eventDetails,
               extra: {"categoryId": event.categoryId, "eventId": event.id!},
             ),
-            onJoin: (event) => context.read<HomeCubit>().joinEvent(
-                  event.categoryId,
-                  event.id!,
-                ),
+            onAddInterest: (event) =>
+                context.read<HomeCubit>().toggleInterestEvent(
+                      categoryId: event.categoryId,
+                      eventId: event.id!,
+                      event: event,
+                    ),
+            onRemoveInterest: (event) =>
+                context.read<HomeCubit>().toggleInterestEvent(
+                      categoryId: event.categoryId,
+                      eventId: event.id!,
+                      event: event,
+                    ),
           );
         }
 

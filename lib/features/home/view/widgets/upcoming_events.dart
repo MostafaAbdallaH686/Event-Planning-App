@@ -45,10 +45,11 @@ class UpcomingEventsSection extends StatelessWidget {
                   itemCount: visibleEvents.length,
                   itemBuilder: (context, index) {
                     final event = visibleEvents[index];
-                    final isJoined = state.joinedEventIds.contains(event.id);
+                    final isInterested =
+                        state.joinedEventIds.contains(event.id);
                     return HorizontalEventCard(
                       event: event,
-                      isJoined: isJoined,
+                      isInterested: isInterested,
                       onTap: () {
                         context.push(
                           AppRoutes.eventDetails,
@@ -58,10 +59,18 @@ class UpcomingEventsSection extends StatelessWidget {
                           },
                         );
                       },
-                      onJoinPressed: () {
-                        context.read<HomeCubit>().joinEvent(
-                              event.categoryId,
-                              event.id!,
+                      onAddInterest: () {
+                        context.read<HomeCubit>().toggleInterestEvent(
+                              categoryId: event.categoryId,
+                              eventId: event.id!,
+                              event: event,
+                            );
+                      },
+                      onRemoveInterest: () {
+                        context.read<HomeCubit>().toggleInterestEvent(
+                              categoryId: event.categoryId,
+                              eventId: event.id!,
+                              event: event,
                             );
                       },
                     );

@@ -1,21 +1,26 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
+import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/home/view/widgets/interested_event_button.dart';
 import 'package:flutter/material.dart';
 
 class HorizontalEventCard extends StatelessWidget {
   final EventModel event;
-  final bool isJoined;
   final VoidCallback onTap;
-  final VoidCallback onJoinPressed;
+  final bool isInterested;
+  final VoidCallback onAddInterest;
+  final VoidCallback onRemoveInterest;
 
   const HorizontalEventCard({
     super.key,
     required this.event,
-    required this.isJoined,
+    required this.isInterested,
+    required this.onAddInterest,
+    required this.onRemoveInterest,
     required this.onTap,
-    required this.onJoinPressed,
   });
 
   @override
@@ -82,8 +87,11 @@ class HorizontalEventCard extends StatelessWidget {
                         ),
                       ),
                       InterestedEventButton(
-                        isJoined: isJoined,
-                        onPressed: onJoinPressed,
+                        isInterested: isInterested,
+                        onAdd: onAddInterest,
+                        onRemove: onRemoveInterest,
+                        addText: AppString.join,
+                        removeText: AppString.joined,
                         size: Size(size.width * 0.2051, size.height * 0.0375),
                       ),
                     ],

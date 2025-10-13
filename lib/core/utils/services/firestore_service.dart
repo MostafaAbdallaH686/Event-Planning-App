@@ -45,26 +45,66 @@ class FirestoreService {
         .add(event.toMap());
   }
 
-  //  Join Event
-  Future<void> joinEvent(
-      String categoryId, String eventId, String userId) async {
-    final docRef = _firestore
-        .collection('categories')
-        .doc(categoryId)
-        .collection('events')
-        .doc(eventId);
+  //  Add Interested Event
+  Future<void> addInterestedEvent({
+    required String userId,
+    required String categoryId,
+    required String eventId,
+    required EventModel event,
+  }) async {
+    try {
+      final docRef = _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('interested')
+          .doc(eventId);
 
-    final doc = await docRef.get();
-    if (doc.exists) {
-      final attendees = List<String>.from(doc.data()?['attendees'] ?? []);
+      await docRef.set({
+        'eventId': eventId,
+        'categoryId': categoryId,
+        'title': event.title,
+        'description': event.description,
+        'date': event.date,
+        'location': event.location,
+        'imageUrl': event.imageUrl,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
 
-      if (!attendees.contains(userId)) {
-        await docRef.update({
-          'attendeesCount': FieldValue.increment(1),
-          'attendees': FieldValue.arrayUnion([userId]),
-        });
-      } else {}
-    } else {}
+      print('✅ Event added to user interested list successfully.');
+    } catch (e) {
+      print('❌ Error adding interested event: $e');
+    }
+  }
+
+  // remove Interested Event
+  Future<void> removeInterestedEvent({
+    required String userId,
+    required String eventId,
+  }) async {
+    try {
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('interested')
+          .doc(eventId)
+          .delete();
+
+      print('✅ Event removed from interested list.');
+    } catch (e) {
+      print('❌ Error removing interested event: $e');
+    }
+  }
+
+  // get all interested
+  Stream<List<Map<String, dynamic>>> getUserInterestedEvents(String userId) {
+    return _firestore
+        .collection('users')
+        .doc(userId)
+        .collection('interested')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => {'id': doc.id, ...doc.data()}).toList());
   }
 
   //  Get Categories

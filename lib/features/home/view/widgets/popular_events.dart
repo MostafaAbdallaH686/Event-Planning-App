@@ -121,13 +121,22 @@ class _PopularEventsContent extends StatelessWidget {
   }
 
   Widget _buildEventCard(BuildContext context, EventModel event) {
-    final isJoined = joinedEventIds.contains(event.id);
+    final isInterested = joinedEventIds.contains(event.id);
 
     return EventCard(
       event: event,
-      isJoined: isJoined,
+      isInterested: isInterested,
+      onAddInterest: () => context.read<HomeCubit>().toggleInterestEvent(
+            categoryId: event.categoryId,
+            eventId: event.id!,
+            event: event,
+          ),
+      onRemoveInterest: () => context.read<HomeCubit>().toggleInterestEvent(
+            categoryId: event.categoryId,
+            eventId: event.id!,
+            event: event,
+          ),
       onTap: () => _navigateToDetails(context, event),
-      onJoinPressed: () => _handleJoinEvent(context, event),
     );
   }
 
@@ -139,9 +148,5 @@ class _PopularEventsContent extends StatelessWidget {
         "eventId": event.id!,
       },
     );
-  }
-
-  void _handleJoinEvent(BuildContext context, EventModel event) {
-    context.read<HomeCubit>().joinEvent(event.categoryId, event.id!);
   }
 }

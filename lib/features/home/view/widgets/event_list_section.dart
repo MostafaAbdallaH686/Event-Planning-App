@@ -12,18 +12,20 @@ class EventListSection extends StatelessWidget {
   final String title;
   final String? seeAllRoute;
   final List<EventModel> events;
-  final Set<String> joinedEventIds;
+  final Set<String> interestedEventIds;
   final void Function(EventModel event) onEventTap;
-  final void Function(EventModel event) onJoin;
+  final void Function(EventModel event) onAddInterest;
+  final void Function(EventModel event) onRemoveInterest;
 
   const EventListSection({
     super.key,
     required this.title,
     this.seeAllRoute,
     required this.events,
-    required this.joinedEventIds,
+    required this.interestedEventIds,
     required this.onEventTap,
-    required this.onJoin,
+    required this.onAddInterest,
+    required this.onRemoveInterest,
   });
 
   @override
@@ -45,7 +47,7 @@ class EventListSection extends StatelessWidget {
           itemCount: visibleEvents.length,
           itemBuilder: (context, index) {
             final event = visibleEvents[index];
-            final isJoined = joinedEventIds.contains(event.id);
+            final isInterested = interestedEventIds.contains(event.id);
             return ListTile(
               leading: event.imageUrl.isNotEmpty
                   ? Image.network(
@@ -70,7 +72,12 @@ class EventListSection extends StatelessWidget {
                   const Icon(Icons.location_on, size: 14, color: Colors.grey),
                   const Spacer(),
                   InterestedEventButton(
-                      isJoined: isJoined, onPressed: () => onJoin(event))
+                    isInterested: isInterested,
+                    onAdd: () => onAddInterest(event),
+                    onRemove: () => onRemoveInterest(event),
+                    addText: AppString.join,
+                    removeText: AppString.joined,
+                  ),
                 ],
               ),
               onTap: () => onEventTap(event),

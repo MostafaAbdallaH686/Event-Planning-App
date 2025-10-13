@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:event_planning_app/core/utils/function/app_width_height.dart';
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
@@ -10,16 +12,18 @@ import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
   final EventModel event;
-  final bool isJoined;
+  final bool isInterested;
+  final VoidCallback onAddInterest;
+  final VoidCallback onRemoveInterest;
   final VoidCallback onTap;
-  final VoidCallback onJoinPressed;
 
   const EventCard({
     super.key,
     required this.event,
-    required this.isJoined,
+    required this.isInterested,
+    required this.onAddInterest,
+    required this.onRemoveInterest,
     required this.onTap,
-    required this.onJoinPressed,
   });
 
   @override
@@ -37,8 +41,9 @@ class EventCard extends StatelessWidget {
             _EventImage(imageUrl: event.imageUrl),
             _EventDetails(
               event: event,
-              isJoined: isJoined,
-              onJoinPressed: onJoinPressed,
+              isInterested: isInterested,
+              onAddInterest: onAddInterest,
+              onRemoveInterest: onRemoveInterest,
             ),
           ],
         ),
@@ -100,13 +105,15 @@ class _EventImage extends StatelessWidget {
 // Private widget - details section
 class _EventDetails extends StatelessWidget {
   final EventModel event;
-  final bool isJoined;
-  final VoidCallback onJoinPressed;
+  final bool isInterested;
+  final VoidCallback onAddInterest;
+  final VoidCallback onRemoveInterest;
 
   const _EventDetails({
     required this.event,
-    required this.isJoined,
-    required this.onJoinPressed,
+    required this.isInterested,
+    required this.onAddInterest,
+    required this.onRemoveInterest,
   });
 
   @override
@@ -139,10 +146,11 @@ class _EventDetails extends StatelessWidget {
                 ),
               ),
               InterestedEventButton(
-                isJoined: isJoined,
-                onPressed: onJoinPressed,
-                joinText: AppString.join,
-                joinedText: AppString.joined,
+                isInterested: isInterested,
+                onAdd: onAddInterest,
+                onRemove: onRemoveInterest,
+                addText: AppString.join,
+                removeText: AppString.joined,
               ),
             ],
           ),
