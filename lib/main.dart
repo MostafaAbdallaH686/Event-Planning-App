@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:event_planning_app/features/events/view/events_details_screen.dart';
 
 
+
 void main() {
   runApp(const MyApp());
 }
