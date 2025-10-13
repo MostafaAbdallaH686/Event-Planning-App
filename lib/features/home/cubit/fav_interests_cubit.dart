@@ -4,6 +4,7 @@ import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/home/cubit/fav_interests_state.dart';
 import 'package:event_planning_app/features/home/data/fav_interests_model.dart';
 import 'package:event_planning_app/features/home/data/fav_interests_repo.dart';
@@ -91,7 +92,7 @@ class InterestsCubit extends Cubit<InterestsState> {
 
       // Save to Firebase (for sync, backend, recommendations)
       await _repo.saveSelectedCategoriesToFirebase(selectedIds);
-      await CacheHelper()
+      await getIt<CacheHelper>()
           .saveData(key: SharedPrefereneceKey.isFirstLogin, value: true);
 
       if (context.mounted) {

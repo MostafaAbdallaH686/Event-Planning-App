@@ -6,6 +6,7 @@ import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/home/cubit/fav_interests_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/fav_interests_state.dart';
 import 'package:event_planning_app/features/home/data/fav_interests_model.dart';
@@ -20,7 +21,7 @@ class InterestsEventsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => InterestsCubit(
-        InterestsRepo(CacheHelper(), FirestoreService()),
+        InterestsRepo(getIt<CacheHelper>(), FirestoreService()),
       ),
       child: const _InterestsEventsScreenView(),
     );

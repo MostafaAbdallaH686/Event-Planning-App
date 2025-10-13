@@ -50,23 +50,29 @@ dependencies:
   google_sign_in: ^7.1.1
   fluttertoast: ^8.2.12
   intl: 
+
   
   
 
 dev_dependencies:
+  flutter_lints: ^5.0.0
   flutter_test:
     sdk: flutter
-  mockito: ^5.4.2
   build_runner: ^2.4.6
-  bloc_test: 
-  flutter_launcher_icons: "^0.13.1"
+  injectable_generator: ^2.3.0
+  fake_async: ^1.3.1
+  mocktail: ^0.3.0
+  bloc_test: 9.1.7
+  mockito: ^5.4.2
+  test: ^1.24.0
+  integration_test:
+    sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

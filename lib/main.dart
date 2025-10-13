@@ -5,6 +5,7 @@ import 'package:event_planning_app/core/utils/function/app_route.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:event_planning_app/features/events/cubit/event_details_cubit.dart';
@@ -19,7 +20,10 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await CacheHelper().init();
+  await CacheHelper.initialize();
+  final cacheHelper = CacheHelper.instance;
+
+  await configureDependencies();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -30,11 +34,15 @@ void main() async {
         '229484552631-tuupqshucmh9spj48gr7qlj3u0rs9te2.apps.googleusercontent.com',
   );
 
-  runApp(const MyApp());
+  runApp(MyApp(
+    cacheHelper: cacheHelper,
+  ));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final CacheHelper cacheHelper;
+
+  const MyApp({super.key, required this.cacheHelper});
 
   @override
   Widget build(BuildContext context) {
