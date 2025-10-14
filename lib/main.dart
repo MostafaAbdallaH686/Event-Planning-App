@@ -1,3 +1,4 @@
+import 'package:event_planning_app/features/events/view/New_Event_Screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -22,7 +23,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xffFFFFFF),
         useMaterial3: true,
       ),
-      home: const EventsDetailsScreen(),
+      home:  CreateEventScreen(),
     );
   }
 }
