@@ -90,8 +90,8 @@ abstract class AppString {
 
   static const String eventDate = "30 September 2025";
   static const String eventDescription =
-  "Join us for an exciting tech conference where industry leaders "
-  "will share insights on AI, Flutter, and the future of technology.";
+      "Join us for an exciting tech conference where industry leaders "
+      "will share insights on AI, Flutter, and the future of technology.";
   static const String eventLocation = "Cairo International Convention Center";
   static const String bookNow = "Book Now";
   static const String aboutEvent = "About Event";

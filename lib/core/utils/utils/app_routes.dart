@@ -20,4 +20,6 @@ abstract class AppRoutes {
   //static const String eventDetailsScreen = "/eventDetailsScreen";
   static const String booking = "/booking";
   static const String eventDetails = "/event-details";
+  static const String orderDetails = "/order-details";
+
 }
