@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/failure/firebase_exception.dart';
+import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
+import 'package:event_planning_app/core/utils/errors/failures.dart';
+import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
@@ -17,7 +19,7 @@ class UserRepoHelper {
       {required String provider}) async {
     try {
       final userCred = await _auth.signInWithCredential(cred);
-      final user = userCred.user ?? (throw FirebaseFailure("No user found"));
+      final user = userCred.user ?? (throw AuthFailure.userNotFound);
       final token = await user.getIdToken();
       await saveAuthData(token, user.emailVerified);
 
@@ -50,9 +52,9 @@ class UserRepoHelper {
         emailVerified: user.emailVerified,
       );
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -79,7 +81,7 @@ class UserRepoHelper {
           .get();
       return doc.data() ?? {};
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -93,10 +95,10 @@ class UserRepoHelper {
           .limit(1)
           .get();
 
-      if (query.docs.isEmpty) throw FirebaseFailure("Username not found");
+      if (query.docs.isEmpty) throw AuthFailure.userNotFound();
       return query.docs.first.data()[ApiKeypoint.fireEmail];
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -116,9 +118,9 @@ class UserRepoHelper {
 
       await user.verifyBeforeUpdateEmail(newEmail);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } catch (e) {
-      throw FirebaseFailure(e.toString());
+      throw UnexpectedFailure(message: e.toString());
     }
   }
 }

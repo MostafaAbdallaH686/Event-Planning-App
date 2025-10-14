@@ -4,7 +4,7 @@
 
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/widget/dialogs/app_dialog.dart';
+import 'package:event_planning_app/core/utils/widgets/dialogs/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
@@ -21,7 +21,7 @@ import 'package:event_planning_app/features/auth/view/shared_widgets/redirect_te
 import 'package:event_planning_app/features/auth/view/shared_widgets/social_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:event_planning_app/core/utils/widget/custom_linedtext.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_linedtext.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginScreenBody extends StatelessWidget {

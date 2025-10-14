@@ -1,3 +1,6 @@
+// purpose: This file contains the keys used for storing data in SharedPreferences.
+// please make sure to keep the keys consistent across the app to avoid data retrieval issues.
+
 abstract class SharedPrefereneceKey {
   static const String isLogin = "isLogin";
   static const String accesstoken = "access_token";

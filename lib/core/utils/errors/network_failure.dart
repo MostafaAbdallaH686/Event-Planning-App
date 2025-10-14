@@ -1,5 +1,7 @@
-//ToDo later ::Mostafa
-
+//ToDo  ::Mostafa :: Refactored and Tested
+// Handles Dio exceptions and maps them to user-friendly error messages
+// Provides a way to create ServerFailure instances from Dio errors and HTTP responses
+// Usage: ServerFailure.fromDioError(dioError) or ServerFailure.fromResponse(statusCode, responseData)
 import 'package:dio/dio.dart';
 
 class CustomDioException implements Exception {

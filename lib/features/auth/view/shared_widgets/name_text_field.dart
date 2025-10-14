@@ -2,7 +2,7 @@
 
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_textform.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:flutter/material.dart';
 

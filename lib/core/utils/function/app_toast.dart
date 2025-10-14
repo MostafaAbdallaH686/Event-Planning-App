@@ -1,27 +1,62 @@
-import 'package:event_planning_app/core/utils/theme/app_colors.dart';
+import 'package:event_planning_app/core/utils/services/toast_services.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class AppToast {
+  static ToastService get _service => getIt<ToastService>();
+
   static void show({
     required String message,
     ToastGravity gravity = ToastGravity.TOP,
-    Color backgroundColor = AppColor.colorb26,
+    Color backgroundColor = const Color(0xFFB26C26),
     Color textColor = Colors.white,
     int timeInSecForIosWeb = 2,
     double fontSize = 16.0,
   }) {
-    cancel();
-    Fluttertoast.showToast(
-      msg: message,
+    _service.show(
+      message: message,
       gravity: gravity,
       backgroundColor: backgroundColor,
       textColor: textColor,
-      toastLength: Toast.LENGTH_SHORT,
       timeInSecForIosWeb: timeInSecForIosWeb,
       fontSize: fontSize,
     );
   }
 
-  static void cancel() => Fluttertoast.cancel();
+  static void success(String message) {
+    show(
+      message: message,
+      backgroundColor: Colors.green,
+      gravity: ToastGravity.TOP,
+    );
+  }
+
+  static void error(String message) {
+    show(
+      message: message,
+      backgroundColor: Colors.red,
+      gravity: ToastGravity.TOP,
+    );
+  }
+
+  static void warning(String message) {
+    show(
+      message: message,
+      backgroundColor: Colors.orange,
+      gravity: ToastGravity.TOP,
+    );
+  }
+
+  static void info(String message) {
+    show(
+      message: message,
+      backgroundColor: Colors.blue,
+      gravity: ToastGravity.TOP,
+    );
+  }
+
+  static void cancel() {
+    _service.cancel();
+  }
 }

@@ -4,8 +4,8 @@ import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/auth/view/my_profile/profile_screen.dart';
 import 'package:event_planning_app/features/booking/view/booking_screen.dart';
+import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
-import 'package:event_planning_app/features/home/view/widgets/recommended_events.dart';
 import 'package:flutter/material.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -21,7 +21,7 @@ class _MainNavigationState extends State<MainNavigation> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    RecommendedEventsSection(),
+    EmptyEventScreen(),
     BookingScreen(),
     ProfileScreen()
   ];

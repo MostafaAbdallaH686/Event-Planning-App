@@ -1,8 +1,8 @@
 //ToDO ::Mostafa::Clean Code Please
 
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
-import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';

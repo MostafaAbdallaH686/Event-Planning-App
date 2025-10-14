@@ -1,11 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/network/api_configration.dart';
-import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
-import 'package:event_planning_app/features/home/data/home_repo.dart';
+import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
+void setupServiceLocator() {
+  // Register toast service
+  getIt.registerLazySingleton<ToastService>(() => FlutterToastService());
+}
+
+// For testing - inject mock
+void setupTestServiceLocator() {
+  getIt.registerLazySingleton<ToastService>(() => MockToastService());
+}
 
 Future<void> configureDependencies() async {
   // Make sure CacheHelper is initialized before DI

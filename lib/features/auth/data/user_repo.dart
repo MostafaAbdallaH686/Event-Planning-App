@@ -1,6 +1,9 @@
 import 'dart:io';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
-import 'package:event_planning_app/core/utils/failure/firebase_exception.dart';
+import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
+import 'package:event_planning_app/core/utils/errors/facebook_login_failure.dart';
+import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
+import 'package:event_planning_app/core/utils/errors/google_signin_failure.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/data/user_repo_helper.dart';
@@ -29,7 +32,7 @@ class UserRepository {
         email: email,
         password: password,
       );
-      final user = userCred.user ?? (throw FirebaseFailure("Login failed"));
+      final user = userCred.user ?? (throw AuthFailure.invalidCredential());
       final token = await user.getIdToken();
 
       await _helper.saveAuthData(token, user.emailVerified);
@@ -38,9 +41,9 @@ class UserRepository {
       return UserModel.fromFirestore(
           data: userData, uid: user.uid, emailVerified: user.emailVerified);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -55,7 +58,8 @@ class UserRepository {
       );
 
       if (result.status != LoginStatus.success) {
-        throw FirebaseFailure.fromFacebookLogin(result.status, result.message);
+        throw FacebookLoginFailure.fromStatus(result.status,
+            message: result.message);
       }
 
       final cred =
@@ -63,7 +67,7 @@ class UserRepository {
 
       return _helper.signInWithCredential(cred, provider: "facebook");
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     }
   }
 
@@ -74,7 +78,7 @@ class UserRepository {
       await _googleSignIn.signOut();
       await _cacheHelper.clearData();
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     }
   }
 
@@ -87,9 +91,9 @@ class UserRepository {
       await _auth.currentUser!.delete();
       await _cacheHelper.clearData();
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -97,7 +101,7 @@ class UserRepository {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     }
   }
 
@@ -120,7 +124,7 @@ class UserRepository {
       return loginWithUsernameOrEmail(
           usernameOrEmail: user!.email!, password: newPassword);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     }
   }
 
@@ -180,9 +184,9 @@ class UserRepository {
 
       return _helper.signInWithCredential(cred, provider: "google");
     } on GoogleSignInException catch (e) {
-      throw FirebaseFailure.fromGoogleSignInException(e);
+      throw GoogleSignInFailure.fromException(e);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     }
   }
 
@@ -198,7 +202,7 @@ class UserRepository {
           .get();
 
       if (query.docs.isNotEmpty) {
-        throw FirebaseFailure("Username already exists");
+        throw AuthFailure.accountExistsWithDifferentCredential();
       }
 
       UserCredential userCred = await _auth.createUserWithEmailAndPassword(
@@ -206,7 +210,8 @@ class UserRepository {
         password: password,
       );
 
-      final user = userCred.user ?? (throw FirebaseFailure("Sign up failed"));
+      final user =
+          userCred.user ?? (throw AuthFailure(message: "Sign up failed"));
 
       await user.sendEmailVerification();
 
@@ -233,9 +238,9 @@ class UserRepository {
       return UserModel.fromFirestore(
           data: createdData, uid: user.uid, emailVerified: user.emailVerified);
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 
@@ -264,7 +269,7 @@ class UserRepository {
   }) async {
     try {
       final user = _auth.currentUser;
-      if (user == null) throw FirebaseFailure("No user logged in");
+      if (user == null) throw AuthFailure.userNotFound();
 
       final Map<String, dynamic> updates = {};
 
@@ -302,7 +307,7 @@ class UserRepository {
             .get();
 
         if (query.docs.isNotEmpty && query.docs.first.id != user.uid) {
-          throw FirebaseFailure("Username already exists");
+          throw AuthFailure.emailAlreadyInUse();
         }
         updates[ApiKeypoint.fireName] = username;
       }
@@ -335,9 +340,9 @@ class UserRepository {
         emailVerified: user.emailVerified,
       );
     } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
+      throw AuthFailure.fromException(e);
     } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
+      throw FirestoreFailure.fromException(e);
     }
   }
 }

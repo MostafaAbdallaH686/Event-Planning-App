@@ -1,6 +1,6 @@
 // Mocks
 import 'package:dio/dio.dart';
-import 'package:event_planning_app/core/utils/failure/dio_exception.dart';
+import 'package:event_planning_app/core/utils/errors/network_failure.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

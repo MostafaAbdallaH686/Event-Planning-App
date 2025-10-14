@@ -1,4 +1,4 @@
-import 'package:event_planning_app/core/utils/widget/dialogs/info_dialog.dart';
+import 'package:event_planning_app/core/utils/widgets/dialogs/info_dialog.dart';
 import 'package:flutter/material.dart';
 
 class ErrorDialog extends StatelessWidget {

@@ -1,6 +1,6 @@
 import 'package:event_planning_app/core/utils/function/app_width_height.dart';
 import 'package:event_planning_app/core/utils/utils/app_distance.dart';
-import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
 import 'package:flutter/material.dart';
 
 class LoadingDialog extends StatelessWidget {

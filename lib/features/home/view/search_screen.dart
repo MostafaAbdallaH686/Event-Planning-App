@@ -5,7 +5,7 @@ import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_textform.dart';
 import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/search_state.dart';
 import 'package:flutter/material.dart';

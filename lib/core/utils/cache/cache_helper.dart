@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// A singleton class to manage local caching using SharedPreferences
+// Provides methods to save, retrieve, and remove data
+// Usage: await CacheHelper.initialize(); then use CacheHelper.instance to access methods
+// Mostafa :: Tested and Refactored
 class CacheHelper {
   static CacheHelper? _instance;
   final SharedPreferences _prefs;

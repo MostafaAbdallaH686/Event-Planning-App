@@ -2,7 +2,7 @@ import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textform.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_textform.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';

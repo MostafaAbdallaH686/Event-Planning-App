@@ -1,8 +1,8 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
-import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';

@@ -1,5 +1,5 @@
-import 'package:event_planning_app/core/utils/widget/dialogs/app_dialog.dart';
-import 'package:event_planning_app/core/utils/widget/dialogs/loading_dialog.dart';
+import 'package:event_planning_app/core/utils/widgets/dialogs/app_dialog.dart';
+import 'package:event_planning_app/core/utils/widgets/dialogs/loading_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
