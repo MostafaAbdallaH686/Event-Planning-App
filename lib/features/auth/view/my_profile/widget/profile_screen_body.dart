@@ -1,9 +1,8 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
-import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/additional_widgets/edit_profile.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/additional_widgets/profile_additional.dart';
+import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inicator.dart';
+import 'package:event_planning_app/core/utils/widget/custom_textbutton.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
@@ -13,21 +12,28 @@ import 'profile_header.dart';
 import 'profile_about.dart';
 import 'profile_interests.dart';
 
-class ProfileScreenBody extends StatelessWidget {
+class ProfileScreenBody extends StatefulWidget {
   const ProfileScreenBody({super.key});
+
+  @override
+  State<ProfileScreenBody> createState() => _ProfileScreenBodyState();
+}
+
+class _ProfileScreenBodyState extends State<ProfileScreenBody> {
+  @override
+  void initState() {
+    super.initState();
+    // Fetch current user if in initial state
+    final cubit = context.read<UserCubit>();
+    if (cubit.state is UserInitial) {
+      cubit.fetchCurrentUser();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, size: 22, color: AppColor.colorb26),
-          onPressed: () => context.pop(),
-        ),
-        title: Text(AppString.profile,
-            style: AppTextStyle.semibold22(AppColor.colorb26)),
-      ),
       body: BlocConsumer<UserCubit, UserState>(
         listener: (context, state) {
           if (state is UserLoggedOut || state is UserDeletedAccount) {
@@ -41,9 +47,8 @@ class ProfileScreenBody extends StatelessWidget {
               state is UserSigningUp ||
               state is UserResettingPassword ||
               state is UserLoggingOut ||
-              state is UserInitial ||
-              state is UserLoggingOut ||
-              state is UserDeletingAccount;
+              state is UserDeletingAccount ||
+              state is UserUpdatingPassword;
 
           if (isLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -64,10 +69,7 @@ class ProfileScreenBody extends StatelessWidget {
                   ProfileHeader(
                       user: user,
                       onEdit: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => EditProfile(user: user)));
+                        context.push(AppRoutes.editProfile, extra: user);
                       },
                       size: size),
                   SizedBox(height: size.height * 0.0375),
@@ -84,7 +86,21 @@ class ProfileScreenBody extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: size.height * 0.04),
-                  ProfileAdditional(user: user),
+                  // ProfileAdditional(user: user),
+                  BlocBuilder<UserCubit, UserState>(
+                    builder: (context, state) {
+                      if (state is UserLoggingOut) {
+                        return const Center(
+                            child: CustomCircleProgressInicator());
+                      }
+                      return CustomTextbutton(
+                        onpressed: () {
+                          context.read<UserCubit>().logout();
+                        },
+                        text: 'Logout',
+                      );
+                    },
+                  )
                 ],
               ),
             );

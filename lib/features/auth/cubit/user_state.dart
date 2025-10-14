@@ -28,6 +28,8 @@ class UserDeletingAccount extends UserState {}
 
 class UserUpdatingPassword extends UserState {}
 
+class UserUpdatingProfile extends UserState {}
+
 // Success states (carry user data)
 abstract class UserDataState extends UserState {
   UserModel get user;
@@ -65,6 +67,14 @@ class UserUpdatedPassword extends UserDataState {
   @override
   final UserModel user;
   UserUpdatedPassword(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class UserUpdatedProfile extends UserDataState {
+  @override
+  final UserModel user;
+  UserUpdatedProfile(this.user);
   @override
   List<Object?> get props => [user];
 }
@@ -136,4 +146,8 @@ class UserErrorDeleteAccount extends UserError {
 
 class UserErrorUpdatePassword extends UserError {
   const UserErrorUpdatePassword(super.message);
+}
+
+class UserErrorUpdateProfile extends UserError {
+  const UserErrorUpdateProfile(super.message);
 }

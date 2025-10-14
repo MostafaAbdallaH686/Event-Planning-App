@@ -3,7 +3,7 @@ import 'package:event_planning_app/core/utils/widget/custom_circle_progress_inic
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/additional_widgets/change_password.dart';
+import 'package:event_planning_app/features/auth/view/my_profile/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

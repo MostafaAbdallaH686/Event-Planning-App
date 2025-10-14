@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/failure/firebase_exception.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
@@ -5,6 +6,7 @@ import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/data/user_repo_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'user_model.dart';
@@ -121,17 +123,49 @@ class UserRepository {
       throw FirebaseFailure.fromAuthException(e);
     }
   }
-  //todo edit profile mohammed don't touch please
-  // Future<void> editProfile({String? email , String? username}) async {
-  //   try {
-  //     final user = _auth.currentUser;
-  //     if (user != null) {
-  //       _helper.updateEmail(currentEmail: email, password: password, newEmail: newEmail);
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     throw FirebaseFailure.fromAuthException(e);
-  //   }
-  // }
+
+  // Edit profile: update email and/or username
+  Future<void> editProfile({
+    String? email,
+    String? username,
+    String? currentPassword,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw FirebaseFailure("No user logged in");
+
+      // 🔹 Re-authenticate if email is being changed
+      if (email != null && currentPassword != null) {
+        final credential = EmailAuthProvider.credential(
+          email: user.email!,
+          password: currentPassword,
+        );
+        await user.reauthenticateWithCredential(credential);
+
+        // ✅ Latest method: sends verification to new email
+        await user.verifyBeforeUpdateEmail(email);
+
+        // Optionally update Firestore immediately,
+        // but Auth email updates only after verification link click
+        await _firestore
+            .collection(ApiKeypoint.fireUsersCollection)
+            .doc(user.uid)
+            .update({ApiKeypoint.fireEmail: email});
+      }
+
+      // 🔹 Update username in Firestore
+      if (username != null) {
+        await _firestore
+            .collection(ApiKeypoint.fireUsersCollection)
+            .doc(user.uid)
+            .update({ApiKeypoint.fireName: username});
+      }
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseFailure.fromAuthException(e);
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
+    }
+  }
 
   Future<UserModel?> loginWithGoogle() async {
     try {
@@ -198,6 +232,96 @@ class UserRepository {
       final createdData = await _helper.getUserData(user.uid);
       return UserModel.fromFirestore(
           data: createdData, uid: user.uid, emailVerified: user.emailVerified);
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseFailure.fromAuthException(e);
+    } on FirebaseException catch (e) {
+      throw FirebaseFailure.fromFirestoreException(e);
+    }
+  }
+
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) return null;
+
+      final userData = await _helper.getUserData(user.uid);
+      return UserModel.fromFirestore(
+        data: userData,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Update user profile with optional fields
+  Future<UserModel> updateProfile({
+    String? username,
+    String? email,
+    String? about,
+    File? profileImage,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw FirebaseFailure("No user logged in");
+
+      final Map<String, dynamic> updates = {};
+
+      // Upload profile image if provided
+      if (profileImage != null) {
+        final storageRef = FirebaseStorage.instance
+            .ref()
+            .child('profile_pictures')
+            .child('${user.uid}.jpg');
+
+        await storageRef.putFile(profileImage);
+        final imageUrl = await storageRef.getDownloadURL();
+        updates[ApiKeypoint.fireProfilePicture] = imageUrl;
+      }
+
+      // Update username if provided
+      if (username != null && username.isNotEmpty) {
+        // Check if username already exists
+        final query = await _firestore
+            .collection(ApiKeypoint.fireUsersCollection)
+            .where(ApiKeypoint.fireUsername, isEqualTo: username)
+            .limit(1)
+            .get();
+
+        if (query.docs.isNotEmpty && query.docs.first.id != user.uid) {
+          throw FirebaseFailure("Username already exists");
+        }
+        updates[ApiKeypoint.fireName] = username;
+      }
+
+      // Update about if provided
+      if (about != null) {
+        updates[ApiKeypoint.fireAbout] = about;
+      }
+
+      // Update email if provided (requires re-authentication in the future)
+      if (email != null && email.isNotEmpty && email != user.email) {
+        updates[ApiKeypoint.fireEmail] = email;
+        // Note: Actual email update in Firebase Auth requires re-authentication
+        // This only updates Firestore. For full email update, use editProfile method
+      }
+
+      // Perform Firestore update
+      if (updates.isNotEmpty) {
+        await _firestore
+            .collection(ApiKeypoint.fireUsersCollection)
+            .doc(user.uid)
+            .update(updates);
+      }
+
+      // Fetch and return updated user data
+      final userData = await _helper.getUserData(user.uid);
+      return UserModel.fromFirestore(
+        data: userData,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+      );
     } on FirebaseAuthException catch (e) {
       throw FirebaseFailure.fromAuthException(e);
     } on FirebaseException catch (e) {

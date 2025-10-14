@@ -24,4 +24,5 @@ abstract class AppRoutes {
   static const String categoryEvents = '/categoryEvents/';
   static const String eventDetails = '/eventDetails';
   static const String navBar = '/navigationBar';
+  static const String editProfile = '/editProfile';
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -174,6 +175,41 @@ class UserCubit extends Cubit<UserState> {
       } catch (e) {
         emit(UserErrorVerificationSent(e.toString()));
       }
+    }
+  }
+
+  // Fetch current user from Firebase
+  Future<void> fetchCurrentUser() async {
+    try {
+      final user = await _repository.getCurrentUser();
+      if (user != null) {
+        emit(UserLoggedIn(user));
+      } else {
+        emit(UserLoggedOut());
+      }
+    } catch (e) {
+      emit(UserErrorLoginUsername(e.toString()));
+    }
+  }
+
+  // Update user profile
+  Future<void> updateProfile({
+    String? username,
+    String? email,
+    String? about,
+    File? profileImage,
+  }) async {
+    emit(UserUpdatingProfile());
+    try {
+      UserModel user = await _repository.updateProfile(
+        username: username,
+        email: email,
+        about: about,
+        profileImage: profileImage,
+      );
+      emit(UserUpdatedProfile(user));
+    } catch (e) {
+      emit(UserErrorUpdateProfile(e.toString()));
     }
   }
 }

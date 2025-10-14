@@ -2,6 +2,8 @@
 
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/di/injections.dart';
+import 'package:event_planning_app/features/auth/data/user_model.dart';
+import 'package:event_planning_app/features/auth/view/my_profile/edit_profile.dart';
 import 'package:event_planning_app/features/auth/view/my_profile/profile_screen.dart';
 import 'package:event_planning_app/features/auth/view/verification/verification_screen.dart';
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
@@ -97,5 +99,12 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
         path: '/profile', builder: (context, state) => const ProfileScreen()),
+    GoRoute(
+      path: '/editProfile',
+      builder: (context, state) {
+        final userData = state.extra as UserModel;
+        return EditProfileScreen(user: userData);
+      },
+    )
   ],
 );

@@ -51,9 +51,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => UserCubit(UserRepository())),
         BlocProvider(create: (_) => HomeCubit(HomeRepo(FirestoreService()))),
         BlocProvider(
-          create: (_) => UserCubit(UserRepository()),
-        ),
-        BlocProvider(
           create: (_) => SearchCubit(FirestoreService()),
         ),
         BlocProvider(

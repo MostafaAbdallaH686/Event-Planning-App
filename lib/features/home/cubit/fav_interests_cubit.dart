@@ -96,7 +96,7 @@ class InterestsCubit extends Cubit<InterestsState> {
           .saveData(key: SharedPrefereneceKey.isFirstLogin, value: true);
 
       if (context.mounted) {
-        context.pushReplacement(AppRoutes.home);
+        context.pushReplacement(AppRoutes.navBar);
       }
     } catch (e) {
       emit(InterestsError('Failed to save selections'));
