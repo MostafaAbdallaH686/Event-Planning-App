@@ -21,7 +21,6 @@ class ServerFailure extends Failures {
     switch (dioError.type) {
       case DioExceptionType.connectionTimeout:
         return ServerFailure('Connection timeout with ApiServer');
-
       case DioExceptionType.sendTimeout:
         return ServerFailure('Send timeout with ApiServer');
       case DioExceptionType.receiveTimeout:
@@ -45,10 +44,7 @@ class ServerFailure extends Failures {
 
   factory ServerFailure.fromResponse(int statusCode, dynamic response) {
     if (statusCode == 400 || statusCode == 401 || statusCode == 403) {
-      if (response["message"] == "Token has expired.") {
-        //       handleExpairedAcessToken();
-      }
-      return ServerFailure(response["message"]);
+      return ServerFailure(response["message"] ?? 'Authentication error');
     } else if (statusCode == 404) {
       return ServerFailure(
           response["message"] ?? 'Your request not found , please try later');

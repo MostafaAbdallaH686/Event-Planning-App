@@ -40,7 +40,6 @@ class CacheHelper {
   // Check if initialized
   static bool get isInitialized => _instance != null;
 
-  // Your methods
   String? getDataString({required String key}) {
     return _prefs.getString(key);
   }

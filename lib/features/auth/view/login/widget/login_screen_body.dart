@@ -4,7 +4,7 @@
 
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/function/app_dialog.dart';
+import 'package:event_planning_app/core/utils/widget/dialogs/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
@@ -48,7 +48,7 @@ class LoginScreenBody extends StatelessWidget {
             context.pushReplacement(AppRoutes.navBar);
           }
         } else if (state is UserErrorNotVerified) {
-          AppDialog.showConfirmDialog(
+          AppDialog.showConfirm(
               context: context,
               title: 'Email Not Verified',
               message: 'Please Verify Your Email',
