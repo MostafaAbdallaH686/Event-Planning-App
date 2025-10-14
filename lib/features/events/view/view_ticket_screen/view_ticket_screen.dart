@@ -1,9 +1,9 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
-import '../../../core/utils/theme/app_colors.dart';
-import '../../../core/utils/theme/app_text_style.dart';
+import '../../../../core/utils/theme/app_colors.dart';
+import '../../../../core/utils/theme/app_text_style.dart';
+//import '../review_page/review_page.dart';
 
-class ViewTicketScreen extends StatefulWidget {
+class ViewTicketScreen extends StatelessWidget {
   final String eventName;
   final String date;
   final String time;
@@ -22,97 +22,6 @@ class ViewTicketScreen extends StatefulWidget {
   });
 
   @override
-  State<ViewTicketScreen> createState() => _ViewTicketScreenState();
-}
-
-class _ViewTicketScreenState extends State<ViewTicketScreen> {
-  double rating = 0; // ⭐ لتخزين عدد النجوم المختارة
-
-  void _showRateDialog() {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Rate Us",
-                  style: AppTextStyle.bold20(AppColor.colorb26),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  "How was your experience?",
-                  style: AppTextStyle.regular16(AppColor.colorbr88),
-                ),
-                const SizedBox(height: 20),
-
-                /// ⭐ نجوم التقييم
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(5, (index) {
-                    final starIndex = index + 1;
-                    return IconButton(
-                      onPressed: () {
-                        setState(() => rating = starIndex.toDouble());
-                        Navigator.pop(context);
-                        _showRateDialog(); // إعادة فتح الحوار للتحديث الفوري
-                      },
-                      icon: Icon(
-                        Icons.star,
-                        size: 36,
-                        color: starIndex <= rating
-                            ? AppColor.colorblFF
-                            : Colors.grey[300],
-                      ),
-                    );
-                  }),
-                ),
-                const SizedBox(height: 20),
-
-                /// زر الإرسال
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColor.colorblFF,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            "Thank you for rating us $rating ⭐",
-                            style: AppTextStyle.regular14(AppColor.white),
-                          ),
-                          backgroundColor: AppColor.colorblFF,
-                        ),
-                      );
-                    },
-                    child: Text(
-                      "Submit",
-                      style: AppTextStyle.bold16(AppColor.white),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
@@ -121,14 +30,14 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            /// 🔹 خلفية الصورة
+
             Positioned(
               top: 0,
               left: 0,
               right: 0,
               height: size.height * 0.4,
-              child: widget.eventImageUrl.isNotEmpty
-                  ? Image.network(widget.eventImageUrl, fit: BoxFit.cover)
+              child: eventImageUrl.isNotEmpty
+                  ? Image.network(eventImageUrl, fit: BoxFit.cover)
                   : Container(
                 color: AppColor.colorblFF.withOpacity(0.1),
                 child: const Center(
@@ -137,7 +46,6 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
               ),
             ),
 
-            /// 🔹 زر الرجوع
             Positioned(
               top: 12,
               left: 20,
@@ -147,7 +55,6 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
               ),
             ),
 
-            /// 🔹 الكارت الرئيسي
             Positioned(
               top: 157,
               left: 20,
@@ -169,7 +76,6 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    /// 🎫 العنوان
                     Text(
                       "View Ticket",
                       style: AppTextStyle.bold24(AppColor.colorb26),
@@ -198,23 +104,23 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
                     ),
                     const SizedBox(height: 25),
 
-                    /// 🔹 اسم الحدث
+
                     Text(
-                      widget.eventName,
+                      eventName,
                       style: AppTextStyle.bold21(AppColor.colorb26),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 8),
 
-                    /// 🔹 المكان
+
                     Text(
-                      widget.location,
+                      location,
                       style: AppTextStyle.regular16(AppColor.colorbr88),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 20),
 
-                    /// 🔹 التاريخ والوقت
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -222,31 +128,31 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text("Date", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                            Text(widget.date, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                            Text(date, style: AppTextStyle.semibold15(AppColor.colorb26)),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
                             Text("Time", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                            Text(widget.time, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                            Text(time, style: AppTextStyle.semibold15(AppColor.colorb26)),
                           ],
                         ),
                       ],
                     ),
                     const SizedBox(height: 15),
 
-                    /// 🔹 المقعد
+
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text("Seat", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                        Text(widget.seat, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                        Text(seat, style: AppTextStyle.semibold15(AppColor.colorb26)),
                       ],
                     ),
                     const Spacer(),
 
-                    /// ⭐ زر التقييم
+                    /// ة ReviewPage
                     SizedBox(
                       width: double.infinity,
                       height: 50,
@@ -257,7 +163,16 @@ class _ViewTicketScreenState extends State<ViewTicketScreen> {
                             borderRadius: BorderRadius.circular(15),
                           ),
                         ),
-                        onPressed: _showRateDialog,
+                        onPressed: () {
+                          // لو حد عاملها يباصيها هنا لو سمحت
+                          /*Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const ReviewPage()),
+                          );*/
+
+
+                        },
+
                         child: Text(
                           "Rate Us",
                           style: AppTextStyle.bold16(AppColor.white),

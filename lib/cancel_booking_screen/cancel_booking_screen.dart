@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import '../core/utils/theme/app_colors.dart';
 import '../core/utils/theme/app_text_style.dart';
-import '../features/home/view/home_screen.dart';
-import '../report_cancel_screen/report_cancel_screen.dart';
+import '../features/events/view/report_cancel_screen/report_cancel_screen.dart';
 
 class CancelBookingScreen extends StatefulWidget {
   const CancelBookingScreen({super.key});
