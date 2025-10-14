@@ -52,6 +52,7 @@ dependencies:
   fluttertoast: ^8.2.12
   intl:
   image_picker: ^1.0.7 
+  supabase_flutter: ^2.10.3
 
   
   

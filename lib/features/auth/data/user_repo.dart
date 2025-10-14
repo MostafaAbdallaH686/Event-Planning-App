@@ -6,9 +6,9 @@ import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/data/user_repo_helper.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'user_model.dart';
 
 class UserRepository {
@@ -125,47 +125,47 @@ class UserRepository {
   }
 
   // Edit profile: update email and/or username
-  Future<void> editProfile({
-    String? email,
-    String? username,
-    String? currentPassword,
-  }) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) throw FirebaseFailure("No user logged in");
+  // Future<void> editProfile({
+  //   String? email,
+  //   String? username,
+  //   String? currentPassword,
+  // }) async {
+  //   try {
+  //     final user = _auth.currentUser;
+  //     if (user == null) throw FirebaseFailure("No user logged in");
 
-      // 🔹 Re-authenticate if email is being changed
-      if (email != null && currentPassword != null) {
-        final credential = EmailAuthProvider.credential(
-          email: user.email!,
-          password: currentPassword,
-        );
-        await user.reauthenticateWithCredential(credential);
+  //     // 🔹 Re-authenticate if email is being changed
+  //     if (email != null && currentPassword != null) {
+  //       final credential = EmailAuthProvider.credential(
+  //         email: user.email!,
+  //         password: currentPassword,
+  //       );
+  //       await user.reauthenticateWithCredential(credential);
 
-        // ✅ Latest method: sends verification to new email
-        await user.verifyBeforeUpdateEmail(email);
+  //       // ✅ Latest method: sends verification to new email
+  //       await user.verifyBeforeUpdateEmail(email);
 
-        // Optionally update Firestore immediately,
-        // but Auth email updates only after verification link click
-        await _firestore
-            .collection(ApiKeypoint.fireUsersCollection)
-            .doc(user.uid)
-            .update({ApiKeypoint.fireEmail: email});
-      }
+  //       // Optionally update Firestore immediately,
+  //       // but Auth email updates only after verification link click
+  //       await _firestore
+  //           .collection(ApiKeypoint.fireUsersCollection)
+  //           .doc(user.uid)
+  //           .update({ApiKeypoint.fireEmail: email});
+  //     }
 
-      // 🔹 Update username in Firestore
-      if (username != null) {
-        await _firestore
-            .collection(ApiKeypoint.fireUsersCollection)
-            .doc(user.uid)
-            .update({ApiKeypoint.fireName: username});
-      }
-    } on FirebaseAuthException catch (e) {
-      throw FirebaseFailure.fromAuthException(e);
-    } on FirebaseException catch (e) {
-      throw FirebaseFailure.fromFirestoreException(e);
-    }
-  }
+  //     // 🔹 Update username in Firestore
+  //     if (username != null) {
+  //       await _firestore
+  //           .collection(ApiKeypoint.fireUsersCollection)
+  //           .doc(user.uid)
+  //           .update({ApiKeypoint.fireName: username});
+  //     }
+  //   } on FirebaseAuthException catch (e) {
+  //     throw FirebaseFailure.fromAuthException(e);
+  //   } on FirebaseException catch (e) {
+  //     throw FirebaseFailure.fromFirestoreException(e);
+  //   }
+  // }
 
   Future<UserModel?> loginWithGoogle() async {
     try {
@@ -268,15 +268,27 @@ class UserRepository {
 
       final Map<String, dynamic> updates = {};
 
-      // Upload profile image if provided
+      // Upload profile image to Supabase Storage if provided
       if (profileImage != null) {
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('profile_pictures')
-            .child('${user.uid}.jpg');
+        final supabase = Supabase.instance.client;
+        final fileExtension = profileImage.path.split('.').last;
+        final fileName =
+            '${user.uid}_${DateTime.now().millisecondsSinceEpoch}.$fileExtension';
+        final filePath = 'user_images/$fileName';
 
-        await storageRef.putFile(profileImage);
-        final imageUrl = await storageRef.getDownloadURL();
+        // Upload to Supabase Storage bucket 'user_images'
+        await supabase.storage.from('user_images').upload(
+              filePath,
+              profileImage,
+              fileOptions: const FileOptions(
+                cacheControl: '3600',
+                upsert: true,
+              ),
+            );
+
+        // Get public URL of the uploaded image
+        final imageUrl =
+            supabase.storage.from('user_images').getPublicUrl(filePath);
         updates[ApiKeypoint.fireProfilePicture] = imageUrl;
       }
 
