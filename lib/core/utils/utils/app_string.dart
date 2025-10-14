@@ -46,6 +46,20 @@ abstract class AppString {
   // button String
 
   // profile
+  static const String profile = "Profile";
+  static const String editProfile = "Edit Profile";
+  static const String change = "CHANGE";
+  static const String aboutMe = "About Me";
+  static const String interests = "Interests";
+  static const String following = "Following";
+  static const String followers = "Followers";
+  static const String noSession = 'No user session. Please log in.';
+  static const String noAbout =
+      'There is no about me available. You can add one.';
+  static const String noInterests =
+      'No interests selected. You can add some interests.';
+  static const String readMore = "Read More";
+  static const String readLess = "Read Less";
 
   // Details
 

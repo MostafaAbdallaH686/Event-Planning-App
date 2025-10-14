@@ -1,5 +1,6 @@
 // Mohnd::TODO: Refactor this file to use named routes instead of passing Widget instances directly.
 
+import 'package:event_planning_app/features/auth/view/my_profile/profile_screen.dart';
 import 'package:event_planning_app/features/auth/view/verification/verification_screen.dart';
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
@@ -33,5 +34,7 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/emptyEvent',
         builder: (context, state) => const EmptyEventScreen()),
+    GoRoute(
+        path: '/profile', builder: (context, state) => const ProfileScreen()),
   ],
 );
