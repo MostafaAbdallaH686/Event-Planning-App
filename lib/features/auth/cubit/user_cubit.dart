@@ -71,15 +71,34 @@ class UserCubit extends Cubit<UserState> {
 
   Future<void> logout() async {
     emit(UserLoggingOut());
-    await _repository.logout();
-    emit(UserLoggedOut());
-    // Clear all relevant fields on logout
-    loginNameCtrl.clear();
-    loginPasswordCtrl.clear();
-    registerNameCtrl.clear();
-    emailCtrl.clear();
-    registerPasswordCtrl.clear();
-    confirmPassCtrl.clear();
+    try {
+      await _repository.logout();
+      loginNameCtrl.clear();
+      loginPasswordCtrl.clear();
+      registerNameCtrl.clear();
+      emailCtrl.clear();
+      registerPasswordCtrl.clear();
+      confirmPassCtrl.clear();
+      emit(UserLoggedOut());
+    } catch (e) {
+      emit(UserErrorLogout(e.toString()));
+    }
+  }
+
+  Future<void> deleteAccount() async {
+    emit(UserDeletingAccount());
+    try {
+      await _repository.deleteAccount();
+      loginNameCtrl.clear();
+      loginPasswordCtrl.clear();
+      registerNameCtrl.clear();
+      emailCtrl.clear();
+      registerPasswordCtrl.clear();
+      confirmPassCtrl.clear();
+      emit(UserDeletedAccount());
+    } catch (e) {
+      emit(UserErrorDeleteAccount(e.toString()));
+    }
   }
 
   Future<void> resetPassword({required String email}) async {
@@ -90,6 +109,18 @@ class UserCubit extends Cubit<UserState> {
       emailCtrl.clear(); // assuming this was used
     } catch (e) {
       emit(UserErrorResetPassword(e.toString()));
+    }
+  }
+
+  Future<void> updatePassword(
+      {required String oldPassword, required String newPassword}) async {
+    emit(UserUpdatingPassword());
+    try {
+      UserModel user =
+          await _repository.updatePassword(oldPassword, newPassword);
+      emit(UserUpdatedPassword(user));
+    } catch (e) {
+      emit(UserErrorUpdatePassword(e.toString()));
     }
   }
 

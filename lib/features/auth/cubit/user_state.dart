@@ -24,20 +24,30 @@ class UserResettingPassword extends UserState {}
 
 class UserLoggingOut extends UserState {}
 
-// Success states
-class UserLoggedIn extends UserState {
+class UserDeletingAccount extends UserState {}
+
+class UserUpdatingPassword extends UserState {}
+
+// Success states (carry user data)
+abstract class UserDataState extends UserState {
+  UserModel get user;
+}
+
+class UserLoggedIn extends UserDataState {
+  @override
   final UserModel user;
 
-  const UserLoggedIn(this.user);
+  UserLoggedIn(this.user);
 
   @override
   List<Object?> get props => [user];
 }
 
-class UserSignedUp extends UserState {
+class UserSignedUp extends UserDataState {
+  @override
   final UserModel user;
 
-  const UserSignedUp(this.user);
+  UserSignedUp(this.user);
 
   @override
   List<Object?> get props => [user];
@@ -48,6 +58,16 @@ class UserVerificationSent extends UserState {}
 class UserResetPasswordSent extends UserState {}
 
 class UserLoggedOut extends UserState {}
+
+class UserDeletedAccount extends UserState {}
+
+class UserUpdatedPassword extends UserDataState {
+  @override
+  final UserModel user;
+  UserUpdatedPassword(this.user);
+  @override
+  List<Object?> get props => [user];
+}
 
 // UI toggle state
 class UserObscureToggled extends UserState {
@@ -104,4 +124,16 @@ class UserErrorVerificationSent extends UserError {
 
 class UserErrorResetPassword extends UserError {
   const UserErrorResetPassword(super.message);
+}
+
+class UserErrorLogout extends UserError {
+  const UserErrorLogout(super.message);
+}
+
+class UserErrorDeleteAccount extends UserError {
+  const UserErrorDeleteAccount(super.message);
+}
+
+class UserErrorUpdatePassword extends UserError {
+  const UserErrorUpdatePassword(super.message);
 }

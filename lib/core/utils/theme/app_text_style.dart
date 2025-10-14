@@ -38,6 +38,12 @@ abstract class AppTextStyle {
         fontWeight: FontWeight.w700,
         color: color,
       );
+
+  static TextStyle bold15(Color color) => TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w700,
+        color: color,
+      );
   static TextStyle bold14(Color color) => TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w700,
@@ -46,6 +52,11 @@ abstract class AppTextStyle {
   static TextStyle bold12(Color color) => TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
+        color: color,
+      );
+  static TextStyle semibold22(Color color) => TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.w600,
         color: color,
       );
   static TextStyle semibold18(Color color) => TextStyle(
