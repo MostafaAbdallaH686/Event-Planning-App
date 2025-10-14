@@ -23,7 +23,9 @@ class ViewTicketScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
 
     return Scaffold(
       backgroundColor: AppColor.white,
@@ -51,7 +53,8 @@ class ViewTicketScreen extends StatelessWidget {
               left: 20,
               child: InkWell(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(Icons.arrow_back, color: Colors.black, size: 28),
+                child: const Icon(
+                    Icons.arrow_back, color: Colors.black, size: 28),
               ),
             ),
 
@@ -61,7 +64,8 @@ class ViewTicketScreen extends StatelessWidget {
               right: 20,
               bottom: 20,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 18),
                 decoration: BoxDecoration(
                   color: AppColor.white,
                   borderRadius: BorderRadius.circular(25),
@@ -127,15 +131,19 @@ class ViewTicketScreen extends StatelessWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text("Date", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                            Text(date, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                            Text("Date", style: AppTextStyle.regular14(
+                                AppColor.colorbr88)),
+                            Text(date, style: AppTextStyle.semibold15(
+                                AppColor.colorb26)),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            Text("Time", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                            Text(time, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                            Text("Time", style: AppTextStyle.regular14(
+                                AppColor.colorbr88)),
+                            Text(time, style: AppTextStyle.semibold15(
+                                AppColor.colorb26)),
                           ],
                         ),
                       ],
@@ -146,8 +154,10 @@ class ViewTicketScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("Seat", style: AppTextStyle.regular14(AppColor.colorbr88)),
-                        Text(seat, style: AppTextStyle.semibold15(AppColor.colorb26)),
+                        Text("Seat",
+                            style: AppTextStyle.regular14(AppColor.colorbr88)),
+                        Text(seat,
+                            style: AppTextStyle.semibold15(AppColor.colorb26)),
                       ],
                     ),
                     const Spacer(),
