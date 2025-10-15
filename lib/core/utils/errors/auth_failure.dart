@@ -40,10 +40,10 @@ class AuthFailure extends Failure {
         code: 'user-not-found',
       );
 
-  factory AuthFailure.invalidCredential() => const AuthFailure(
-        message: 'Email not registered.',
-        code: 'invalid-credential',
-      );
+  // factory AuthFailure.invalidCredential() => const AuthFailure(
+  //       message: 'Email not registered.',
+  //       code: 'invalid-credential',
+  //     );
 
   factory AuthFailure.accountExistsWithDifferentCredential() =>
       const AuthFailure(
@@ -86,8 +86,8 @@ class AuthFailure extends Failure {
         return AuthFailure.userDisabled();
       case 'user-not-found':
         return AuthFailure.userNotFound();
-      case 'invalid-credential':
-        return AuthFailure.invalidCredential();
+      // case 'invalid-credential':
+      //   return AuthFailure.invalidCredential();
       case 'account-exists-with-different-credential':
         return AuthFailure.accountExistsWithDifferentCredential();
       case 'wrong-password':

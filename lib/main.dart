@@ -3,6 +3,7 @@
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/function/app_route.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
+import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
 import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
 import 'package:event_planning_app/di/injections.dart';
@@ -22,10 +23,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.initialize();
-  final cacheHelper = CacheHelper.instance;
-
   await configureDependencies();
-
+// Register the toast service
+  setupServiceLocator();
+  assert(getIt.isRegistered<ToastService>(), 'ToastService not registered');
   await Supabase.initialize(
     url: "https://wjvxhrqdhcikwllmmkdi.supabase.co",
     anonKey:
@@ -42,7 +43,7 @@ void main() async {
   );
 
   runApp(MyApp(
-    cacheHelper: cacheHelper,
+    cacheHelper: getIt<CacheHelper>(),
   ));
 }
 

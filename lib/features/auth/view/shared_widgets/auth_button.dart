@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 class LoginButton extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final String buttonText;
-  final Function() onLogin;
+  final VoidCallback onLogin;
   final bool isaddIcon;
 
   const LoginButton({
@@ -31,26 +31,80 @@ class LoginButton extends StatelessWidget {
         if (state is UserLoadingUsername || state is UserSigningUp) {
           return const Center(child: CustomCircleProgressInicator());
         }
-        return CustomTextbutton(
-          isIconAdded: isaddIcon,
-          text: buttonText,
-          onpressed: () {
-            if (formKey.currentState!.validate()) {
-              FocusScope.of(context).unfocus(); // Hide the keyboard
-              onLogin();
-            }
-          },
+        return _LoginActionButton(
+          formKey: formKey,
+          buttonText: buttonText,
+          onLogin: onLogin,
+          isaddIcon: isaddIcon,
         );
       },
       listener: (context, state) {
-        if (state is UserSignedUp) {
-          AppToast.show(message: 'Please Confirm Your Email');
-          context.push(AppRoutes.login);
-        }
-        if (state is UserErrorSignUp) {
-          AppToast.show(message: state.message);
-        }
+        _handleStateChanges(context, state);
       },
     );
+  }
+
+  void _handleStateChanges(BuildContext context, UserState state) {
+    if (state is UserSignedUp) {
+      AppToast.show(message: 'Please Confirm Your Email');
+      if (!context.mounted) return;
+      context.push(AppRoutes.login);
+      return;
+    }
+
+    String? msg;
+    if (state is UserErrorSignUp)
+      msg = state.message;
+    else if (state is UserErrorLoginUsername)
+      msg = state.message;
+    else if (state is UserErrorLoginFacebook)
+      msg = state.message;
+    else if (state is UserErrorLoginGoogle)
+      msg = state.message;
+    else if (state is UserErrorNotVerified)
+      msg = state.message;
+    else if (state is UserErrorLogout)
+      msg = state.message;
+    else if (state is UserErrorDeleteAccount)
+      msg = state.message;
+    else if (state is UserErrorResetPassword)
+      msg = state.message;
+    else if (state is UserErrorUpdateProfile)
+      msg = state.message;
+    else if (state is UserErrorVerificationSent) msg = state.message;
+
+    if (msg != null) AppToast.show(message: msg);
+  }
+}
+
+// Separate widget for the action button
+class _LoginActionButton extends StatelessWidget {
+  final GlobalKey<FormState> formKey;
+  final String buttonText;
+  final VoidCallback onLogin;
+  final bool isaddIcon;
+
+  const _LoginActionButton({
+    required this.formKey,
+    required this.buttonText,
+    required this.onLogin,
+    required this.isaddIcon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomTextbutton(
+      isIconAdded: isaddIcon,
+      text: buttonText,
+      onpressed: () => _handlePress(context),
+    );
+  }
+
+  void _handlePress(BuildContext context) {
+    // Safe validation
+    if (formKey.currentState?.validate() ?? false) {
+      FocusScope.of(context).unfocus();
+      onLogin();
+    }
   }
 }

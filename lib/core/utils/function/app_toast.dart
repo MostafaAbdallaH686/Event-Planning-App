@@ -4,7 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 class AppToast {
-  static ToastService get _service => getIt<ToastService>();
+  static ToastService? get _serviceOrNull =>
+      getIt.isRegistered<ToastService>() ? getIt<ToastService>() : null;
 
   static void show({
     required String message,
@@ -14,49 +15,44 @@ class AppToast {
     int timeInSecForIosWeb = 2,
     double fontSize = 16.0,
   }) {
-    _service.show(
-      message: message,
-      gravity: gravity,
-      backgroundColor: backgroundColor,
-      textColor: textColor,
-      timeInSecForIosWeb: timeInSecForIosWeb,
-      fontSize: fontSize,
-    );
+    final s = _serviceOrNull;
+    if (s == null) {
+      debugPrint('AppToast: ToastService not registered. Message: $message');
+      return;
+    }
+    try {
+      s.show(
+        message: message,
+        gravity: gravity,
+        backgroundColor: backgroundColor,
+        textColor: textColor,
+        timeInSecForIosWeb: timeInSecForIosWeb,
+        fontSize: fontSize,
+      );
+    } catch (e, st) {
+      debugPrint('AppToast show failed: $e\n$st');
+    }
   }
 
-  static void success(String message) {
-    show(
-      message: message,
-      backgroundColor: Colors.green,
-      gravity: ToastGravity.TOP,
-    );
-  }
+  static void success(String message) =>
+      show(message: message, backgroundColor: Colors.green);
 
-  static void error(String message) {
-    show(
-      message: message,
-      backgroundColor: Colors.red,
-      gravity: ToastGravity.TOP,
-    );
-  }
+  static void error(String message) =>
+      show(message: message, backgroundColor: Colors.red);
 
-  static void warning(String message) {
-    show(
-      message: message,
-      backgroundColor: Colors.orange,
-      gravity: ToastGravity.TOP,
-    );
-  }
+  static void warning(String message) =>
+      show(message: message, backgroundColor: Colors.orange);
 
-  static void info(String message) {
-    show(
-      message: message,
-      backgroundColor: Colors.blue,
-      gravity: ToastGravity.TOP,
-    );
-  }
+  static void info(String message) =>
+      show(message: message, backgroundColor: Colors.blue);
 
   static void cancel() {
-    _service.cancel();
+    final s = _serviceOrNull;
+    if (s == null) return;
+    try {
+      s.cancel();
+    } catch (e, st) {
+      debugPrint('AppToast cancel failed: $e\n$st');
+    }
   }
 }

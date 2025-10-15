@@ -1,4 +1,4 @@
-import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
+import 'package:event_planning_app/core/utils/network/firebase_keys.dart';
 
 class UserModel {
   final String uid;
@@ -48,7 +48,7 @@ class UserModel {
     return UserModel.fromFirestore(
       data: {
         ...data,
-        ApiKeypoint.fireProfilePicture: data['picture']?['data']?['url'],
+        FirebaseKeys.fireProfilePicture: data['picture']?['data']?['url'],
       },
       uid: data['id'] ?? '',
       emailVerified: true,
@@ -59,10 +59,10 @@ class UserModel {
     return UserModel.fromFirestore(
       data: {
         ...data,
-        ApiKeypoint.fireProfilePicture:
-            data['photoUrl'] ?? data[ApiKeypoint.fireProfilePicture],
+        FirebaseKeys.fireProfilePicture:
+            data['photoUrl'] ?? data[FirebaseKeys.fireProfilePicture],
       },
-      uid: data[ApiKeypoint.fireId] ?? '',
+      uid: data[FirebaseKeys.fireId] ?? '',
       emailVerified: true,
     );
   }

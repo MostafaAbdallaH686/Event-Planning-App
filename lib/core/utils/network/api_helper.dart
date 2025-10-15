@@ -1,5 +1,7 @@
 // ToDo later ::Mostafa
+// not used now
 
+// Api helper class to handle API requests using Dio package with token refresh mechanism.
 // import 'dart:io';
 
 // import 'package:dio/dio.dart' as dio;
