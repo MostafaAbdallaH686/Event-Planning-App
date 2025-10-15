@@ -9,6 +9,7 @@ import 'package:event_planning_app/features/auth/view/verification/verification_
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
+import 'package:event_planning_app/features/events/view/create_event_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/events/view/event_details_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view_screen.dart';
@@ -56,6 +57,9 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/navigationBar',
         builder: (context, state) => const MainNavigation()),
+    GoRoute(
+        path: '/createEvent',
+        builder: (context, state) => const CreateEventScreen()),
     GoRoute(
         path: '/SeeAllRecommendation',
         builder: (context, state) => const SeeAllRecommendationScreen()),

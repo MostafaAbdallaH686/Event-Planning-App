@@ -68,6 +68,7 @@ abstract class AppString {
   static const String buytecket = "Buy Ticket";
   static const String aboutEvent = "About Event";
   static const String location = "Location";
+  static const String create = "Create";
 
   // add screen
 
