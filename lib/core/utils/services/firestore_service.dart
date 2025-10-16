@@ -60,14 +60,19 @@ class FirestoreService {
           .doc(eventId);
 
       await docRef.set({
-        'eventId': eventId,
         'categoryId': categoryId,
         'title': event.title,
         'description': event.description,
         'date': event.date,
         'location': event.location,
         'imageUrl': event.imageUrl,
-        'createdAt': FieldValue.serverTimestamp(),
+        'createdAt': event.createdAt,
+        'attendeesCount': event.attendeesCount,
+        'organizerId': event.organizerId,
+        'isPopular': event.isPopular,
+        'tags': event.tags,
+        'price': event.price,
+        'categoryName': event.categoryName,
       });
 
       print('✅ Event added to user interested list successfully.');
@@ -101,7 +106,7 @@ class FirestoreService {
         .collection('users')
         .doc(userId)
         .collection('interested')
-        .orderBy('createdAt', descending: true)
+        .orderBy('date', descending: true)
         .snapshots()
         .map((snapshot) =>
             snapshot.docs.map((doc) => {'id': doc.id, ...doc.data()}).toList());

@@ -10,7 +10,9 @@ import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:event_planning_app/features/events/cubit/event_details_cubit.dart';
+import 'package:event_planning_app/features/events/data/events_repo.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
+import 'package:event_planning_app/features/events/cubit/events_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
 import 'package:event_planning_app/features/home/data/home_repo.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
@@ -57,6 +59,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => UserCubit(UserRepository())),
+        BlocProvider(
+            create: (_) =>
+                InterestedCubit(InterestedRepository(FirestoreService()))),
         BlocProvider(create: (_) => HomeCubit(HomeRepo(FirestoreService()))),
         BlocProvider(
           create: (_) => SearchCubit(FirestoreService()),

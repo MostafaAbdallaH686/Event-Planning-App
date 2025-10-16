@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:event_planning_app/core/utils/function/app_width_height.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';

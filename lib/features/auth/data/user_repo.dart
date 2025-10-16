@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:io';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
@@ -213,7 +215,7 @@ class UserRepository {
   Future<UserModel> loginWithGoogle() async {
     try {
       await _googleSignIn.signOut();
-      final GoogleSignInAccount? account = await _googleSignIn.authenticate();
+      final GoogleSignInAccount account = await _googleSignIn.authenticate();
 
       if (account == null) {
         throw GoogleSignInFailure.cancelled();

@@ -29,7 +29,7 @@ class LoginScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     final cubit = BlocProvider.of<UserCubit>(context);
     final size = MediaQuery.of(context).size;
@@ -66,7 +66,7 @@ class LoginScreenBody extends StatelessWidget {
       },
       builder: (context, state) {
         return Form(
-          key: _formKey,
+          key: formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             padding: EdgeInsets.only(
@@ -102,7 +102,7 @@ class LoginScreenBody extends StatelessWidget {
               // Login Button
               LoginButton(
                 isaddIcon: true,
-                formKey: _formKey,
+                formKey: formKey,
                 buttonText: AppString.login,
                 onLogin: () {
                   cubit.loginWithUsername(

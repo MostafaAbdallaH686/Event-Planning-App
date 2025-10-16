@@ -1,5 +1,7 @@
 //ToDO ::Mostafa::Clean Code Please
 
+// ignore_for_file: curly_braces_in_flow_control_structures
+
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
@@ -53,9 +55,9 @@ class LoginButton extends StatelessWidget {
     }
 
     String? msg;
-    if (state is UserErrorSignUp)
+    if (state is UserErrorSignUp) {
       msg = state.message;
-    else if (state is UserErrorLoginUsername)
+    } else if (state is UserErrorLoginUsername)
       msg = state.message;
     else if (state is UserErrorLoginFacebook)
       msg = state.message;

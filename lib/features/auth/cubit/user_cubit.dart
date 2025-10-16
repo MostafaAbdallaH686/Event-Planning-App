@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';

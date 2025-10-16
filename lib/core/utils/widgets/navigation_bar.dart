@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:event_planning_app/core/utils/function/app_svg_image.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
@@ -10,6 +12,7 @@ import 'package:flutter/material.dart';
 
 class MainNavigation extends StatefulWidget {
   final int index;
+
   const MainNavigation({super.key, this.index = 0});
 
   @override
@@ -18,6 +21,7 @@ class MainNavigation extends StatefulWidget {
 
 class _MainNavigationState extends State<MainNavigation> {
   late int _currentIndex;
+  DateTime? lastPressed;
 
   final List<Widget> _screens = [
     HomeScreen(),
@@ -34,44 +38,54 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppColor.white,
-      ),
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: AppColor.white,
-        currentIndex: _currentIndex,
-        selectedItemColor: AppColor.blue,
-        unselectedItemColor: AppColor.colorbr688,
-        onTap: (index) {
-          setState(() {
-            _currentIndex = index;
-          });
-        },
-        items: [
-          _buildNavItem(
-            iconPath: AppIcon.home,
-            label: AppString.homeNav,
-            isSelected: _currentIndex == 0,
-          ),
-          _buildNavItem(
-            iconPath: AppIcon.events,
-            label: AppString.eventsNav,
-            isSelected: _currentIndex == 1,
-          ),
-          _buildNavItem(
-            iconPath: AppIcon.orders,
-            label: AppString.ordersNav,
-            isSelected: _currentIndex == 2,
-          ),
-          _buildNavItem(
-            iconPath: AppIcon.profile,
-            label: AppString.profileNav,
-            isSelected: _currentIndex == 3,
-          ),
-        ],
+    return WillPopScope(
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (lastPressed == null ||
+            now.difference(lastPressed!) > const Duration(seconds: 2)) {
+          lastPressed = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text(AppString.pressagain)),
+          );
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        body: _screens[_currentIndex],
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: AppColor.white,
+          currentIndex: _currentIndex,
+          selectedItemColor: AppColor.blue,
+          unselectedItemColor: AppColor.colorbr688,
+          onTap: (index) {
+            setState(() {
+              _currentIndex = index;
+            });
+          },
+          items: [
+            _buildNavItem(
+              iconPath: AppIcon.home,
+              label: AppString.homeNav,
+              isSelected: _currentIndex == 0,
+            ),
+            _buildNavItem(
+              iconPath: AppIcon.events,
+              label: AppString.eventsNav,
+              isSelected: _currentIndex == 1,
+            ),
+            _buildNavItem(
+              iconPath: AppIcon.orders,
+              label: AppString.ordersNav,
+              isSelected: _currentIndex == 2,
+            ),
+            _buildNavItem(
+              iconPath: AppIcon.profile,
+              label: AppString.profileNav,
+              isSelected: _currentIndex == 3,
+            ),
+          ],
+        ),
       ),
     );
   }

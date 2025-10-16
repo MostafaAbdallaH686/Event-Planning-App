@@ -1,4 +1,6 @@
-﻿import 'dart:io';
+﻿// ignore_for_file: use_build_context_synchronously
+
+import 'dart:io';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
