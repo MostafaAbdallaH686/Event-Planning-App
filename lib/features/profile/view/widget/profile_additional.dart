@@ -1,6 +1,6 @@
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
-import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
 

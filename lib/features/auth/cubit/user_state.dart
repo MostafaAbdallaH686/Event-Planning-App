@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:event_planning_app/features/auth/data/user_model.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 
 abstract class UserState extends Equatable {
   const UserState();

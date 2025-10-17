@@ -1,10 +1,10 @@
-import 'dart:io';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
 import 'package:event_planning_app/core/utils/errors/facebook_login_failure.dart';
 import 'package:event_planning_app/core/utils/errors/failures.dart';
 import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
 import 'package:event_planning_app/core/utils/errors/google_signin_failure.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/network/firebase_keys.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/data/user_repo_helper.dart';
@@ -13,8 +13,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:supabase_flutter/supabase_flutter.dart' hide User;
-import 'user_model.dart';
 
 class UserRepository {
   final FirebaseAuth _auth = FirebaseAuth.instance;

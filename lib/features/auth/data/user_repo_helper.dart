@@ -4,9 +4,9 @@ import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart'
 import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
 import 'package:event_planning_app/core/utils/errors/failures.dart';
 import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/network/firebase_keys.dart';
 import 'package:event_planning_app/di/injections.dart';
-import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class UserRepoHelper {

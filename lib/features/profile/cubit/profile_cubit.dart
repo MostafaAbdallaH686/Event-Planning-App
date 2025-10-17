@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
 import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
-import 'package:event_planning_app/features/auth/data/user_model.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
 import 'package:event_planning_app/features/profile/data/profile_repostiry.dart';
 import 'package:firebase_auth/firebase_auth.dart';
