@@ -1,12 +1,14 @@
-﻿import 'dart:io';
+import 'dart:io';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/edit_profile_buttons.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/edit_profile_form_fields.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/edit_profile_image.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
+
+import 'package:event_planning_app/features/profile/view/widget/edit_profile_buttons.dart';
+import 'package:event_planning_app/features/profile/view/widget/edit_profile_form_fields.dart';
+import 'package:event_planning_app/features/profile/view/widget/edit_profile_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -53,7 +55,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void _saveProfile() {
     if (_formKey.currentState!.validate()) {
       // Use cubit to update profile
-      context.read<UserCubit>().updateProfile(
+      context.read<ProfileCubit>().updateProfile(
             username: _usernameController.text.trim(),
             email: _emailController.text.trim(),
             about: _aboutController.text.trim(),
@@ -66,7 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return BlocListener<UserCubit, UserState>(
+    return BlocListener<ProfileCubit, ProfileState>(
       listener: (context, state) {
         if (state is UserUpdatingProfile) {
           setState(() => _isLoading = true);

@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -226,49 +225,6 @@ class UserCubit extends Cubit<UserState> {
       emit(UserErrorResetPassword(e.message));
     } catch (e) {
       emit(UserErrorResetPassword('Failed to send password reset email'));
-    }
-  }
-
-  Future<void> fetchCurrentUser() async {
-    try {
-      final user = await _repository.getCurrentUser();
-      if (user != null) {
-        emit(UserLoggedIn(user));
-      } else {
-        emit(UserLoggedOut());
-      }
-    } on AuthFailure catch (e) {
-      emit(UserErrorLoginUsername(e.message));
-    } on FirestoreFailure catch (e) {
-      emit(UserErrorLoginUsername(e.message));
-    } catch (e) {
-      emit(UserLoggedOut());
-    }
-  }
-
-  Future<void> updateProfile({
-    String? username,
-    String? email,
-    String? about,
-    File? profileImage,
-  }) async {
-    emit(UserUpdatingProfile());
-
-    try {
-      UserModel user = await _repository.updateProfile(
-        username: username,
-        email: email,
-        about: about,
-        profileImage: profileImage,
-      );
-
-      emit(UserUpdatedProfile(user));
-    } on AuthFailure catch (e) {
-      emit(UserErrorUpdateProfile(e.message));
-    } on FirestoreFailure catch (e) {
-      emit(UserErrorUpdateProfile(e.message));
-    } catch (e) {
-      emit(UserErrorUpdateProfile('Failed to update profile'));
     }
   }
 }

@@ -3,10 +3,10 @@ import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:go_router/go_router.dart';
 import 'profile_header.dart';
 import 'profile_about.dart';
@@ -24,8 +24,8 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   void initState() {
     super.initState();
     // Fetch current user if in initial state
-    final cubit = context.read<UserCubit>();
-    if (cubit.state is UserInitial) {
+    final cubit = context.read<ProfileCubit>();
+    if (cubit.state is ProfileInitial) {
       cubit.fetchCurrentUser();
     }
   }
@@ -34,27 +34,21 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      body: BlocConsumer<UserCubit, UserState>(
+      body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is UserLoggedOut || state is UserDeletedAccount) {
             context.go(AppRoutes.login);
           }
         },
         builder: (context, state) {
-          final isLoading = state is UserLoadingUsername ||
-              state is UserLoadingFacebook ||
-              state is UserLoadingGoogle ||
-              state is UserSigningUp ||
-              state is UserResettingPassword ||
-              state is UserLoggingOut ||
-              state is UserDeletingAccount ||
-              state is UserUpdatingPassword;
+          final isLoading =
+              state is UserLoggingOut || state is UserDeletingAccount;
 
           if (isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
 
-          if (state is UserDataState) {
+          if (state is ProfileDataState) {
             final user = state.user;
             return SingleChildScrollView(
               padding: EdgeInsets.only(
@@ -87,7 +81,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                   ),
                   SizedBox(height: size.height * 0.04),
                   // ProfileAdditional(user: user),
-                  BlocBuilder<UserCubit, UserState>(
+                  BlocBuilder<ProfileCubit, ProfileState>(
                     builder: (context, state) {
                       if (state is UserLoggingOut) {
                         return const Center(
@@ -95,7 +89,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                       }
                       return CustomTextbutton(
                         onpressed: () {
-                          context.read<UserCubit>().logout();
+                          context.read<ProfileCubit>().logout();
                         },
                         text: 'Logout',
                       );
@@ -106,7 +100,7 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
             );
           }
 
-          if (state is UserError) {
+          if (state is ProfileError) {
             return Center(
               child: Padding(
                 padding: const EdgeInsets.all(24.0),

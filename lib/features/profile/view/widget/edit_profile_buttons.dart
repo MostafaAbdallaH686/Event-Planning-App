@@ -1,5 +1,5 @@
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/change_password.dart';
+import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileButtons extends StatelessWidget {

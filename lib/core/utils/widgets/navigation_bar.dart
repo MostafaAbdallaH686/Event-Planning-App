@@ -4,10 +4,10 @@ import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/profile_screen.dart';
 import 'package:event_planning_app/features/booking/view/booking_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
+import 'package:event_planning_app/features/profile/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

@@ -1,9 +1,10 @@
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
-import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/data/user_model.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/change_password.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
+
+import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,7 +17,7 @@ class ProfileAdditional extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          BlocConsumer<UserCubit, UserState>(
+          BlocConsumer<ProfileCubit, ProfileState>(
             listener: (context, state) {
               if (state is UserErrorLogout) {
                 AppToast.show(message: state.message);
@@ -28,12 +29,12 @@ class ProfileAdditional extends StatelessWidget {
               }
               return OutlinedButton(
                   onPressed: () {
-                    context.read<UserCubit>().logout();
+                    context.read<ProfileCubit>().logout();
                   },
                   child: const Text("Logout"));
             },
           ),
-          BlocConsumer<UserCubit, UserState>(
+          BlocConsumer<ProfileCubit, ProfileState>(
             listener: (context, state) {
               if (state is UserErrorDeleteAccount) {
                 AppToast.show(message: state.message);
@@ -45,7 +46,7 @@ class ProfileAdditional extends StatelessWidget {
               }
               return OutlinedButton(
                   onPressed: () {
-                    context.read<UserCubit>().deleteAccount();
+                    context.read<ProfileCubit>().deleteAccount();
                   },
                   child: const Text("Delete Account"));
             },
