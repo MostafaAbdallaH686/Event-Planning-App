@@ -139,10 +139,12 @@ class _EventDetails extends StatelessWidget {
             children: [
               Expanded(
                 child: Text(
-                  event.location,
-                  style: AppTextStyle.regular12(AppColor.colorbr80),
-                  maxLines: 1,
+                  event.location.length > 10
+                      ? '${event.location.substring(0, 10)}...'
+                      : event.location,
+                  style: AppTextStyle.regular12(AppColor.colorbr688),
                   overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
                 ),
               ),
               InterestedEventButton(

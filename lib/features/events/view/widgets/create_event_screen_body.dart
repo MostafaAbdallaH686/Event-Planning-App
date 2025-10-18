@@ -116,7 +116,6 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
         .where((e) => e.isNotEmpty)
         .toList();
 
-    // TODO: wire real categories; placeholder for now
     const categoryId = 'general';
     const categoryName = 'General';
 
@@ -215,8 +214,9 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
                               keyboardType: TextInputType.number,
                               validator: (v) {
                                 final d = double.tryParse(v?.trim() ?? '');
-                                if (d == null || d < 0)
+                                if (d == null || d < 0) {
                                   return 'Enter a valid non-negative number';
+                                }
                                 return null;
                               },
                             )),

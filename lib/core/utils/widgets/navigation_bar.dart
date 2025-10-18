@@ -41,85 +41,96 @@ class _MainNavigationState extends State<MainNavigation> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      appBar: AppBar(
-        centerTitle: true,
-        backgroundColor: AppColor.white,
-      ),
-      body: _screens[_currentIndex],
+    return WillPopScope(
+      onWillPop: () async {
+        DateTime now = DateTime.now();
+        if (lastPressed == null ||
+            now.difference(lastPressed!) > const Duration(seconds: 2)) {
+          lastPressed = now;
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text(AppString.pressagain)),
+          );
+          return false;
+        }
+        return true;
+      },
+      child: Scaffold(
+        extendBody: true,
 
-      // Center FAB
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: Container(
-        height: AppWidthHeight.percentageOfHeight(context, 50),
-        width: AppWidthHeight.percentageOfWidth(context, 50),
-        decoration: BoxDecoration(
-          color: AppColor.white,
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: AppColor.black.withOpacity(0.2),
-              spreadRadius: 2,
-              blurRadius: 8,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        child: FloatingActionButton(
-          heroTag: 'main_fab',
-          backgroundColor: AppColor.colorgr88,
-          onPressed: () {
-            context.push(AppRoutes.createEvent);
-          },
-          child: Icon(Icons.add,
-              size: AppWidthHeight.percentageOfWidth(context, 32),
-              color: AppColor.white),
-        ),
-      ),
+        body: _screens[_currentIndex],
 
-      // Bottom bar with notch
-      bottomNavigationBar: BottomAppBar(
-        color: AppColor.white,
-        shape: const CircularNotchedRectangle(),
-        notchMargin: 8,
-        elevation: 8,
-        child: SizedBox(
-          height: AppWidthHeight.percentageOfHeight(context, 64),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              // Left side: two tabs
-              _TabItem(
-                iconPath: AppIcon.home,
-                label: AppString.homeNav,
-                selected: _currentIndex == 0,
-                onTap: () => setState(() => _currentIndex = 0),
-              ),
-              _TabItem(
-                iconPath: AppIcon.events,
-                label: AppString.eventsNav,
-                selected: _currentIndex == 1,
-                onTap: () => setState(() => _currentIndex = 1),
-              ),
-
-              // Space for FAB notch
-              const SizedBox(width: 48),
-
-              // Right side: two tabs
-              _TabItem(
-                iconPath: AppIcon.orders,
-                label: AppString.ordersNav,
-                selected: _currentIndex == 2,
-                onTap: () => setState(() => _currentIndex = 2),
-              ),
-              _TabItem(
-                iconPath: AppIcon.profile,
-                label: AppString.profileNav,
-                selected: _currentIndex == 3,
-                onTap: () => setState(() => _currentIndex = 3),
+        // Center FAB
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: Container(
+          height: AppWidthHeight.percentageOfHeight(context, 50),
+          width: AppWidthHeight.percentageOfWidth(context, 50),
+          decoration: BoxDecoration(
+            color: AppColor.white,
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColor.black.withOpacity(0.2),
+                spreadRadius: 2,
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
             ],
+          ),
+          child: FloatingActionButton(
+            heroTag: 'main_fab',
+            backgroundColor: AppColor.colorgr88,
+            onPressed: () {
+              context.push(AppRoutes.createEvent);
+            },
+            child: Icon(Icons.add,
+                size: AppWidthHeight.percentageOfWidth(context, 32),
+                color: AppColor.white),
+          ),
+        ),
+
+        // Bottom bar with notch
+        bottomNavigationBar: BottomAppBar(
+          color: AppColor.white,
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 8,
+          elevation: 8,
+          child: SizedBox(
+            height: AppWidthHeight.percentageOfHeight(context, 64),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                // Left side: two tabs
+                _TabItem(
+                  iconPath: AppIcon.home,
+                  label: AppString.homeNav,
+                  selected: _currentIndex == 0,
+                  onTap: () => setState(() => _currentIndex = 0),
+                ),
+                _TabItem(
+                  iconPath: AppIcon.events,
+                  label: AppString.eventsNav,
+                  selected: _currentIndex == 1,
+                  onTap: () => setState(() => _currentIndex = 1),
+                ),
+
+                // Space for FAB notch
+                const SizedBox(width: 48),
+
+                // Right side: two tabs
+                _TabItem(
+                  iconPath: AppIcon.orders,
+                  label: AppString.ordersNav,
+                  selected: _currentIndex == 2,
+                  onTap: () => setState(() => _currentIndex = 2),
+                ),
+                _TabItem(
+                  iconPath: AppIcon.profile,
+                  label: AppString.profileNav,
+                  selected: _currentIndex == 3,
+                  onTap: () => setState(() => _currentIndex = 3),
+                ),
+              ],
+            ),
           ),
         ),
       ),

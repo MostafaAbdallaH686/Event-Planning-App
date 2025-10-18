@@ -36,7 +36,7 @@ abstract class AppString {
   static const String events = "Events";
   static const String upcoming = "UPCOMING";
   static const String pastEvents = "PAST EVENTS";
-  static const String noUpcomingEvents = "No Upcoming Events";
+  static const String noUpcomingEvents = "No Interested Events";
   static const String noResult = "No Result Show";
   static const String exploreEvent = "Explore Events";
   //favorite screen
