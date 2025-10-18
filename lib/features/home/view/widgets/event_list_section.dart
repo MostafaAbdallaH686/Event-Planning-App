@@ -77,6 +77,7 @@ class EventListSection extends StatelessWidget {
                     onRemove: () => onRemoveInterest(event),
                     addText: AppString.join,
                     removeText: AppString.joined,
+                    eventId: event.id!,
                   ),
                 ],
               ),

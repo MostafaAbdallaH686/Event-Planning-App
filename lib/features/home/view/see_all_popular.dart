@@ -6,6 +6,7 @@ import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/home_state.dart';
+import 'package:event_planning_app/features/home/view/widgets/interested_event_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -101,33 +102,29 @@ class SeeAllPopularScreen extends StatelessWidget {
                                               AppColor.colorbr688)),
                                     ],
                                   ),
-                                  TextButton(
-                                    onPressed: isJoined
-                                        ? null
-                                        : () {
-                                            context
-                                                .read<HomeCubit>()
-                                                .toggleInterestEvent(
-                                                  categoryId: event.categoryId,
-                                                  eventId: event.id!,
-                                                  event: event,
-                                                );
-                                          },
-                                    style: TextButton.styleFrom(
-                                      backgroundColor: AppColor.colorbr80,
-                                      minimumSize: Size(size.width * 0.17948,
-                                          size.height * 0.0375),
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    child: Text(
-                                      isJoined
-                                          ? AppString.joined
-                                          : AppString.join,
-                                      style: AppTextStyle.regular12(
-                                          AppColor.white),
-                                    ),
+                                  InterestedEventButton(
+                                    isInterested: isJoined,
+                                    eventId: event.id!,
+                                    onAdd: () {
+                                      context
+                                          .read<HomeCubit>()
+                                          .toggleInterestEvent(
+                                            categoryId: event.categoryId,
+                                            eventId: event.id!,
+                                            event: event,
+                                          );
+                                    },
+                                    onRemove: () {
+                                      context
+                                          .read<HomeCubit>()
+                                          .toggleInterestEvent(
+                                            categoryId: event.categoryId,
+                                            eventId: event.id!,
+                                            event: event,
+                                          );
+                                    },
+                                    addText: AppString.join,
+                                    removeText: AppString.joined,
                                   ),
                                 ],
                               ),

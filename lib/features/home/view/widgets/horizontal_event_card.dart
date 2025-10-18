@@ -93,6 +93,7 @@ class HorizontalEventCard extends StatelessWidget {
                         addText: AppString.join,
                         removeText: AppString.joined,
                         size: Size(size.width * 0.2051, size.height * 0.0375),
+                        eventId: event.id!,
                       ),
                     ],
                   ),

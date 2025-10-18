@@ -151,6 +151,7 @@ class _EventDetails extends StatelessWidget {
                 onRemove: onRemoveInterest,
                 addText: AppString.join,
                 removeText: AppString.joined,
+                eventId: event.id!,
               ),
             ],
           ),

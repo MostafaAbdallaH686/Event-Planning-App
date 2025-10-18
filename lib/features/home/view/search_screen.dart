@@ -23,7 +23,6 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    // تنفيذ البحث عند فتح الصفحة لأول مرة
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_searchController.text.isNotEmpty) {
         context.read<SearchCubit>().searchEvents(_searchController.text);
@@ -48,11 +47,9 @@ class SearchScreen extends StatelessWidget {
               prefixtext: AppString.search,
               fillColor: AppColor.colorbr9E,
               onChanged: (value) {
-                // البحث مباشرة عند الكتابة
                 context.read<SearchCubit>().searchEvents(value);
               },
               onFieldSubmitted: (value) {
-                // البحث عند الضغط على Enter
                 context.read<SearchCubit>().searchEvents(value);
               },
             ),
