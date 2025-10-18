@@ -2,6 +2,8 @@ import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/network/api_configration.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
+import 'package:event_planning_app/features/events/data/events_repository.dart';
+import 'package:event_planning_app/features/events/data/events_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -43,6 +45,7 @@ Future<void> configureDependencies() async {
   // );
 
   // Repositories
+  getIt.registerLazySingleton<EventRepository>(() => EventRepositoryImpl());
 
   // getIt.registerLazySingleton<HomeRepo>(
   //     () => HomeRepo(apiHelper: getIt<ApiHelper>()));

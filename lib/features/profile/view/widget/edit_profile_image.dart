@@ -1,7 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:io';
-import 'package:event_planning_app/features/auth/view/my_profile/widget/image_source_bottom_sheet.dart';
+import 'package:event_planning_app/features/profile/view/widget/image_source_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

@@ -1,4 +1,4 @@
-import 'package:event_planning_app/features/auth/view/my_profile/widget/profile_screen_body.dart';
+import 'package:event_planning_app/features/profile/view/widget/profile_screen_body.dart';
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {

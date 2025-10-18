@@ -16,6 +16,8 @@ import 'package:event_planning_app/features/events/cubit/events_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
 import 'package:event_planning_app/features/home/data/home_repo.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
+import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
+import 'package:event_planning_app/features/profile/data/profile_repostiry.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -71,6 +73,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => OnBoardingCubit(),
+        ),
+        BlocProvider(
+          create: (context) => ProfileCubit(ProfileRepository()),
         ),
       ],
       child: MaterialApp.router(

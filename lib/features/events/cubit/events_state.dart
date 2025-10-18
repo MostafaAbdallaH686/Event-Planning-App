@@ -1,65 +1,37 @@
-// ...existing code...
-import 'package:event_planning_app/features/events/data/events_model.dart';
+import 'package:equatable/equatable.dart';
+import 'package:event_planning_app/core/utils/model/event_model.dart';
 
-abstract class InterestedState {}
+abstract class CreateEventState extends Equatable {
+  const CreateEventState();
 
-class InterestedInitial extends InterestedState {}
-
-class InterestedLoading extends InterestedState {}
-
-class InterestedLoaded extends InterestedState {
-  final List<InterestedEvent> events;
-  InterestedLoaded(this.events);
-
-  DateTime _toDate(dynamic v) {
-    if (v == null) return DateTime.fromMillisecondsSinceEpoch(0);
-    if (v is DateTime) return v.toUtc();
-    try {
-      if (v is Map && v.containsKey('seconds')) {
-        return DateTime.fromMillisecondsSinceEpoch(
-          (v['seconds'] as int) * 1000,
-          isUtc: true,
-        );
-      }
-      // Try Firestore Timestamp format
-      if (v.toString().contains("Timestamp")) {
-        final match = RegExp(r'seconds=(\d+)').firstMatch(v.toString());
-        if (match != null) {
-          return DateTime.fromMillisecondsSinceEpoch(
-            int.parse(match.group(1)!) * 1000,
-            isUtc: true,
-          );
-        }
-      }
-      return DateTime.tryParse(v.toString())?.toUtc() ??
-          DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
-    } catch (_) {
-      return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true);
-    }
-  }
-
-  List<InterestedEvent> get upcoming {
-    final now = DateTime.now().toUtc();
-    final list = events.where((e) {
-      final d = _toDate(e.date);
-      return d.isAfter(now);
-    }).toList();
-    list.sort((a, b) => _toDate(a.date).compareTo(_toDate(b.date)));
-    return list;
-  }
-
-  List<InterestedEvent> get past {
-    final now = DateTime.now().toUtc();
-    final list = events.where((e) {
-      final d = _toDate(e.date);
-      return d.isBefore(now);
-    }).toList();
-    list.sort((a, b) => _toDate(b.date).compareTo(_toDate(a.date)));
-    return list;
-  }
+  @override
+  List<Object?> get props => [];
 }
 
-class InterestedError extends InterestedState {
+class CreateEventInitial extends CreateEventState {}
+
+class CreateEventSubmitting extends CreateEventState {}
+
+class CreateEventSuccess extends CreateEventState {
+  final EventModel event;
+  const CreateEventSuccess(this.event);
+
+  @override
+  List<Object?> get props => [event];
+}
+
+class CreateEventFailure extends CreateEventState {
   final String message;
-  InterestedError(this.message);
+  const CreateEventFailure(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class CreateEventValidationError extends CreateEventState {
+  final Map<String, String> errors;
+  const CreateEventValidationError(this.errors);
+
+  @override
+  List<Object?> get props => [errors];
 }

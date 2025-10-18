@@ -1,14 +1,13 @@
 // Mohnd::TODO: Refactor this file to use named routes instead of passing Widget instances directly.
 
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/di/injections.dart';
-import 'package:event_planning_app/features/auth/data/user_model.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/edit_profile.dart';
-import 'package:event_planning_app/features/auth/view/my_profile/profile_screen.dart';
 import 'package:event_planning_app/features/auth/view/verification/verification_screen.dart';
 import 'package:event_planning_app/features/auth/view/forgetPassword/forget_password_screen.dart';
 import 'package:event_planning_app/features/auth/view/login/login_screen.dart';
 import 'package:event_planning_app/features/auth/view/register/register_screen.dart';
+import 'package:event_planning_app/features/events/view/create_event_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/events/view/event_details_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view_screen.dart';
@@ -22,6 +21,8 @@ import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.da
 import 'package:event_planning_app/core/utils/widgets/navigation_bar.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
+import 'package:event_planning_app/features/profile/view/edit_profile.dart';
+import 'package:event_planning_app/features/profile/view/profile_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
@@ -56,6 +57,9 @@ final GoRouter router = GoRouter(
     GoRoute(
         path: '/navigationBar',
         builder: (context, state) => const MainNavigation()),
+    GoRoute(
+        path: '/createEvent',
+        builder: (context, state) => const CreateEventScreen()),
     GoRoute(
         path: '/SeeAllRecommendation',
         builder: (context, state) => const SeeAllRecommendationScreen()),

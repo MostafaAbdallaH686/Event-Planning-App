@@ -43,6 +43,7 @@ dependencies:
   flutter_bloc: 
   equatable: ^2.0.7
   async: ^2.12.0
+  calendar_date_picker2: ^2.0.1
   firebase_core: ^4.0.0
   firebase_auth: ^6.0.1
   cloud_firestore: ^6.0.0
