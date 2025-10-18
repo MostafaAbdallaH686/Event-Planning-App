@@ -1,3 +1,5 @@
+import 'package:event_planning_app/core/utils/model/event_model.dart';
+
 class InterestedEvent {
   final String id;
   final String eventId;
@@ -76,5 +78,28 @@ class InterestedEvent {
       'price': price,
       'categoryName': categoryName,
     };
+  }
+
+  EventModel toEventModel() {
+    return EventModel(
+      id: eventId,
+      title: title,
+      description: description,
+      categoryId: categoryId,
+      categoryName: categoryName,
+      location: location,
+      date: date is DateTime
+          ? date
+          : DateTime.tryParse(date.toString()) ?? DateTime.now(),
+      createdAt: createdAt is DateTime
+          ? createdAt
+          : DateTime.tryParse(createdAt.toString()) ?? DateTime.now(),
+      organizerId: organizerId,
+      imageUrl: imageUrl,
+      attendeesCount: attendeesCount,
+      isPopular: isPopular,
+      tags: tags.map((e) => e.toString()).toList(),
+      price: (price ?? 0).toDouble(),
+    );
   }
 }
