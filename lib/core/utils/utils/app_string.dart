@@ -133,4 +133,43 @@ abstract class AppString {
   static const String kSuccess = "Success";
   static const String kchangePasswordSuccess = "change password success";
   static const String kupdateprofilesuccess = "update profile success";
+
+  // order details screen
+  static const String paymentMethod = "Payment Method";
+  static const String selectPaymentMethod = "Select Payment Method";
+  static const String creditDebitCard = 'Credit / Debit Card';
+  static const String paypal = 'PayPal';
+  static const String googlePay = 'Google Pay';
+  static const String orderDetails = 'order details';
+  static const String orderSummary = 'Order Summary';
+  static const String tickets = 'Tickets';
+  static const String totalPrice = 'Total Price';
+  static const String confirmOrder = 'Confirm Order';
+  static const String placeOrder = 'Place Order';
+
+  // ticket booked screen
+  static const String congratulations = 'Congratulations!';
+  static const String yourTicketfor = "Your ticket for";
+  static const String bookingSuccess = 'has been booked successfully!';
+  static const String totalPaid = 'Total Paid';
+  static const String viewETicket = 'View E-Ticket';
+  static const String goToHome = 'Go to Home';
+  static const String report = 'Report (Cancel Booking)';
+
+  // view ticket screen
+  static const String viewTicket = 'View Ticket';
+  static const String date = 'Date';
+  static const String time = 'Time';
+  static const String seat = 'Seat';
+  static const String rateUs = 'Rate Us';
+
+  // cancel booking screen
+  static const String cancelBooking = 'Cancel Booking';
+  static const String selectReasonFirst =
+      'Please select or write a reason first';
+  static const String tellUsMore = 'Tell us more about your reason...';
+
+  // booking cancelled screen
+  static const String bookingCancelledSuccessfully =
+      'Your Booking Cancelled Successfully';
 }

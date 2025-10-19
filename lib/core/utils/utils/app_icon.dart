@@ -16,4 +16,8 @@ abstract class AppIcon {
   static const String events = "${_baseUrl}events_Icon.svg";
   static const String orders = "${_baseUrl}orders_Icon.svg";
   static const String profile = "${_baseUrl}profile_Icon.svg";
+  static const String greentrue = "${_baseUrl}green_true.svg";
+  static const String googlepay = "${_baseUrl}googlepay.svg";
+  static const String mastercard = "${_baseUrl}mastercard.svg";
+  static const String paypal = "${_baseUrl}paypal.svg";
 }

@@ -11,19 +11,19 @@ abstract class AppColor {
   static const Color colorb26 = Color(0xff120D26);
   static const Color colorwEE = Color(0xffEEEEEE);
   static const Color colorbr80 = Color(0xff808080);
-  static Color colorbr88 = Color(0xff8B8688);
-  static Color colorbr688 = Color(0xff747688);
-  static Color colorbrD8 = Color(0xffD9D9D9);
+  static const Color colorbr88 = Color(0xff8B8688);
+  static const Color colorbr688 = Color(0xff747688);
+  static const Color colorbrD8 = Color(0xffD9D9D9);
   static const Color colorb18 = Color(0xff060518);
   static const Color border = Color(0xff8B8688);
   static Color colorstack =
       Color.alphaBlend(Color(0xffB9DAFB), Color(0xff9895EE));
-  static Color colorbrCC = Color(0xffCCCCCC);
-  static Color colorbr9E = Color(0xffE9E9E9);
-  static Color colorbr9B = Color(0xff9B9B9B);
-  static Color sharedbutton = Color(0xff0055FF);
-  static Color facebookbutton = Color(0xff4267B2);
-  static Color googlebutton = Color(0xffDB4437);
+  static const Color colorbrCC = Color(0xffCCCCCC);
+  static const Color colorbr9E = Color(0xffE9E9E9);
+  static const Color colorbr9B = Color(0xff9B9B9B);
+  static const Color sharedbutton = Color(0xff0055FF);
+  static const Color facebookbutton = Color(0xff4267B2);
+  static const Color googlebutton = Color(0xffDB4437);
 
   static const List<Color> colorsInterests = [
     Color(0xFF6B7AED),
@@ -39,4 +39,5 @@ abstract class AppColor {
   static const Color colorgrDD = Color(0xffDDDDDD);
   static const Color colorbl0FF = Color(0xffEEF0FF);
   static const Color colorError = Color(0xffFF4D4D);
+  static const Color colorbl83 = Color(0x1F493E83);
 }
