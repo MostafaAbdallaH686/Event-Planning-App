@@ -28,4 +28,9 @@ abstract class AppRoutes {
   static const String createEvent = '/createEvent';
   static const String changeEmail = '/changeEmail';
   static const String changePasswordProfile = '/changePasswordProfile';
+  static const String bookingCancel = '/bookingCancel';
+  static const String cancelBooking = '/cancelBooking';
+  static const String orderDetails = '/orderDetails';
+  static const String ticketBooked = '/ticketBooked';
+  static const String viewTicket = '/viewTicket';
 }

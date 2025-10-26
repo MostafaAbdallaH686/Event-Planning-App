@@ -132,5 +132,52 @@ final GoRouter router = GoRouter(
         return ChangePassword(user: userData);
       },
     ),
+    GoRoute(
+      path: '/bookingCancel',
+      builder: (context, state) => const BookingCancelScreen(),
+    ),
+    GoRoute(
+      path: '/cancelBooking',
+      builder: (context, state) => const CancelBookingScreen(),
+    ),
+    GoRoute(
+      path: '/orderDetails',
+      builder: (context, state) {
+        final order = state.extra as OrderModel;
+        return OrderDetailsScreen(order: order);
+      },
+    ),
+    GoRoute(
+      path: '/ticketBooked',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return TicketBookedScreen(
+          eventName: extra['eventName'],
+          paymentMethod: extra['paymentMethod'],
+          totalPrice: extra['totalPrice'],
+          date: extra['date'],
+          time: extra['time'],
+          seat: extra['seat'],
+          location: extra['location'],
+          qrImageUrl: extra['qrImageUrl'],
+          eventImageUrl: extra['eventImageUrl'],
+        );
+      },
+    ),
+    GoRoute(
+      path: '/viewTicket',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return ViewTicketScreen(
+          eventName: extra['eventName'],
+          date: extra['date'],
+          time: extra['time'],
+          seat: extra['seat'],
+          location: extra['location'],
+          eventImageUrl: extra['eventImageUrl'],
+          qrImageUrl: extra['qrImageUrl'],
+        );
+      },
+    ),
   ],
 );
