@@ -26,4 +26,6 @@ abstract class AppRoutes {
   static const String navBar = '/navigationBar';
   static const String editProfile = '/editProfile';
   static const String createEvent = '/createEvent';
+  static const String changeEmail = '/changeEmail';
+  static const String changePasswordProfile = '/changePasswordProfile';
 }

@@ -49,6 +49,8 @@ class UserVerificationSent extends ProfileState {}
 
 class UserLoggedOut extends ProfileState {}
 
+class UserLoggedOutEmailChanged extends ProfileState {}
+
 class UserDeletedAccount extends ProfileState {}
 
 class UserUpdatedProfile extends ProfileDataState {
@@ -87,4 +89,32 @@ class UserErrorDeleteAccount extends ProfileError {
 
 class UserErrorUpdateProfile extends ProfileError {
   const UserErrorUpdateProfile(super.message);
+}
+
+class UserChangingEmail extends ProfileState {}
+
+class UserChangedEmail extends ProfileDataState {
+  @override
+  final UserModel user;
+  UserChangedEmail(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class UserErrorChangeEmail extends ProfileError {
+  const UserErrorChangeEmail(super.message);
+}
+
+class UserChangingPassword extends ProfileState {}
+
+class UserChangedPassword extends ProfileDataState {
+  @override
+  final UserModel user;
+  UserChangedPassword(this.user);
+  @override
+  List<Object?> get props => [user];
+}
+
+class UserErrorChangePassword extends ProfileError {
+  const UserErrorChangePassword(super.message);
 }

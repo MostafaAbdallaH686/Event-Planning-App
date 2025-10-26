@@ -1,40 +1,21 @@
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
-import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileButtons extends StatelessWidget {
   final bool isLoading;
   final VoidCallback onSave;
-  final VoidCallback onCancel;
 
   const EditProfileButtons({
     super.key,
     required this.isLoading,
     required this.onSave,
-    required this.onCancel,
   });
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Change Password Button
-        CustomTextbutton(
-          text: 'Change Password',
-          isIconAdded: true,
-          onpressed: isLoading
-              ? () {}
-              : () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ChangePassword(),
-                    ),
-                  );
-                },
-        ),
-        const SizedBox(height: 20),
-
         // Save Button
         isLoading
             ? Container(
@@ -51,13 +32,6 @@ class EditProfileButtons extends StatelessWidget {
                 onpressed: onSave,
               ),
         const SizedBox(height: 20),
-
-        // Cancel Button
-        CustomTextbutton(
-          text: 'Cancel',
-          isIconAdded: false,
-          onpressed: isLoading ? () {} : onCancel,
-        ),
       ],
     );
   }

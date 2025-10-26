@@ -1,15 +1,22 @@
+import 'package:event_planning_app/core/utils/model/user_model.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/features/profile/view/change_email.dart';
+import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class EditProfileFormFields extends StatelessWidget {
   final TextEditingController usernameController;
-  final TextEditingController emailController;
   final TextEditingController aboutController;
+  final UserModel user;
+  final bool isLoading;
 
   const EditProfileFormFields({
     super.key,
     required this.usernameController,
-    required this.emailController,
     required this.aboutController,
+    required this.user,
+    this.isLoading = false,
   });
 
   @override
@@ -38,26 +45,97 @@ class EditProfileFormFields extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Email Field
+        // Email Button (navigate to change email screen)
         _buildLabel('Email'),
         const SizedBox(height: 8),
-        TextFormField(
-          controller: emailController,
-          keyboardType: TextInputType.emailAddress,
-          decoration: _inputDecoration(
-            hintText: 'Enter your email',
-            prefixIcon: Icons.email_outlined,
-          ),
-          validator: (value) {
-            if (value == null || value.trim().isEmpty) {
-              return 'Email is required';
-            }
-            final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-            if (!emailRegex.hasMatch(value.trim())) {
-              return 'Enter a valid email';
-            }
-            return null;
+        InkWell(
+          onTap: () {
+            context.push(
+              AppRoutes.changeEmail,
+              extra: user,
+            );
           },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.email_outlined,
+                  color: Color(0xFF2855FF),
+                  size: 22,
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    user.email,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF0D1B2A),
+                    ),
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 24),
+
+        // Password Button (navigate to change password screen)
+        _buildLabel('Password'),
+        const SizedBox(height: 8),
+        InkWell(
+          onTap: isLoading
+              ? null
+              : () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChangePassword(user: user),
+                    ),
+                  );
+                },
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.grey.shade300),
+            ),
+            child: Row(
+              children: [
+                const Icon(
+                  Icons.lock_outline,
+                  color: Color(0xFF2855FF),
+                  size: 22,
+                ),
+                const SizedBox(width: 12),
+                const Expanded(
+                  child: Text(
+                    'Change Password',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Color(0xFF0D1B2A),
+                    ),
+                  ),
+                ),
+                const Icon(
+                  Icons.arrow_forward_ios,
+                  color: Colors.grey,
+                  size: 16,
+                ),
+              ],
+            ),
+          ),
         ),
         const SizedBox(height: 24),
 

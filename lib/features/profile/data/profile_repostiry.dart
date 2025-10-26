@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
@@ -103,7 +102,7 @@ class ProfileRepository {
 
   Future<UserModel> updateProfile({
     String? username,
-    String? email,
+    // String? email,
     String? about,
     File? profileImage,
   }) async {
@@ -157,12 +156,12 @@ class ProfileRepository {
         updates[FirebaseKeys.fireAbout] = about;
       }
 
-      // Update email if provided (requires re-authentication in the future)
-      if (email != null && email.isNotEmpty && email != user.email) {
-        updates[FirebaseKeys.fireEmail] = email;
-        // Note: Actual email update in Firebase Auth requires re-authentication
-        // This only updates Firestore. For full email update, use editProfile method
-      }
+      // // Update email if provided (requires re-authentication in the future)
+      // if (email != null && email.isNotEmpty && email != user.email) {
+      //   updates[FirebaseKeys.fireEmail] = email;
+      //   // Note: Actual email update in Firebase Auth requires re-authentication
+      //   // This only updates Firestore. For full email update, use editProfile method
+      // }
 
       // Perform Firestore update
       if (updates.isNotEmpty) {
@@ -173,6 +172,61 @@ class ProfileRepository {
       }
 
       // Fetch and return updated user data
+      final userData = await _helper.getUserData(user.uid);
+      return UserModel.fromFirestore(
+        data: userData,
+        uid: user.uid,
+        emailVerified: user.emailVerified,
+      );
+    } on FirebaseAuthException catch (e) {
+      throw AuthFailure.fromException(e);
+    } on FirebaseException catch (e) {
+      throw FirestoreFailure.fromException(e);
+    }
+  }
+
+  Future<UserModel> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String password,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) throw AuthFailure.userNotFound();
+
+      // Re-authenticate user with password (this will verify both email and password)
+      AuthCredential credential = EmailAuthProvider.credential(
+        email: currentEmail,
+        password: password,
+      );
+      await user.reauthenticateWithCredential(credential);
+
+      // Check if new email already exists in Firestore
+      final emailQuery = await _firestore
+          .collection(FirebaseKeys.fireUsersCollection)
+          .where(FirebaseKeys.fireEmail, isEqualTo: newEmail)
+          .limit(1)
+          .get();
+
+      if (emailQuery.docs.isNotEmpty) {
+        throw AuthFailure.emailAlreadyInUse();
+      }
+
+      // Send verification email to new email address
+      // Firebase will only update the email after user clicks the verification link
+      await user.verifyBeforeUpdateEmail(newEmail);
+
+      // Store pending email change in Firestore for tracking
+      await _firestore
+          .collection(FirebaseKeys.fireUsersCollection)
+          .doc(user.uid)
+          .update({
+        FirebaseKeys.fireEmail: newEmail,
+      });
+      // Sign out user
+      await logout();
+
+      // Return current user data (email not changed yet until verified)
       final userData = await _helper.getUserData(user.uid);
       return UserModel.fromFirestore(
         data: userData,

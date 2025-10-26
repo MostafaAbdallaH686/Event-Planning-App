@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImageSourceBottomSheet extends StatelessWidget {
@@ -29,7 +30,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
             leading: const Icon(Icons.camera_alt, color: Color(0xFF2855FF)),
             title: const Text('Camera'),
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
               onSourceSelected(ImageSource.camera);
             },
           ),
@@ -37,7 +38,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
             leading: const Icon(Icons.photo_library, color: Color(0xFF2855FF)),
             title: const Text('Gallery'),
             onTap: () {
-              Navigator.pop(context);
+              context.pop();
               onSourceSelected(ImageSource.gallery);
             },
           ),
@@ -46,7 +47,7 @@ class ImageSourceBottomSheet extends StatelessWidget {
               leading: const Icon(Icons.delete, color: Colors.red),
               title: const Text('Remove Photo'),
               onTap: () {
-                Navigator.pop(context);
+                context.pop();
                 onRemove();
               },
             ),
