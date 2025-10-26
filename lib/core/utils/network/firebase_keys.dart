@@ -16,5 +16,5 @@ abstract class FirebaseKeys {
   static const String fireName = "name";
   static const String firePictureFacebook = "picture.width(200)";
   static const String fireProfilePicture = "profilePicture";
-  static const String firePhotoUrl = "photoUrl";
+  // static const String firePhotoUrl = "photoUrl";
 }

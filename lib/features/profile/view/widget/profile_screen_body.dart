@@ -1,3 +1,5 @@
+import 'package:event_planning_app/core/utils/function/app_toast.dart';
+import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
@@ -19,16 +21,40 @@ class ProfileScreenBody extends StatefulWidget {
   State<ProfileScreenBody> createState() => _ProfileScreenBodyState();
 }
 
-class _ProfileScreenBodyState extends State<ProfileScreenBody> {
+class _ProfileScreenBodyState extends State<ProfileScreenBody>
+    with WidgetsBindingObserver {
+  UserModel? _lastKnownUser;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // Fetch current user if in initial state
     final cubit = context.read<ProfileCubit>();
     if (cubit.state is ProfileInitial) {
       cubit.fetchCurrentUser();
+    } else if (cubit.state is ProfileDataState) {
+      _lastKnownUser = (cubit.state as ProfileDataState).user;
     }
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // @override
+  // void didChangeAppLifecycleState(AppLifecycleState state) {
+  //   // When app resumes, sync email in case user verified it
+  //   if (state == AppLifecycleState.resumed) {
+  //     _refreshUserData();
+  //   }
+  // }
+
+  // void _refreshUserData() {
+  //   context.read<ProfileCubit>().syncEmailAfterVerification();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +62,16 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
     return Scaffold(
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
-          if (state is UserLoggedOut || state is UserDeletedAccount) {
+          if (state is UserLoggedOutEmailChanged) {
+            AppToast.show(
+                message:
+                    'Email changed successfully! Please verify your new email to log in.');
             context.go(AppRoutes.login);
+          } else if (state is UserLoggedOut || state is UserDeletedAccount) {
+            context.go(AppRoutes.login);
+          }
+          if (state is ProfileDataState) {
+            _lastKnownUser = state.user;
           }
         },
         builder: (context, state) {
@@ -48,9 +82,22 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
             return const Center(child: CircularProgressIndicator());
           }
 
+          // Get user from current state or fallback to last known user
+          UserModel? user;
           if (state is ProfileDataState) {
-            final user = state.user;
+            user = state.user;
+          } else if (_lastKnownUser != null) {
+            user = _lastKnownUser;
+          }
+
+          // Show loading if we're fetching user for the first time
+          if (user == null && state is ProfileInitial) {
+            return const Center(child: CustomCircleProgressInicator());
+          }
+
+          if (user != null) {
             return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
               padding: EdgeInsets.only(
                   left: size.width * 0.0533,
                   right: size.width * 0.0855,
@@ -62,8 +109,10 @@ class _ProfileScreenBodyState extends State<ProfileScreenBody> {
                   SizedBox(height: size.height * 0.00625),
                   ProfileHeader(
                       user: user,
-                      onEdit: () {
-                        context.push(AppRoutes.editProfile, extra: user);
+                      onEdit: () async {
+                        await context.push(AppRoutes.editProfile, extra: user);
+                        // Refresh user data when returning from edit profile
+                        // _refreshUserData();
                       },
                       size: size),
                   SizedBox(height: size.height * 0.0375),

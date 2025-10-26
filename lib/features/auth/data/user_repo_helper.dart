@@ -6,6 +6,7 @@ import 'package:event_planning_app/core/utils/errors/failures.dart';
 import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
 import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/network/firebase_keys.dart';
+import 'package:event_planning_app/core/utils/utils/firebase_constants.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -35,11 +36,12 @@ class UserRepoHelper {
       final Map<String, dynamic> data = {
         FirebaseKeys.fireId: user.uid,
         FirebaseKeys.fireEmail: user.email,
-        FirebaseKeys.fireName: user.displayName,
-        FirebaseKeys.fireProfilePicture: user.photoURL,
+        FirebaseConstants.firstlog: false,
       };
 
       if (!docSnapshot.exists) {
+        data[FirebaseKeys.fireProfilePicture] = user.photoURL;
+        data[FirebaseKeys.fireName] = user.displayName ?? 'User';
         data[FirebaseKeys.fireFollowers] = [];
         data[FirebaseKeys.fireFollowing] = [];
         data[FirebaseKeys.fireInterests] = [];

@@ -21,6 +21,8 @@ import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.da
 import 'package:event_planning_app/core/utils/widgets/navigation_bar.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
+import 'package:event_planning_app/features/profile/view/change_email.dart';
+import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:event_planning_app/features/order/data/order_model.dart';
 import 'package:event_planning_app/features/order/view/booking_cancel_screen.dart';
 import 'package:event_planning_app/features/order/view/cancel_booking_screen.dart';
@@ -117,50 +119,17 @@ final GoRouter router = GoRouter(
       },
     ),
     GoRoute(
-      path: '/bookingCancel',
-      builder: (context, state) => const BookingCancelScreen(),
-    ),
-    GoRoute(
-      path: '/cancelBooking',
-      builder: (context, state) => const CancelBookingScreen(),
-    ),
-    GoRoute(
-      path: '/orderDetails',
+      path: '/changeEmail',
       builder: (context, state) {
-        final order = state.extra as OrderModel;
-        return OrderDetailsScreen(order: order);
+        final userData = state.extra as UserModel;
+        return ChangeEmailScreen(user: userData);
       },
     ),
     GoRoute(
-      path: '/ticketBooked',
+      path: '/changePasswordProfile',
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>;
-        return TicketBookedScreen(
-          eventName: extra['eventName'],
-          paymentMethod: extra['paymentMethod'],
-          totalPrice: extra['totalPrice'],
-          date: extra['date'],
-          time: extra['time'],
-          seat: extra['seat'],
-          location: extra['location'],
-          qrImageUrl: extra['qrImageUrl'],
-          eventImageUrl: extra['eventImageUrl'],
-        );
-      },
-    ),
-    GoRoute(
-      path: '/viewTicket',
-      builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>;
-        return ViewTicketScreen(
-          eventName: extra['eventName'],
-          date: extra['date'],
-          time: extra['time'],
-          seat: extra['seat'],
-          location: extra['location'],
-          eventImageUrl: extra['eventImageUrl'],
-          qrImageUrl: extra['qrImageUrl'],
-        );
+        final userData = state.extra as UserModel;
+        return ChangePassword(user: userData);
       },
     ),
   ],

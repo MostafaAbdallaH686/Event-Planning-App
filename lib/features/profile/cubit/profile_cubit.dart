@@ -73,7 +73,7 @@ class ProfileCubit extends Cubit<ProfileState> {
 
   Future<void> updateProfile({
     String? username,
-    String? email,
+    // String? email,
     String? about,
     File? profileImage,
   }) async {
@@ -82,7 +82,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     try {
       UserModel user = await _repository.updateProfile(
         username: username,
-        email: email,
+        // email: email,
         about: about,
         profileImage: profileImage,
       );
@@ -94,6 +94,50 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(UserErrorUpdateProfile(e.message));
     } catch (e) {
       emit(UserErrorUpdateProfile('Failed to update profile'));
+    }
+  }
+
+  Future<void> changeEmail({
+    required String currentEmail,
+    required String newEmail,
+    required String password,
+  }) async {
+    emit(UserChangingEmail());
+
+    try {
+      UserModel user = await _repository.changeEmail(
+        currentEmail: currentEmail,
+        newEmail: newEmail,
+        password: password,
+      );
+
+      emit(UserChangedEmail(user));
+    } on AuthFailure catch (e) {
+      emit(UserErrorChangeEmail(e.message));
+    } on FirestoreFailure catch (e) {
+      emit(UserErrorChangeEmail(e.message));
+    } catch (e) {
+      emit(UserErrorChangeEmail('Failed to change email'));
+    }
+  }
+
+  Future<void> changePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    emit(UserChangingPassword());
+
+    try {
+      UserModel user = await _repository.updatePassword(
+        currentPassword,
+        newPassword,
+      );
+
+      emit(UserChangedPassword(user));
+    } on AuthFailure catch (e) {
+      emit(UserErrorChangePassword(e.message));
+    } catch (e) {
+      emit(UserErrorChangePassword('Failed to change password'));
     }
   }
 }

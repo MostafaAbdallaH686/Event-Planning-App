@@ -7,6 +7,7 @@ import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
 import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class ProfileAdditional extends StatelessWidget {
   final UserModel user;
@@ -53,10 +54,7 @@ class ProfileAdditional extends StatelessWidget {
           ),
           OutlinedButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ChangePassword()));
+                context.go('/changePasswordProfile', extra: user);
               },
               child: const Text("Change Password")),
         ],
