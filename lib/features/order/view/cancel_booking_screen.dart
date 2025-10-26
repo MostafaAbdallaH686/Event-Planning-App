@@ -1,8 +1,9 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
+import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/order/view/booking_cancel_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CancelBookingScreen extends StatefulWidget {
   const CancelBookingScreen({super.key});
@@ -16,11 +17,11 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
   final TextEditingController _reasonController = TextEditingController();
 
   final List<String> _reasons = [
-    "I have a better deal",
-    "Some other work, can’t come",
-    "I want to book another event",
-    "Venue location is too far",
-    "Another reason",
+    AppString.reason1,
+    AppString.reason2,
+    AppString.reason3,
+    AppString.reason4,
+    AppString.otherReason,
   ];
 
   @override
@@ -34,25 +35,26 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
         elevation: 0,
         centerTitle: true,
         title: Text(
-          "Cancel Booking",
+          AppString.cancelBooking,
           style: AppTextStyle.bold20(AppColor.colorb26),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: AppColor.black),
-          onPressed: () => Navigator.pop(context),
+          onPressed: () => context.pop(context),
         ),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.0512, vertical: size.height * 0.01875),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             /// Title
             Text(
-              "Please select the reason for cancellation",
+              AppString.pleaseSelectReasonForCancel,
               style: AppTextStyle.semibold15(AppColor.colorb26),
             ),
-            const SizedBox(height: 15),
+            SizedBox(height: size.height * 0.01875),
 
             /// Radio Buttons
             ..._reasons.map((reason) => RadioListTile<String>(
@@ -68,7 +70,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                   },
                 )),
 
-            const SizedBox(height: 15),
+            SizedBox(height: size.height * 0.01875),
 
             /// Text Field
             TextField(
@@ -90,7 +92,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
               ),
             ),
 
-            const SizedBox(height: 40),
+            SizedBox(height: size.height * 0.05),
 
             /// Buttons
             Center(
@@ -99,7 +101,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                   /// Cancel Button (without popup)
                   SizedBox(
                     width: size.width * 0.7,
-                    height: 50,
+                    height: size.height * 0.0625,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColor.colorblFF,
@@ -119,11 +121,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                           return;
                         }
 
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const BookingCancelScreen()),
-                        );
+                        context.pushReplacement(AppRoutes.bookingCancel);
                       },
                       child: Text(
                         AppString.cancelBooking,
@@ -132,7 +130,7 @@ class _CancelBookingScreenState extends State<CancelBookingScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 15),
+                  SizedBox(height: size.height * 0.01875),
 
                   /// Report Button
                 ],

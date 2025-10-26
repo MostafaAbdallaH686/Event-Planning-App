@@ -168,6 +168,13 @@ abstract class AppString {
   static const String selectReasonFirst =
       'Please select or write a reason first';
   static const String tellUsMore = 'Tell us more about your reason...';
+  static const String reason1 = "I have a better deal";
+  static const String reason2 = "Some other work, can’t come";
+  static const String reason3 = "I want to book another event";
+  static const String reason4 = "Venue location is too far";
+  static const String otherReason = "Another reason";
+  static const String pleaseSelectReasonForCancel =
+      "Please select the reason for cancellation";
 
   // booking cancelled screen
   static const String bookingCancelledSuccessfully =

@@ -21,6 +21,12 @@ import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.da
 import 'package:event_planning_app/core/utils/widgets/navigation_bar.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
+import 'package:event_planning_app/features/order/data/order_model.dart';
+import 'package:event_planning_app/features/order/view/booking_cancel_screen.dart';
+import 'package:event_planning_app/features/order/view/cancel_booking_screen.dart';
+import 'package:event_planning_app/features/order/view/order_details_screen.dart';
+import 'package:event_planning_app/features/order/view/ticket_booked_screen.dart';
+import 'package:event_planning_app/features/order/view/view_ticket_screen.dart';
 import 'package:event_planning_app/features/profile/view/edit_profile.dart';
 import 'package:event_planning_app/features/profile/view/profile_screen.dart';
 import 'package:go_router/go_router.dart';
@@ -109,6 +115,53 @@ final GoRouter router = GoRouter(
         final userData = state.extra as UserModel;
         return EditProfileScreen(user: userData);
       },
-    )
+    ),
+    GoRoute(
+      path: '/bookingCancel',
+      builder: (context, state) => const BookingCancelScreen(),
+    ),
+    GoRoute(
+      path: '/cancelBooking',
+      builder: (context, state) => const CancelBookingScreen(),
+    ),
+    GoRoute(
+      path: '/orderDetails',
+      builder: (context, state) {
+        final order = state.extra as OrderModel;
+        return OrderDetailsScreen(order: order);
+      },
+    ),
+    GoRoute(
+      path: '/ticketBooked',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return TicketBookedScreen(
+          eventName: extra['eventName'],
+          paymentMethod: extra['paymentMethod'],
+          totalPrice: extra['totalPrice'],
+          date: extra['date'],
+          time: extra['time'],
+          seat: extra['seat'],
+          location: extra['location'],
+          qrImageUrl: extra['qrImageUrl'],
+          eventImageUrl: extra['eventImageUrl'],
+        );
+      },
+    ),
+    GoRoute(
+      path: '/viewTicket',
+      builder: (context, state) {
+        final extra = state.extra as Map<String, dynamic>;
+        return ViewTicketScreen(
+          eventName: extra['eventName'],
+          date: extra['date'],
+          time: extra['time'],
+          seat: extra['seat'],
+          location: extra['location'],
+          eventImageUrl: extra['eventImageUrl'],
+          qrImageUrl: extra['qrImageUrl'],
+        );
+      },
+    ),
   ],
 );

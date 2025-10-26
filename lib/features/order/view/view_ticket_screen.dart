@@ -2,6 +2,7 @@
 
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../core/utils/theme/app_colors.dart';
 import '../../../../core/utils/theme/app_text_style.dart';
 //import '../review_page/review_page.dart';
@@ -52,7 +53,7 @@ class ViewTicketScreen extends StatelessWidget {
               top: 12,
               left: 20,
               child: InkWell(
-                onTap: () => Navigator.pop(context),
+                onTap: () => context.pop(context),
                 child:
                     const Icon(Icons.arrow_back, color: Colors.black, size: 28),
               ),
@@ -63,8 +64,9 @@ class ViewTicketScreen extends StatelessWidget {
               right: 20,
               bottom: 20,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.0512,
+                    vertical: size.height * 0.0225),
                 decoration: BoxDecoration(
                   color: AppColor.white,
                   borderRadius: BorderRadius.circular(25),
@@ -83,12 +85,12 @@ class ViewTicketScreen extends StatelessWidget {
                       AppString.viewTicket,
                       style: AppTextStyle.bold24(AppColor.colorb26),
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: size.height * 0.01875),
 
                     /// 🔹 QR Placeholder
                     Container(
-                      width: 180,
-                      height: 180,
+                      width: size.width * 0.4615,
+                      height: size.width * 0.225,
                       decoration: BoxDecoration(
                         color: AppColor.colorblFF.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(12),
@@ -105,21 +107,21 @@ class ViewTicketScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    SizedBox(height: size.height * 0.03125),
 
                     Text(
                       eventName,
                       style: AppTextStyle.bold21(AppColor.colorb26),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 8),
+                    SizedBox(height: size.height * 0.01),
 
                     Text(
                       location,
                       style: AppTextStyle.regular16(AppColor.colorbr88),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 20),
+                    SizedBox(height: size.height * 0.025),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,7 +150,7 @@ class ViewTicketScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: size.height * 0.01875),
 
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -164,7 +166,7 @@ class ViewTicketScreen extends StatelessWidget {
                     /// ة ReviewPage
                     SizedBox(
                       width: double.infinity,
-                      height: 50,
+                      height: size.height * 0.0625,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.colorblFF,
