@@ -1,15 +1,25 @@
 //ToDO later
 // NOT USED THERE IS NOT Api
 abstract class ApiEndpoint {
-  // static const String register = "/auth/register";
-  // static const String login = "/auth/login";
-  // static const String tasks = "/todos?page=1";
-  // static const String profile = "/auth/profile";
-  // static const String newTasks = "/todos";
-  // static const String refreshtoken = "/auth/refresh-token";
-  // static const String uploadphoto = "/upload/image";
+  // Auth
+  static const String register = "/auth/register";
+  static const String login = "/auth/login";
+  static const String refreshToken = "/auth/refresh-token";
+  static const String profile = "/auth/profile/me";
+
+  // Events
+  static const String events = "/events";
+  static String eventById(String id) => "/events/$id";
+  static const String myEvents = "/events/my-events";
+
+  // Categories
+  static const String categories = "/categories";
+
+  // Upload
+  static const String uploadImage = "/upload/image";
 }
 
 abstract class ApiBaseUrl {
-  static const String baseUrl = "";
+  static const String baseUrl =
+      "https://event-management-api-production-4980.up.railway.app/api";
 }

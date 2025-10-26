@@ -25,7 +25,8 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
   final _priceCtrl = TextEditingController();
   final _dateCtrl = TextEditingController();
   final _timeCtrl = TextEditingController();
-  final _tagsCtrl = TextEditingController();
+  final _categoryCtrl = TextEditingController();
+  final _attendenceCtrl = TextEditingController();
 
   DateTime? _pickedDate;
   TimeOfDay? _pickedTime;
@@ -39,7 +40,8 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
     _priceCtrl.dispose();
     _dateCtrl.dispose();
     _timeCtrl.dispose();
-    _tagsCtrl.dispose();
+    _categoryCtrl.dispose();
+    _attendenceCtrl.dispose();
     super.dispose();
   }
 
@@ -110,24 +112,16 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
       return;
     }
 
-    final tags = _tagsCtrl.text
-        .split(',')
-        .map((e) => e.trim())
-        .where((e) => e.isNotEmpty)
-        .toList();
-
-    const categoryId = 'general';
-    const categoryName = 'General';
-
-    final input = CreateEventInput(
+    final input = EventModel(
       title: _titleCtrl.text.trim(),
       description: _descCtrl.text.trim(),
-      categoryId: categoryId,
-      categoryName: categoryName,
+      categoryId: _categoryCtrl.text,
       location: _locationCtrl.text.trim(),
       date: dt,
-      tags: tags,
-      price: price,
+      maxAttendees: _attendenceCtrl.text.isNotEmpty
+          ? int.tryParse(_attendenceCtrl.text.trim()) ?? 0
+          : 0,
+      paymentRequired: price,
     );
 
     context.read<CreateEventCubit>().submit(
@@ -197,6 +191,16 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
                                   : null,
                             )),
                         _Field(
+                            title: 'Attendence Limit',
+                            child: TextFormField(
+                              controller: _attendenceCtrl,
+                              decoration: const InputDecoration(
+                                  hintText: 'Event limit'),
+                              validator: (v) => (v == null || v.trim().isEmpty)
+                                  ? 'Required'
+                                  : null,
+                            )),
+                        _Field(
                             title: 'Address',
                             child: TextFormField(
                               controller: _locationCtrl,
@@ -244,11 +248,11 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
                         ),
                         const SizedBox(height: 12),
                         _Field(
-                            title: 'Tags (comma separated)',
+                            title: 'Category',
                             child: TextFormField(
-                              controller: _tagsCtrl,
+                              controller: _categoryCtrl,
                               decoration: const InputDecoration(
-                                  hintText: 'music, festival, party'),
+                                  hintText: 'Gategory ID'),
                             )),
                         const SizedBox(height: 16),
                         _ImagePickerRow(

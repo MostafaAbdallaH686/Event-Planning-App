@@ -1,102 +1,62 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:event_planning_app/core/utils/errors/auth_failure.dart';
-import 'package:event_planning_app/core/utils/errors/failures.dart';
-import 'package:event_planning_app/core/utils/errors/firestore_failure.dart';
-import 'package:event_planning_app/core/utils/model/event_model.dart';
+import 'package:event_planning_app/core/utils/errors/network_failure.dart';
+import 'package:event_planning_app/core/utils/network/api_endpoint.dart';
+import 'package:event_planning_app/core/utils/network/api_helper.dart';
 import 'package:event_planning_app/features/events/data/events_model.dart';
 import 'package:event_planning_app/features/events/data/events_repository.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
-class EventRepositoryImpl implements EventRepository {
-  final FirebaseAuth _auth;
-  final FirebaseFirestore _firestore;
-  final SupabaseClient _supabase;
+class EventRepositoryApi implements EventRepository {
+  final ApiHelper _api;
 
-  EventRepositoryImpl({
-    FirebaseAuth? auth,
-    FirebaseFirestore? firestore,
-    SupabaseClient? supabase,
-  })  : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance,
-        _supabase = supabase ?? Supabase.instance.client;
+  EventRepositoryApi(this._api);
 
   @override
   Future<EventModel> createEvent({
-    required CreateEventInput input,
+    required EventModel input,
     File? imageFile,
   }) async {
     try {
-      final user = _auth.currentUser;
-      if (user == null) {
-        throw const AuthFailure(
-            message: 'Not signed in', code: 'not-signed-in');
-      }
+      final fields = <String, dynamic>{
+        'title': input.title.trim(),
+        'description': input.description.trim(),
+        'categoryId': input.categoryId, // Must be valid UUID from your DB
+        'location': input.location.trim(),
+        'dateTime': input.date.toUtc().toIso8601String(),
+        'maxAttendees': input.maxAttendees, // 🔧 FIXED: Was missing!
+        'paymentRequired': input.paymentRequired,
+      };
 
-      // Prepare an ID first so we can reuse it for both collections
-      final globalDoc = _firestore.collection('events').doc();
-      final eventId = globalDoc.id;
+      print('🚀 Creating event: ${input.title}');
+      print('📅 Date: ${input.date.toIso8601String()}');
+      print('👥 Max attendees: ${input.maxAttendees}');
+      print('💰 Payment: \$${input.paymentRequired}');
 
-      // Upload image to Supabase (optional)
-      String imageUrl = '';
-      if (imageFile != null) {
-        final ext = imageFile.path.split('.').last;
-        final filePath =
-            'event_images/${user.uid}_${DateTime.now().millisecondsSinceEpoch}.$ext';
-        await _supabase.storage.from('event_images').upload(
-              filePath,
-              imageFile,
-              fileOptions:
-                  const FileOptions(cacheControl: '3600', upsert: true),
-            );
-        imageUrl =
-            _supabase.storage.from('event_images').getPublicUrl(filePath);
-      }
-
-      final event = EventModel(
-        id: eventId,
-        title: input.title,
-        description: input.description,
-        categoryId: input.categoryId,
-        categoryName: input.categoryName,
-        location: input.location,
-        date: input.date,
-        createdAt: DateTime.now(),
-        organizerId: user.uid,
-        imageUrl: imageUrl,
-        attendeesCount: 0,
-        isPopular: false,
-        tags: input.tags,
-        price: input.price,
+      final json = await _api.postMultipart(
+        endPoint: ApiEndpoint.events,
+        fields: fields,
+        file: imageFile,
+        fileField: 'image', // Must match your multer middleware
+        isAuth: true,
+        onSendProgress: (sent, total) {
+          final percent = (sent / total * 100).toStringAsFixed(0);
+          print('📤 Upload progress: $percent%');
+        },
       );
 
-      final data = event.toMap()
-        ..['createdAt'] = FieldValue.serverTimestamp()
-        ..['organizerId'] = user.uid // ensure organizerId is consistent
-        ..['id'] = eventId; // optional: can be helpful for client reads
+      // Parse response
+      if (json is Map<String, dynamic>) {
+        print('✅ Event created successfully!');
+        return EventModel.fromJson(json);
+      }
 
-      final userEventsDoc = _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('events')
-          .doc(eventId);
-
-      final batch = _firestore.batch();
-      batch.set(globalDoc, data, SetOptions(merge: true));
-      batch.set(userEventsDoc, data, SetOptions(merge: true));
-      await batch.commit();
-
-      return event;
-    } on AuthFailure {
+      throw CustomDioException(
+        errMessage: 'Unexpected response format: ${json.runtimeType}',
+      );
+    } on CustomDioException {
       rethrow;
-    } on FirebaseAuthException catch (e) {
-      throw AuthFailure.fromException(e);
-    } on FirebaseException catch (e) {
-      throw FirestoreFailure.fromException(e);
     } catch (e) {
-      throw UnexpectedFailure(message: e.toString());
+      print('❌ Create event error: $e');
+      throw CustomDioException(errMessage: 'Unexpected error: $e');
     }
   }
 }

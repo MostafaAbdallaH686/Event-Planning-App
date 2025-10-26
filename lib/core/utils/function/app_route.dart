@@ -26,7 +26,7 @@ import 'package:event_planning_app/features/profile/view/profile_screen.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/navigationBar',
   routes: [
     GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
     GoRoute(

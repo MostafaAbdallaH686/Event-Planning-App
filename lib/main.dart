@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/function/app_route.dart';
+import 'package:event_planning_app/core/utils/network/api_configration.dart';
+import 'package:event_planning_app/core/utils/network/token_service.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
@@ -24,10 +27,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await CacheHelper.initialize();
   await configureDependencies();
+  // final tokenservice = TokenService(
+  //     cacheHelper: getIt<CacheHelper>(), dio: Dio(ApiConfigration.option()));
 // Register the toast service
   setupServiceLocator();
   assert(getIt.isRegistered<ToastService>(), 'ToastService not registered');

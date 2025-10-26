@@ -1,6 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/network/api_configration.dart';
+import 'package:event_planning_app/core/utils/network/api_helper.dart';
+import 'package:event_planning_app/core/utils/network/token_service.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/features/events/data/events_repository.dart';
 import 'package:event_planning_app/features/events/data/events_repository_impl.dart';
@@ -29,23 +31,26 @@ Future<void> configureDependencies() async {
   getIt.registerLazySingleton<Dio>(() => Dio(ApiConfigration.option()),
       instanceName: 'authDio');
 
-  // getIt.registerLazySingleton<TokenService>(
-  //   () => TokenService(
-  //     cacheHelper: getIt<CacheHelper>(),
-  //     dio: getIt<Dio>(instanceName: 'authDio'),
-  //   ),
-  // );
+  getIt.registerLazySingleton<TokenService>(
+    () => TokenService(
+      cacheHelper: getIt<CacheHelper>(),
+      dio: getIt<Dio>(instanceName: 'authDio'),
+    ),
+  );
 
-  // // ApiHelper BEFORE repos
-  // getIt.registerLazySingleton<ApiHelper>(
-  //   () => ApiHelper(
-  //     dio: getIt<Dio>(instanceName: 'mainDio'),
-  //     tokenService: getIt<TokenService>(),
-  //   ),
-  // );
+  //  ApiHelper BEFORE repos
+  getIt.registerLazySingleton<ApiHelper>(
+    () => ApiHelper(
+      dio: getIt<Dio>(instanceName: 'mainDio'),
+      tokenService: getIt<TokenService>(),
+    ),
+  );
 
   // Repositories
-  getIt.registerLazySingleton<EventRepository>(() => EventRepositoryImpl());
+  getIt.registerLazySingleton<EventRepository>(() => EventRepositoryApi(
+        getIt<ApiHelper>(),
+      ));
+  //());
 
   // getIt.registerLazySingleton<HomeRepo>(
   //     () => HomeRepo(apiHelper: getIt<ApiHelper>()));
