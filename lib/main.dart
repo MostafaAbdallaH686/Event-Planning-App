@@ -1,10 +1,8 @@
 // ignore_for_file: avoid_print
 
-import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/function/app_route.dart';
-import 'package:event_planning_app/core/utils/network/api_configration.dart';
-import 'package:event_planning_app/core/utils/network/token_service.dart';
+
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
@@ -16,7 +14,6 @@ import 'package:event_planning_app/features/events/cubit/event_details_cubit.dar
 import 'package:event_planning_app/features/events/cubit/interested_cubit.dart';
 import 'package:event_planning_app/features/events/data/interested_repo.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
-import 'package:event_planning_app/features/home/cubit/search_cubit.dart';
 import 'package:event_planning_app/features/home/data/home_repo.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
@@ -72,9 +69,6 @@ class MyApp extends StatelessWidget {
             create: (_) =>
                 InterestedCubit(InterestedRepository(FirestoreService()))),
         BlocProvider(create: (_) => HomeCubit(HomeRepo(FirestoreService()))),
-        BlocProvider(
-          create: (_) => SearchCubit(FirestoreService()),
-        ),
         BlocProvider(
           create: (_) => EventCubit(FirestoreService()),
         ),

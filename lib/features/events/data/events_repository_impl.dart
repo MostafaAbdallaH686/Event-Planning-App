@@ -5,7 +5,7 @@ import 'package:event_planning_app/core/utils/network/api_helper.dart';
 import 'package:event_planning_app/features/events/data/events_model.dart';
 import 'package:event_planning_app/features/events/data/events_repository.dart';
 
-class EventRepositoryApi implements EventRepository {
+class EventRepositoryApi implements CreateEventRepository {
   final ApiHelper _api;
 
   EventRepositoryApi(this._api);

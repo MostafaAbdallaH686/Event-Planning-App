@@ -3,13 +3,13 @@
 //Api helper class to handle API requests using Dio package with token refresh mechanism.
 import 'dart:convert';
 import 'dart:io';
+import 'package:event_planning_app/core/utils/errors/errors/exceptions.dart';
+import 'package:event_planning_app/core/utils/errors/errors/failuress.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart' as p;
-import 'package:dio/dio.dart' as dio;
 import 'package:dio/dio.dart';
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/errors/network_failure.dart';
 import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
 import 'package:event_planning_app/core/utils/network/token_service.dart';
 
@@ -463,7 +463,8 @@ class ApiHelper {
       if (file != null) {
         if (!await file.exists()) {
           throw CustomDioException(
-            errMessage: 'Image file does not exist at path: ${file.path}',
+            message: 'Selected file does not exist',
+            code: "400",
           );
         }
 
@@ -499,17 +500,11 @@ class ApiHelper {
       print('✅ Response: ${response.statusCode}');
       return response.data;
     } on DioException catch (e) {
-      print('❌ DioException: ${e.message}');
-      if (e.response != null) {
-        print('Response data: ${e.response?.data}');
-        print('Status code: ${e.response?.statusCode}');
-      }
+      final failure = ServerFailure.fromDioError(e);
       throw CustomDioException(
-        errMessage: ServerFailure.fromDioError(e).errorMessage,
+        message: failure.message,
+        code: failure.code,
       );
-    } catch (e) {
-      print('❌ Unexpected error: $e');
-      throw CustomDioException(errMessage: 'Unexpected error: $e');
     }
   }
 
@@ -525,8 +520,10 @@ class ApiHelper {
       );
       return response.data;
     } on DioException catch (e) {
+      final failure = ServerFailure.fromDioError(e);
       throw CustomDioException(
-        errMessage: ServerFailure.fromDioError(e).errorMessage,
+        message: failure.message,
+        code: failure.code,
       );
     }
   }
@@ -548,8 +545,10 @@ class ApiHelper {
       );
       return response.data;
     } on DioException catch (e) {
+      final failure = ServerFailure.fromDioError(e);
       throw CustomDioException(
-        errMessage: ServerFailure.fromDioError(e).errorMessage,
+        message: failure.message,
+        code: failure.code,
       );
     }
   }
@@ -571,8 +570,10 @@ class ApiHelper {
       );
       return response.data;
     } on DioException catch (e) {
+      final failure = ServerFailure.fromDioError(e);
       throw CustomDioException(
-        errMessage: ServerFailure.fromDioError(e).errorMessage,
+        message: failure.message,
+        code: failure.code,
       );
     }
   }
@@ -592,8 +593,10 @@ class ApiHelper {
       );
       return response.data;
     } on DioException catch (e) {
+      final failure = ServerFailure.fromDioError(e);
       throw CustomDioException(
-        errMessage: ServerFailure.fromDioError(e).errorMessage,
+        message: failure.message,
+        code: failure.code,
       );
     }
   }

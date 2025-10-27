@@ -1,17 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:event_planning_app/core/utils/function/app_width_height.dart';
-import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_distance.dart';
-import 'package:event_planning_app/core/utils/utils/app_image.dart';
-import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/home/view/widgets/interested_event_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
 import 'package:flutter/material.dart';
 
 class EventCard extends StatelessWidget {
-  final EventModel event;
+  final EventSummaryModel event;
   final bool isInterested;
   final VoidCallback onAddInterest;
   final VoidCallback onRemoveInterest;
@@ -28,136 +24,116 @@ class EventCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: AppWidthHeight.percentageOfWidth(context, AppDistance.d220),
-        margin: EdgeInsets.only(
-            right: AppWidthHeight.percentageOfWidth(context, AppDistance.d10)),
-        decoration: _cardDecoration(context),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _EventImage(imageUrl: event.imageUrl),
-            _EventDetails(
-              event: event,
-              isInterested: isInterested,
-              onAddInterest: onAddInterest,
-              onRemoveInterest: onRemoveInterest,
+        width: size.width * 0.6,
+        margin: EdgeInsets.only(right: size.width * 0.04),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.08),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  BoxDecoration _cardDecoration(BuildContext context) {
-    return BoxDecoration(
-      borderRadius: BorderRadius.circular(
-          AppWidthHeight.percentageOfHeight(context, AppDistance.d12)),
-      color: AppColor.white,
-      boxShadow: [
-        BoxShadow(
-          color: Colors.black.withOpacity(
-            .2,
-          ),
-          blurRadius:
-              AppWidthHeight.percentageOfHeight(context, AppDistance.d6),
-          offset: Offset(0, 3),
-        ),
-      ],
-    );
-  }
-}
-
-// Private widget - image section
-class _EventImage extends StatelessWidget {
-  final String imageUrl;
-
-  const _EventImage({required this.imageUrl});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: AppWidthHeight.percentageOfHeight(context, AppDistance.d67),
-      width: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(
-            AppWidthHeight.percentageOfHeight(context, AppDistance.d10),
-          ),
-          topRight: Radius.circular(
-            AppWidthHeight.percentageOfHeight(context, AppDistance.d10),
-          ),
-        ),
-        image: DecorationImage(
-          image: NetworkImage(imageUrl),
-          fit: BoxFit.cover,
-          onError: (error, stackTrace) {
-            AssetImage(AppImage.splash);
-          },
-        ),
-      ),
-    );
-  }
-}
-
-// Private widget - details section
-class _EventDetails extends StatelessWidget {
-  final EventModel event;
-  final bool isInterested;
-  final VoidCallback onAddInterest;
-  final VoidCallback onRemoveInterest;
-
-  const _EventDetails({
-    required this.event,
-    required this.isInterested,
-    required this.onAddInterest,
-    required this.onRemoveInterest,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppWidthHeight.percentageOfWidth(context, AppDistance.d10),
-        vertical: AppWidthHeight.percentageOfHeight(context, AppDistance.d12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            event.title,
-            style: AppTextStyle.bold14(AppColor.black),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          SizedBox(
-              height:
-                  AppWidthHeight.percentageOfHeight(context, AppDistance.d8)),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  event.location.length > 10
-                      ? '${event.location.substring(0, 10)}...'
-                      : event.location,
-                  style: AppTextStyle.regular12(AppColor.colorbr688),
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 1,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image with bookmark button
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: CachedNetworkImage(
+                    imageUrl: event.imageUrl ?? '',
+                    width: double.infinity,
+                    height: size.height * 0.15,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => Container(
+                      color: Colors.grey[300],
+                      child: const Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    ),
+                    errorWidget: (context, url, error) => Container(
+                      color: Colors.grey[300],
+                      child: const Icon(Icons.event, size: 50),
+                    ),
+                  ),
                 ),
+                // Bookmark button
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: InkWell(
+                    onTap: isInterested ? onRemoveInterest : onAddInterest,
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        isInterested ? Icons.bookmark : Icons.bookmark_border,
+                        size: 20,
+                        color: isInterested ? AppColor.border : Colors.grey,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+
+            // Content
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.title,
+                    style: AppTextStyle.bold16(AppColor.black),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.location_on,
+                        size: 14,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          event.location,
+                          style: AppTextStyle.regular12(AppColor.colorbr688),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-              InterestedEventButton(
-                isInterested: isInterested,
-                onAdd: onAddInterest,
-                onRemove: onRemoveInterest,
-                addText: AppString.join,
-                removeText: AppString.joined,
-                eventId: event.id!,
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

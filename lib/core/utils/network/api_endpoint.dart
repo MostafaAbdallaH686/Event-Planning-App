@@ -9,14 +9,17 @@ abstract class ApiEndpoint {
 
   // Events
   static const String events = "/events";
-  static String eventById(String id) => "/events/$id";
-  static const String myEvents = "/events/my-events";
 
   // Categories
   static const String categories = "/categories";
 
   // Upload
   static const String uploadImage = "/upload/image";
+  // User interests (favorite/bookmark)
+  static const String userInterests = "/users/me/interests";
+  static String addInterest(String eventId) => "/users/me/interests/$eventId";
+  static String removeInterest(String eventId) =>
+      "/users/me/interests/$eventId";
 }
 
 abstract class ApiBaseUrl {

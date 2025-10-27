@@ -11,7 +11,7 @@ class CreateEventScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CreateEventCubit(getIt<EventRepository>()),
+      create: (context) => CreateEventCubit(getIt<CreateEventRepository>()),
       child: const CreateEventScreenBody(),
     );
   }

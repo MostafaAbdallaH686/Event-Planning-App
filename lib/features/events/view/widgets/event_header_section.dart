@@ -3,12 +3,12 @@
 import 'package:event_planning_app/core/utils/function/app_width_height.dart';
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
+import 'package:event_planning_app/features/events/data/models/event_model.dart';
 import 'package:event_planning_app/features/events/view/widgets/event_share_bottom.dart';
 import 'package:flutter/material.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class EventHeaderSection extends StatelessWidget {
@@ -32,7 +32,7 @@ class EventHeaderSection extends StatelessWidget {
                 bottomRight: Radius.circular(15),
               ),
               image: DecorationImage(
-                image: NetworkImage(event.imageUrl),
+                image: NetworkImage(event.imageUrl!),
                 fit: BoxFit.cover,
               ),
             ),
@@ -117,7 +117,7 @@ class EventHeaderSection extends StatelessWidget {
                   ),
                   // SizedBox(width: size.width * 0.156),
                   Text(
-                    "+${event.attendeesCount} ${AppString.going}",
+                    "+${event.maxAttendees - event.registrationsCount} ${AppString.going}",
                     style: AppTextStyle.regular15(AppColor.black),
                   ),
                   Spacer(),

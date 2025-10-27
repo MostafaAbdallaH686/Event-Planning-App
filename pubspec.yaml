@@ -55,8 +55,8 @@ dependencies:
   intl:
   image_picker: ^1.0.7 
   supabase_flutter: ^2.10.3
-
-  
+  dartz: ^0.10.1
+  cached_network_image: ^3.2.3
   
 
 dev_dependencies:

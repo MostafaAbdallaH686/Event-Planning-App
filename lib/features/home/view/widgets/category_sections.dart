@@ -17,51 +17,54 @@ class CategoriesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
-        if (state is HomeLoading) {
-          return const Center(child: CircularProgressIndicator());
-        }
         if (state is HomeLoaded && state.data.categories.isNotEmpty) {
-          return _buildCategoryList(context, state.data.categories);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SectionHeader(
+                title: 'Categories',
+                actionText: 'See All',
+                onActionPressed: () {
+                  context.push(AppRoutes.categoryEvents);
+                },
+              ),
+              const SizedBox(height: 12),
+              SizedBox(
+                height: 50,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: state.data.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = state.data.categories[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: CategoryChip(
+                        category: category,
+                        onTap: () {
+                          // Navigate to category events
+                          // context.push(AppRoutes.categoryEvents, extra: category.id);
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
         }
+
         return const SizedBox.shrink();
       },
     );
   }
-
-  Widget _buildCategoryList(
-      BuildContext context, List<CategoryModel> categories) {
-    final size = MediaQuery.sizeOf(context);
-
-    return SizedBox(
-      height: size.height * 0.05,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: categories.map((category) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.0205),
-              child: CategoryItem(
-                key: ValueKey(category.id),
-                category: category,
-                onTap: () {
-                  final encodedName = Uri.encodeComponent(category.name);
-                  context.push(
-                      '${AppRoutes.categoryEvents}${category.id}/$encodedName');
-                },
-              ),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  }
 }
 
-class CategoryItem extends StatelessWidget {
+// Category Chip Widget
+class CategoryChip extends StatelessWidget {
   final CategoryModel category;
   final VoidCallback onTap;
 
-  const CategoryItem({
+  const CategoryChip({
     super.key,
     required this.category,
     required this.onTap,
@@ -69,34 +72,45 @@ class CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.0256,
-          vertical: size.height * 0.0125,
-        ),
-        decoration: BoxDecoration(
-          color: AppColor.white,
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 6,
-              offset: const Offset(2, 2),
-            ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            category.name,
-            style: AppTextStyle.regular14(AppColor.colorbA1),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ),
+      child: Chip(
+        label: Text(category.name),
+        backgroundColor: AppColor.border,
+        labelStyle: AppTextStyle.medium14(AppColor.black),
       ),
+    );
+  }
+}
+
+// Section Header Widget (Reusable)
+class SectionHeader extends StatelessWidget {
+  final String title;
+  final String? actionText;
+  final VoidCallback? onActionPressed;
+
+  const SectionHeader({
+    super.key,
+    required this.title,
+    this.actionText,
+    this.onActionPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: AppTextStyle.bold16(AppColor.black),
+        ),
+        if (actionText != null && onActionPressed != null)
+          TextButton(
+            onPressed: onActionPressed,
+            child: Text(actionText!),
+          ),
+      ],
     );
   }
 }

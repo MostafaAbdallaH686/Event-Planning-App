@@ -11,6 +11,7 @@ import 'package:event_planning_app/features/events/view/create_event_screen.dart
 import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/events/view/event_details_screen.dart';
 import 'package:event_planning_app/features/events/view/map_view_screen.dart';
+import 'package:event_planning_app/features/home/cubit/cubits/search_cubit.dart';
 import 'package:event_planning_app/features/home/view/category_events_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/home/view/interests_events_screen.dart';
@@ -23,6 +24,7 @@ import 'package:event_planning_app/features/onboarding/view/onboarding_screen.da
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
 import 'package:event_planning_app/features/profile/view/edit_profile.dart';
 import 'package:event_planning_app/features/profile/view/profile_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final GoRouter router = GoRouter(
@@ -71,23 +73,22 @@ final GoRouter router = GoRouter(
         builder: (context, state) => const SeeAllUpComingScreen()),
     GoRoute(
       path: '/SearchScreen',
+      name: 'SearchScreen',
       builder: (context, state) {
-        final query = state.extra as String?;
-        return SearchScreen(searchQuery: query ?? '');
+        final query = state.extra as String? ?? '';
+
+        return BlocProvider(
+          create: (context) => SearchCubit(getIt()),
+          child: SearchScreen(searchQuery: query),
+        );
       },
     ),
     GoRoute(
       path: '/eventDetails',
       builder: (context, state) {
-        final extra = state.extra as Map<String, dynamic>?;
-
-        final categoryId = extra?['categoryId'] as String? ?? '';
-        final eventId = extra?['eventId'] as String? ?? '';
-
-        return EventDetailsScreen(
-          categoryId: categoryId,
-          eventId: eventId,
-        );
+        final extra = state.extra as Map<String, dynamic>;
+        final eventId = extra['eventId'] as String;
+        return EventDetailsScreen(eventId: eventId);
       },
     ),
     GoRoute(

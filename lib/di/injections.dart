@@ -6,6 +6,11 @@ import 'package:event_planning_app/core/utils/network/token_service.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/features/events/data/events_repository.dart';
 import 'package:event_planning_app/features/events/data/events_repository_impl.dart';
+import 'package:event_planning_app/features/events/data/repositories/event_repository.dart';
+import 'package:event_planning_app/features/events/data/repositories/event_repository_impl.dart';
+
+import 'package:event_planning_app/features/home/data/repositories/home_repository.dart';
+import 'package:event_planning_app/features/home/data/repositories/home_repository_impl.dart';
 import 'package:get_it/get_it.dart';
 
 final getIt = GetIt.instance;
@@ -30,7 +35,9 @@ Future<void> configureDependencies() async {
       instanceName: 'mainDio');
   getIt.registerLazySingleton<Dio>(() => Dio(ApiConfigration.option()),
       instanceName: 'authDio');
-
+  getIt.registerLazySingleton<HomeRepository>(
+    () => HomeRepositoryImpl(getIt()),
+  );
   getIt.registerLazySingleton<TokenService>(
     () => TokenService(
       cacheHelper: getIt<CacheHelper>(),
@@ -45,9 +52,11 @@ Future<void> configureDependencies() async {
       tokenService: getIt<TokenService>(),
     ),
   );
-
+  getIt.registerLazySingleton<EventRepository>(
+    () => EventRepositoryImpl(getIt()),
+  );
   // Repositories
-  getIt.registerLazySingleton<EventRepository>(() => EventRepositoryApi(
+  getIt.registerLazySingleton<CreateEventRepository>(() => EventRepositoryApi(
         getIt<ApiHelper>(),
       ));
   //());

@@ -6,7 +6,7 @@ import 'package:event_planning_app/features/events/data/events_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CreateEventCubit extends Cubit<CreateEventState> {
-  final EventRepository _repo;
+  final CreateEventRepository _repo;
 
   CreateEventCubit(this._repo) : super(CreateEventInitial());
 

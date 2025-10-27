@@ -1,18 +1,16 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:event_planning_app/core/utils/function/app_width_height.dart';
-import 'package:event_planning_app/core/utils/model/event_model.dart';
-import 'package:event_planning_app/core/utils/utils/app_distance.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/features/home/cubit/cubits/home_cubit.dart';
+import 'package:event_planning_app/features/home/cubit/states/home_state.dart';
+import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
+import 'package:event_planning_app/features/home/domain/entities/home_data.dart';
 import 'package:event_planning_app/features/home/view/widgets/event_card.dart';
 import 'package:event_planning_app/features/home/view/widgets/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
-import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
-import 'package:event_planning_app/features/home/cubit/home_state.dart';
 import 'package:go_router/go_router.dart';
 
 class PopularEventsSection extends StatelessWidget {
@@ -24,12 +22,8 @@ class PopularEventsSection extends StatelessWidget {
       builder: (context, state) {
         return switch (state) {
           HomeLoading() => const _LoadingView(),
-          HomeLoaded(:final data, :final joinedEventIds)
-              when data.popularEvents.isNotEmpty =>
-            _PopularEventsContent(
-              events: data.popularEvents,
-              joinedEventIds: joinedEventIds,
-            ),
+          HomeLoaded(:final data) when data.popularEvents.isNotEmpty =>
+            _PopularEventsContent(state: data),
           HomeError(:final message) => _ErrorView(message: message),
           _ => const _EmptyView(),
         };
@@ -44,7 +38,12 @@ class _LoadingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: CircularProgressIndicator());
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(24),
+        child: CircularProgressIndicator(),
+      ),
+    );
   }
 }
 
@@ -57,9 +56,12 @@ class _ErrorView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text(
-        'Error: $message',
-        style: AppTextStyle.regular12(Colors.red),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Text(
+          'Error: $message',
+          style: AppTextStyle.regular12(Colors.red),
+        ),
       ),
     );
   }
@@ -71,28 +73,19 @@ class _EmptyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        'No popular events available',
-        style: AppTextStyle.regular12(AppColor.colorbr80),
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }
 
 // Content with events
 class _PopularEventsContent extends StatelessWidget {
-  final List<EventModel> events;
-  final Set<String> joinedEventIds;
+  final HomeData state;
 
-  const _PopularEventsContent({
-    required this.events,
-    required this.joinedEventIds,
-  });
+  const _PopularEventsContent({required this.state});
 
   @override
   Widget build(BuildContext context) {
-    final displayEvents = events.take(5).toList();
+    final displayEvents = state.popularEvents.take(5).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -102,11 +95,9 @@ class _PopularEventsContent extends StatelessWidget {
           actionText: AppString.all,
           onActionPressed: () => context.push(AppRoutes.seeAllPopular),
         ),
+        const SizedBox(height: 12),
         SizedBox(
-            height:
-                AppWidthHeight.percentageOfHeight(context, AppDistance.d10)),
-        SizedBox(
-          height: AppWidthHeight.percentageOfHeight(context, AppDistance.d190),
+          height: MediaQuery.of(context).size.height * 0.28,
           child: ListView.builder(
             scrollDirection: Axis.horizontal,
             itemCount: displayEvents.length,
@@ -120,33 +111,24 @@ class _PopularEventsContent extends StatelessWidget {
     );
   }
 
-  Widget _buildEventCard(BuildContext context, EventModel event) {
-    final isInterested = joinedEventIds.contains(event.id);
+  Widget _buildEventCard(BuildContext context, EventSummaryModel event) {
+    final isInterested = state.joinedEventIds.contains(event.id);
 
     return EventCard(
       event: event,
       isInterested: isInterested,
-      onAddInterest: () => context.read<HomeCubit>().toggleInterestEvent(
-            categoryId: event.categoryId,
-            eventId: event.id!,
-            event: event,
-          ),
-      onRemoveInterest: () => context.read<HomeCubit>().toggleInterestEvent(
-            categoryId: event.categoryId,
-            eventId: event.id!,
-            event: event,
-          ),
+      onAddInterest: () =>
+          context.read<HomeCubit>().toggleInterestEvent(event.id),
+      onRemoveInterest: () =>
+          context.read<HomeCubit>().toggleInterestEvent(event.id),
       onTap: () => _navigateToDetails(context, event),
     );
   }
 
-  void _navigateToDetails(BuildContext context, EventModel event) {
+  void _navigateToDetails(BuildContext context, EventSummaryModel event) {
     context.push(
       AppRoutes.eventDetails,
-      extra: {
-        "categoryId": event.categoryId,
-        "eventId": event.id!,
-      },
+      extra: {"eventId": event.id},
     );
   }
 }
