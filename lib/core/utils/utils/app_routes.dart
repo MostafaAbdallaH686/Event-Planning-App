@@ -21,7 +21,7 @@ abstract class AppRoutes {
   static const String seeAllPopular = '/SeeAllPopular';
   static const String seeAllUpComing = '/SeeAllUpComing';
   static const String searchScreen = '/SearchScreen';
-  static const String categoryEvents = '/categoryEvents/';
+  static const String categoryEvents = '/categoryEvents/:id/:name';
   static const String eventDetails = '/eventDetails';
   static const String navBar = '/navigationBar';
   static const String editProfile = '/editProfile';

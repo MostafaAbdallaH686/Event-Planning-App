@@ -2,7 +2,7 @@ import 'package:event_planning_app/core/utils/errors/errors/exceptions.dart';
 import 'package:event_planning_app/core/utils/errors/errors/failuress.dart';
 import 'package:event_planning_app/core/utils/network/api_endpoint.dart';
 import 'package:event_planning_app/core/utils/network/api_helper.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
 import 'package:event_planning_app/features/home/data/repositories/home_repository.dart';
 import 'package:event_planning_app/features/home/domain/entities/home_data.dart';
@@ -210,6 +210,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
+  @override
   Future<Either<Failure, Set<String>>> getUserInterestedEventIds() async {
     try {
       final ids = await _fetchInterestedEventIds();
@@ -225,39 +226,57 @@ class HomeRepositoryImpl implements HomeRepository {
 
   Future<List<CategoryModel>> _fetchCategories() async {
     try {
-      print('📤 GET ${ApiEndpoint.categories}');
+      print('═══════════════════════════════════════');
+      print('📤 Fetching categories...');
+      print('   Endpoint: ${ApiEndpoint.categories}');
 
       final response = await _apiHelper.get(
         endPoint: ApiEndpoint.categories,
         isAuth: false,
       );
 
-      print('📥 Categories response type: ${response.runtimeType}');
+      print('📥 Categories API Response:');
+      print('   Response type: ${response.runtimeType}');
+      print('   Response: $response');
+      print('═══════════════════════════════════════');
 
       // Handle different response formats
       List<dynamic> categoriesList;
       if (response is List) {
         categoriesList = response;
+        print('✅ Response is a List with ${categoriesList.length} items');
       } else if (response is Map<String, dynamic> &&
           response.containsKey('categories')) {
         categoriesList = response['categories'] as List;
+        print('✅ Response is Map with "categories" key');
       } else if (response is Map<String, dynamic> &&
           response.containsKey('data')) {
         categoriesList = response['data'] as List;
+        print('✅ Response is Map with "data" key');
       } else {
         print('⚠️ Unexpected categories response format: $response');
         return [];
+      }
+
+      // Print first category raw data
+      if (categoriesList.isNotEmpty) {
+        print('📋 First category raw data:');
+        print('   $categoriesList[0]');
       }
 
       final categories = categoriesList
           .map((json) => CategoryModel.fromJson(json as Map<String, dynamic>))
           .toList();
 
-      print('✅ Fetched ${categories.length} categories');
+      print('✅ Parsed ${categories.length} categories');
+      if (categories.isNotEmpty) {
+        print('   First category: ${categories.first}');
+      }
+
       return categories;
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('❌ Error fetching categories: $e');
-      // Return empty list instead of throwing to prevent home page crash
+      print('Stack trace: $stackTrace');
       return [];
     }
   }

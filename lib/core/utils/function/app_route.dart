@@ -94,11 +94,10 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/categoryEvents/:id/:name',
       builder: (context, state) {
-        final categoryId = state.pathParameters['id']!;
-        final categoryName = state.pathParameters['name']!;
+        final extra = state.extra as Map<String, dynamic>;
         return CategoryEventsScreen(
-          categoryId: categoryId,
-          categoryName: categoryName,
+          categoryId: extra['categoryId'] as String,
+          categoryName: extra['categoryName'] as String,
         );
       },
     ),

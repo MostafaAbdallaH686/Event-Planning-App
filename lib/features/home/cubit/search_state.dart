@@ -1,32 +1,32 @@
-import 'package:event_planning_app/core/utils/model/event_model.dart';
+//import 'package:event_planning_app/core/utils/model/event_model.dart';
 
-abstract class SearchState {}
+// abstract class SearchState {}
 
-// search state
-class SearchInitial extends SearchState {}
+// // search state
+// class SearchInitial extends SearchState {}
 
-class SearchLoading extends SearchState {}
+// class SearchLoading extends SearchState {}
 
-class SearchLoaded extends SearchState {
-  final List<EventModel> events;
-  SearchLoaded(this.events);
-}
+// class SearchLoaded extends SearchState {
+//   final List<EventModel> events;
+//   SearchLoaded(this.events);
+// }
 
-class SearchError extends SearchState {
-  final String message;
-  SearchError(this.message);
-}
+// class SearchError extends SearchState {
+//   final String message;
+//   SearchError(this.message);
+// }
 
-// category state
-class CategoryEventsLoading extends SearchState {}
+// // category state
+// class CategoryEventsLoading extends SearchState {}
 
-class CategoryEventsLoaded extends SearchState {
-  final String categoryId;
-  final List<EventModel> events;
-  CategoryEventsLoaded(this.categoryId, this.events);
-}
+// class CategoryEventsLoaded extends SearchState {
+//   final String categoryId;
+//   final List<EventModel> events;
+//   CategoryEventsLoaded(this.categoryId, this.events);
+// }
 
-class CategoryEventsError extends SearchState {
-  final String message;
-  CategoryEventsError(this.message);
-}
+// class CategoryEventsError extends SearchState {
+//   final String message;
+//   CategoryEventsError(this.message);
+// }

@@ -12,6 +12,7 @@ abstract class ApiEndpoint {
 
   // Categories
   static const String categories = "/categories";
+  static String categoryById(String id) => "/categories/$id";
 
   // Upload
   static const String uploadImage = "/upload/image";

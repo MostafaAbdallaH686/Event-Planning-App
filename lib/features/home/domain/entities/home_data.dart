@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
 
 class HomeData extends Equatable {

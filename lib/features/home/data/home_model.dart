@@ -1,5 +1,5 @@
 import 'package:event_planning_app/core/utils/model/event_model.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 
 class HomeData {
   final List<CategoryModel> categories;

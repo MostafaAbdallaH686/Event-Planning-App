@@ -7,6 +7,7 @@ import 'package:event_planning_app/core/utils/network/api_endpoint.dart';
 import 'package:event_planning_app/core/utils/network/api_helper.dart';
 import 'package:event_planning_app/features/events/data/models/event_model.dart';
 import 'package:event_planning_app/features/events/data/repositories/event_repository.dart';
+import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
 
 class EventRepositoryImpl implements EventRepository {
   final ApiHelper _apiHelper;
@@ -92,7 +93,7 @@ class EventRepositoryImpl implements EventRepository {
   }
 
   @override
-  Future<Either<Failure, List<EventModel>>> getEventsByCategory(
+  Future<Either<Failure, List<EventSummaryModel>>> getEventsByCategory(
     String categoryId, {
     int page = 1,
     int limit = 20,
@@ -106,25 +107,31 @@ class EventRepositoryImpl implements EventRepository {
         isAuth: false,
       );
 
-      final List<EventModel> events;
+      // Parse response (handle both List and Object formats)
+      final List<EventSummaryModel> events;
       if (response is List) {
         events = response
-            .map((json) => EventModel.fromJson(json as Map<String, dynamic>))
+            .map((json) =>
+                EventSummaryModel.fromJson(json as Map<String, dynamic>))
             .toList();
       } else if (response is Map<String, dynamic> &&
           response.containsKey('events')) {
         events = (response['events'] as List)
-            .map((json) => EventModel.fromJson(json as Map<String, dynamic>))
+            .map((json) =>
+                EventSummaryModel.fromJson(json as Map<String, dynamic>))
             .toList();
       } else {
+        print('⚠️ Unexpected response format: ${response.runtimeType}');
         events = [];
       }
 
       print('✅ Fetched ${events.length} events for category: $categoryId');
       return Right(events);
     } on CustomDioException catch (e) {
+      print('❌ Error: ${e.message}');
       return Left(ServerFailure(message: e.message, code: e.code));
     } catch (e) {
+      print('❌ Unexpected error: $e');
       return Left(UnexpectedFailure(message: e.toString()));
     }
   }

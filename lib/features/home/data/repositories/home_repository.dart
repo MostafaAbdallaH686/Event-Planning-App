@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:event_planning_app/core/utils/errors/errors/failuress.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 import 'package:event_planning_app/features/home/data/models/event_summary_model.dart';
 import 'package:event_planning_app/features/home/domain/entities/home_data.dart';
 
@@ -10,6 +10,7 @@ abstract class HomeRepository {
 
   /// Fetch specific sections
   Future<Either<Failure, List<CategoryModel>>> getCategories();
+
   Future<Either<Failure, List<EventSummaryModel>>> getUpcomingEvents(
       {int limit = 10});
   Future<Either<Failure, List<EventSummaryModel>>> getPopularEvents(

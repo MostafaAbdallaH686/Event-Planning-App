@@ -4,7 +4,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/utils/firebase_constants.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 
 class FirestoreService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;

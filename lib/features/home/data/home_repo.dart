@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:async/async.dart';
 import 'package:event_planning_app/core/utils/model/event_model.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
-import 'package:event_planning_app/features/home/data/catagory_model.dart';
+import 'package:event_planning_app/features/home/data/models/catagory_model.dart';
 import 'package:event_planning_app/features/home/data/home_model.dart';
 
 class HomeRepo {
