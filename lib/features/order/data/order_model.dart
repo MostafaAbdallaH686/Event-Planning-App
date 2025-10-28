@@ -18,4 +18,26 @@ class OrderModel {
     required this.ticketCount,
     required this.imageUrl,
   });
+
+  OrderModel copyWith({
+    String? eventName,
+    String? eventDate,
+    String? eventTime,
+    String? location,
+    double? totalPrice,
+    String? paymentMethod,
+    int? ticketCount,
+    String? imageUrl,
+  }) {
+    return OrderModel(
+      eventName: eventName ?? this.eventName,
+      eventDate: eventDate ?? this.eventDate,
+      eventTime: eventTime ?? this.eventTime,
+      location: location ?? this.location,
+      totalPrice: totalPrice ?? this.totalPrice,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      ticketCount: ticketCount ?? this.ticketCount,
+      imageUrl: imageUrl ?? this.imageUrl,
+    );
+  }
 }

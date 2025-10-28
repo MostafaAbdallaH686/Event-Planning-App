@@ -151,16 +151,12 @@ final GoRouter router = GoRouter(
       path: '/ticketBooked',
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
+        final order = extra['order'] as OrderModel;
+
         return TicketBookedScreen(
-          eventName: extra['eventName'],
-          paymentMethod: extra['paymentMethod'],
-          totalPrice: extra['totalPrice'],
-          date: extra['date'],
-          time: extra['time'],
+          order: order,
           seat: extra['seat'],
-          location: extra['location'],
           qrImageUrl: extra['qrImageUrl'],
-          eventImageUrl: extra['eventImageUrl'],
         );
       },
     ),
@@ -168,14 +164,14 @@ final GoRouter router = GoRouter(
       path: '/viewTicket',
       builder: (context, state) {
         final extra = state.extra as Map<String, dynamic>;
+        final OrderModel order = extra['order'] as OrderModel;
+        final String seat = extra['seat'] as String;
+        final String qrImageUrl = extra['qrImageUrl'] as String;
+
         return ViewTicketScreen(
-          eventName: extra['eventName'],
-          date: extra['date'],
-          time: extra['time'],
-          seat: extra['seat'],
-          location: extra['location'],
-          eventImageUrl: extra['eventImageUrl'],
-          qrImageUrl: extra['qrImageUrl'],
+          order: order,
+          seat: seat,
+          qrImageUrl: qrImageUrl,
         );
       },
     ),
