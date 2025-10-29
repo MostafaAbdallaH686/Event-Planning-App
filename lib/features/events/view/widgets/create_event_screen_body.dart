@@ -128,6 +128,7 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
       date: dt,
       tags: tags,
       price: price,
+      imageUrl: _imageFile?.path ?? '',
     );
 
     context.read<CreateEventCubit>().submit(

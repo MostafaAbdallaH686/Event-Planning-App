@@ -39,20 +39,25 @@ class EventRepositoryImpl implements EventRepository {
       final globalDoc = _firestore.collection('events').doc();
       final eventId = globalDoc.id;
 
-      // Upload image to Supabase (optional)
+      // Upload image to Supabase (required if imageFile provided)
       String imageUrl = '';
       if (imageFile != null) {
         final ext = imageFile.path.split('.').last;
-        final filePath =
-            'event_images/${user.uid}_${DateTime.now().millisecondsSinceEpoch}.$ext';
-        await _supabase.storage.from('event_images').upload(
+        final fileName =
+            '${user.uid}_${DateTime.now().millisecondsSinceEpoch}.$ext';
+        final filePath = 'events_images/$fileName';
+
+        // Upload to Supabase Storage bucket 'events_images'
+        await _supabase.storage.from('events_images').upload(
               filePath,
               imageFile,
               fileOptions:
                   const FileOptions(cacheControl: '3600', upsert: true),
             );
+
+        // Get public URL
         imageUrl =
-            _supabase.storage.from('event_images').getPublicUrl(filePath);
+            _supabase.storage.from('events_images').getPublicUrl(filePath);
       }
 
       final event = EventModel(

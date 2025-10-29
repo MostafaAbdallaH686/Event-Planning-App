@@ -7,6 +7,7 @@ class CreateEventInput {
   final DateTime date;
   final List<String> tags;
   final double price;
+  final String imageUrl;
 
   const CreateEventInput({
     required this.title,
@@ -17,6 +18,7 @@ class CreateEventInput {
     required this.date,
     required this.tags,
     required this.price,
+    required this.imageUrl,
   });
 
   CreateEventInput copyWith({
@@ -28,6 +30,7 @@ class CreateEventInput {
     DateTime? date,
     List<String>? tags,
     double? price,
+    String? imageUrl,
   }) {
     return CreateEventInput(
       title: title ?? this.title,
@@ -38,6 +41,7 @@ class CreateEventInput {
       date: date ?? this.date,
       tags: tags ?? this.tags,
       price: price ?? this.price,
+      imageUrl: imageUrl ?? this.imageUrl,
     );
   }
 }
