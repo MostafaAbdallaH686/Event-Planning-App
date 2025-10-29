@@ -82,16 +82,26 @@ class EventRepositoryImpl implements EventRepository {
         ..['organizerId'] = user.uid // ensure organizerId is consistent
         ..['id'] = eventId; // optional: can be helpful for client reads
 
-      final userEventsDoc = _firestore
-          .collection('users')
-          .doc(user.uid)
-          .collection('events')
-          .doc(eventId);
+      // final userEventsDoc = _firestore
+      //     .collection('users')
+      //     .doc(user.uid)
+      //     .collection('events')
+      //     .doc(eventId);
 
-      final batch = _firestore.batch();
-      batch.set(globalDoc, data, SetOptions(merge: true));
-      batch.set(userEventsDoc, data, SetOptions(merge: true));
-      await batch.commit();
+      // final batch = _firestore.batch();
+      // batch.set(globalDoc, data, SetOptions(merge: true));
+      // batch.set(userEventsDoc, data, SetOptions(merge: true));
+      // await batch.commit();
+      // 🔹 حدد مكان الحفظ داخل الكاتيجوري
+      final categoryId = input.categoryId; // زي "business"
+      final eventDoc = _firestore
+          .collection('categories')
+          .doc(categoryId)
+          .collection('events')
+          .doc(eventId); // أو .doc(input.title) لو عايز الاسم بدل الـ ID
+
+// 🔹 خزّن البيانات
+      await eventDoc.set(data, SetOptions(merge: true));
 
       return event;
     } on AuthFailure {

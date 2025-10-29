@@ -18,7 +18,6 @@ class CreateEventScreenBody extends StatefulWidget {
 
 class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
   final _formKey = GlobalKey<FormState>();
-
   final _titleCtrl = TextEditingController();
   final _descCtrl = TextEditingController();
   final _locationCtrl = TextEditingController();
@@ -26,7 +25,6 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
   final _dateCtrl = TextEditingController();
   final _timeCtrl = TextEditingController();
   final _tagsCtrl = TextEditingController();
-
   DateTime? _pickedDate;
   TimeOfDay? _pickedTime;
   File? _imageFile;
@@ -103,22 +101,18 @@ class _CreateEventScreenBodyState extends State<CreateEventScreenBody> {
       AppToast.warning('Please select date and time');
       return;
     }
-
     final price = double.tryParse(_priceCtrl.text.trim()) ?? -1;
     if (price < 0) {
       AppToast.warning('Price must be a valid non-negative number');
       return;
     }
-
     final tags = _tagsCtrl.text
         .split(',')
         .map((e) => e.trim())
         .where((e) => e.isNotEmpty)
         .toList();
-
     const categoryId = 'general';
     const categoryName = 'General';
-
     final input = CreateEventInput(
       title: _titleCtrl.text.trim(),
       description: _descCtrl.text.trim(),
@@ -319,7 +313,6 @@ class _ReadOnlyField extends StatelessWidget {
     required this.icon,
     required this.onTap,
   });
-
   @override
   Widget build(BuildContext context) {
     return _Field(
@@ -349,7 +342,6 @@ class _ImagePickerRow extends StatelessWidget {
     required this.file,
     required this.onPick,
   });
-
   @override
   Widget build(BuildContext context) {
     final name = file != null ? file!.path.split('/').last : 'No file chosen';

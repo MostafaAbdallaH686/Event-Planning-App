@@ -54,6 +54,7 @@ dependencies:
   intl:
   image_picker: ^1.0.7 
   supabase_flutter: ^2.10.3
+  flutter_stripe:
 
   
   

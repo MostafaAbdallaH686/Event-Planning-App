@@ -21,6 +21,7 @@ import 'package:event_planning_app/features/profile/data/profile_repostiry.dart'
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -36,6 +37,9 @@ void main() async {
     anonKey:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqdnhocnFkaGNpa3dsbG1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0MzE5OTEsImV4cCI6MjA3NjAwNzk5MX0.AKULfXKInrrSYXvlXeIXktVqFHp8EwdYpVent8hbf7k",
   );
+  Stripe.publishableKey =
+      "pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg";
+  await Stripe.instance.applySettings();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

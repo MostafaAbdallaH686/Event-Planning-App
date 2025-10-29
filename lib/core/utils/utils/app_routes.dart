@@ -33,4 +33,5 @@ abstract class AppRoutes {
   static const String orderDetails = '/orderDetails';
   static const String ticketBooked = '/ticketBooked';
   static const String viewTicket = '/viewTicket';
+  static const String stripePayment = '/stripePayment';
 }
