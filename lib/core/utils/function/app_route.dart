@@ -21,7 +21,6 @@ import 'package:event_planning_app/features/home/view/see_all_upcoming_screen.da
 import 'package:event_planning_app/core/utils/widgets/navigation_bar.dart';
 import 'package:event_planning_app/features/onboarding/view/onboarding_screen.dart';
 import 'package:event_planning_app/features/onboarding/view/splash_screen.dart';
-import 'package:event_planning_app/features/order/view/stripe_payment_screen.dart';
 import 'package:event_planning_app/features/profile/view/change_email.dart';
 import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:event_planning_app/features/order/data/order_model.dart';
@@ -174,13 +173,6 @@ final GoRouter router = GoRouter(
           seat: seat,
           qrImageUrl: qrImageUrl,
         );
-      },
-    ),
-    GoRoute(
-      path: '/stripePayment',
-      builder: (context, state) {
-        final data = state.extra as Map<String, dynamic>;
-        return StripePaymentScreen(order: data['order']);
       },
     ),
   ],
