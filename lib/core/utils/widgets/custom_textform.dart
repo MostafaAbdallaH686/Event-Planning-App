@@ -15,8 +15,9 @@ class CustomTextform extends StatelessWidget {
     this.fillColor,
     this.onChanged,
     this.onFieldSubmitted,
+    this.errorText,
   });
-
+  final String? errorText;
   final String prefixicon;
   final String prefixtext;
   final Widget? suffixicon;
@@ -46,6 +47,7 @@ class CustomTextform extends StatelessWidget {
             padding: const EdgeInsets.all(10),
             child: SvgPicture.asset(prefixicon, width: 20, height: 20),
           ),
+          errorText: errorText,
           hintText: prefixtext,
           hintStyle: AppTextStyle.medium14(AppColor.colorbA1),
           suffixIcon: suffixicon,

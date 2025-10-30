@@ -1,53 +1,40 @@
-import 'package:dio/dio.dart';
-import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
-import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/network/api_endpoint.dart';
-import 'package:event_planning_app/core/utils/network/api_keypoint.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
 
 //ToDo :: Mostafa :: Implement Token Refresh Logic
 class TokenService {
-  final CacheHelper cacheHelper;
-  final Dio dio;
+  static const String _accessTokenKey = 'access_token';
+  static const String _refreshTokenKey = 'refresh_token';
 
-  TokenService({required this.cacheHelper, required this.dio});
+  final SharedPreferences _prefs;
 
-  Future<bool> refreshAccessToken() async {
-    try {
-      final refreshToken = cacheHelper.getDataString(
-        key: SharedPrefereneceKey.refreshtoken,
-      );
+  TokenService(this._prefs);
 
-      if (refreshToken == null) {
-        handleRefreshTokenExpired();
-        return false;
-      }
-
-      final response = await dio.get(
-        "${ApiEndpoint.refreshToken}?token=$refreshToken",
-      );
-
-      final newAccessToken = response.data[ApiKeypoint.accesstoken];
-      if (newAccessToken != null && newAccessToken is String) {
-        await cacheHelper.saveData(
-          key: SharedPrefereneceKey.accesstoken,
-          value: newAccessToken,
-        );
-        return true;
-      }
-
-      handleRefreshTokenExpired();
-      return false;
-    } on DioException catch (_) {
-      handleRefreshTokenExpired();
-      return false;
-    } catch (_) {
-      handleRefreshTokenExpired();
-      return false;
-    }
+  Future<String?> getAccessToken() async {
+    return _prefs.getString(_accessTokenKey);
   }
 
-  void handleRefreshTokenExpired() {
-    cacheHelper.clearData();
-    Future.microtask(() {});
+  Future<String?> getRefreshToken() async {
+    return _prefs.getString(_refreshTokenKey);
+  }
+
+  Future<void> saveTokens({
+    required String accessToken,
+    required String refreshToken,
+  }) async {
+    await _prefs.setString(_accessTokenKey, accessToken);
+    await _prefs.setString(_refreshTokenKey, refreshToken);
+  }
+
+  Future<void> clearTokens() async {
+    await _prefs.remove(_accessTokenKey);
+    await _prefs.remove(_refreshTokenKey);
+  }
+
+  /// Refresh access token using refresh token
+  Future<bool> refreshAccessToken() async {
+    // This will be called by ApiHelper interceptor
+    // The actual refresh is handled by AuthRepository
+    return false; // Placeholder
   }
 }

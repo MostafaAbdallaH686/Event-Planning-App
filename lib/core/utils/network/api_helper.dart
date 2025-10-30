@@ -315,58 +315,134 @@ import 'package:event_planning_app/core/utils/network/token_service.dart';
 class _DevConfig {
   // 🔴 REPLACE THIS WITH YOUR ACTUAL TOKEN FROM POSTMAN
   static const String staticAccessToken =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1YzhhZjNjLTgzNWMtNDk0Yy04ODI2LTc0ZjE2MGNlMzQxMSIsInJvbGUiOiJPUkdBTklaRVIiLCJpYXQiOjE3NjE0ODkxMjYsImV4cCI6MTc2MTQ5MDAyNn0.mMDlEl8kpmSoZZL2UCR7OQFAx9VS42q693dyUn-et0g';
-
-  // Set to false once you implement real authentication
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1YzhhZjNjLTgzNWMtNDk0Yy04ODI2LTc0ZjE2MGNlMzQxMSIsInJvbGUiOiJPUkdBTklaRVIiLCJpYXQiOjE3NjE3Mjk0OTUsImV4cCI6MTc2MTczMDM5NX0.xx_mlDPu4r5LVPb5JMsqsGrnJ2yGBJ7L00AWBh_40nQ'; // Set to false once you implement real authentication
   static const bool useStaticToken = true;
 }
 
 class ApiHelper {
-  ApiHelper({required Dio dio, required TokenService tokenService})
-      : _dio = dio,
+  final Dio _dio;
+  final TokenService _tokenService;
+
+  // Lock to prevent multiple simultaneous refresh attempts
+  bool _isRefreshing = false;
+  final List<Function> _refreshCallbacks = [];
+
+  ApiHelper({
+    required Dio dio,
+    required TokenService tokenService,
+  })  : _dio = dio,
         _tokenService = tokenService {
     _setupInterceptors();
   }
 
-  final Dio _dio;
-  final TokenService _tokenService;
-
   void _setupInterceptors() {
     _dio.interceptors.add(
       InterceptorsWrapper(
-        onRequest: (options, handler) {
-          final headers = _getHeaders(options.uri.path.contains('refresh'));
-          options.headers.addAll(headers);
-
-          // Debug log to verify token is being sent
-          if (options.headers.containsKey(ApiKeypoint.authorization)) {
-            print(
-                '🔑 Auth header: ${options.headers[ApiKeypoint.authorization]}');
+        onRequest: (options, handler) async {
+          // Add access token to requests
+          final accessToken = await _tokenService.getAccessToken();
+          if (accessToken != null) {
+            options.headers['Authorization'] = 'Bearer $accessToken';
           }
-
           return handler.next(options);
         },
         onError: (error, handler) async {
-          // Skip refresh logic if using static token
-          if (_DevConfig.useStaticToken) {
-            return handler.next(error);
-          }
-
+          // Handle 401 Unauthorized
           if (error.response?.statusCode == 401) {
+            print('🔄 Token expired, attempting refresh...');
+
+            // If already refreshing, queue this request
+            if (_isRefreshing) {
+              return _queueRequest(error, handler);
+            }
+
+            _isRefreshing = true;
+
             try {
-              final didRefresh = await _tokenService.refreshAccessToken();
-              if (didRefresh) {
-                final retryResponse = await _retryRequest(error.requestOptions);
-                return handler.resolve(retryResponse);
+              // Attempt to refresh token
+              final refreshToken = await _tokenService.getRefreshToken();
+
+              if (refreshToken == null) {
+                print('❌ No refresh token available');
+                _isRefreshing = false;
+                return handler.next(error);
               }
+
+              // Call refresh endpoint
+              final response = await _dio.post(
+                '/auth/refresh-token',
+                data: {'refreshToken': refreshToken},
+                options: Options(
+                  headers: {'Authorization': null}, // Don't send old token
+                ),
+              );
+
+              final newAccessToken = response.data['accessToken'] as String;
+              final newRefreshToken = response.data['refreshToken'] as String;
+
+              // Save new tokens
+              await _tokenService.saveTokens(
+                accessToken: newAccessToken,
+                refreshToken: newRefreshToken,
+              );
+
+              print('✅ Token refreshed successfully');
+
+              // Retry original request with new token
+              error.requestOptions.headers['Authorization'] =
+                  'Bearer $newAccessToken';
+              final retryResponse = await _dio.fetch(error.requestOptions);
+
+              _isRefreshing = false;
+
+              // Process queued requests
+              _processRefreshCallbacks();
+
+              return handler.resolve(retryResponse);
             } catch (e) {
+              print('❌ Token refresh failed: $e');
+              _isRefreshing = false;
+
+              // Clear tokens and fail queued requests
+              await _tokenService.clearTokens();
+              _failRefreshCallbacks();
+
               return handler.next(error);
             }
           }
+
           return handler.next(error);
         },
       ),
     );
+  }
+
+  Future<void> _queueRequest(
+    DioException error,
+    ErrorInterceptorHandler handler,
+  ) async {
+    // Add to queue
+    _refreshCallbacks.add(() async {
+      try {
+        final accessToken = await _tokenService.getAccessToken();
+        error.requestOptions.headers['Authorization'] = 'Bearer $accessToken';
+        final response = await _dio.fetch(error.requestOptions);
+        handler.resolve(response);
+      } catch (e) {
+        handler.next(error);
+      }
+    });
+  }
+
+  void _processRefreshCallbacks() {
+    for (var callback in _refreshCallbacks) {
+      callback();
+    }
+    _refreshCallbacks.clear();
+  }
+
+  void _failRefreshCallbacks() {
+    _refreshCallbacks.clear();
   }
 
   /// Get headers for authentication
@@ -497,7 +573,9 @@ class ApiHelper {
         onSendProgress: onSendProgress,
       );
 
-      print('✅ Response: ${response.statusCode}');
+      print('📥 ApiHelper response status: ${response.statusCode}');
+      print('📥 ApiHelper response.data: ${response.data}');
+
       return response.data;
     } on DioException catch (e) {
       final failure = ServerFailure.fromDioError(e);

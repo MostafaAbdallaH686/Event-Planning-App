@@ -4,18 +4,16 @@ import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
+import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
+import 'package:event_planning_app/di/injections.dart';
+import 'package:event_planning_app/features/auth/cubit/cubits/auth_cubit.dart';
+import 'package:event_planning_app/features/auth/cubit/states/auth_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class SplashScreen extends StatefulWidget {
-  final Duration delay;
-  final CacheHelper cacheHelper;
-
-  const SplashScreen({
-    super.key,
-    this.delay = const Duration(seconds: 1),
-    required this.cacheHelper,
-  });
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -25,41 +23,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    _navigateAfterDelay();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _navigateAfterDelay();
+    });
   }
 
-// navigate after delay
   Future<void> _navigateAfterDelay() async {
-    await Future.delayed(const Duration(seconds: 3));
+    await Future.delayed(const Duration(seconds: 2));
 
-    // ToDo :: MOstafa ::  caching and login logic
-    // check cache for first time and login status
+    if (!mounted) return;
+
+    final cacheHelper = getIt<CacheHelper>();
     final isFirstTime =
-        widget.cacheHelper.getData(key: SharedPrefereneceKey.isFirstTime) ??
-            true;
-    final isLoggedIn =
-        widget.cacheHelper.getData(key: SharedPrefereneceKey.isLogin) ?? false;
-// check if first time or logged in
+        cacheHelper.getData(key: SharedPrefereneceKey.isFirstTime) ?? true;
+
     if (isFirstTime) {
-      await widget.cacheHelper
-          .saveData(key: SharedPrefereneceKey.isFirstTime, value: false);
+      await cacheHelper.saveData(
+          key: SharedPrefereneceKey.isFirstTime, value: false);
       if (!mounted) return;
-      context.pushReplacement(AppRoutes.onBoarding);
-    } else if (isLoggedIn) {
-      if (!mounted) return;
-
-      context.pushReplacement(AppRoutes.navBar);
-    } else {
-      if (!mounted) return;
-
-      context.pushReplacement(AppRoutes.login);
+      context.go('/onboarding');
+      return;
     }
-  }
 
-  @override
-  void dispose() {
-    // Cancel any ongoing operations if widget is disposed
-    super.dispose();
+    // Check auth with AuthCubit
+    await context.read<AuthCubit>().checkAuthStatus();
+
+    if (!mounted) return;
+
+    final authState = context.read<AuthCubit>().state;
+
+    if (authState is AuthAuthenticated) {
+      context.go('/navigationBar');
+    } else {
+      context.go('/login');
+    }
   }
 
   @override

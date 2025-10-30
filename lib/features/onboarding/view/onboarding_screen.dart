@@ -1,7 +1,10 @@
 //ToDo :: Mostafa :: Do not Touch Please
 
+import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
+import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
+import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_state.dart';
 import 'package:event_planning_app/features/onboarding/view/widgets/custom_onboarding.dart';
@@ -29,6 +32,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         finalIndex = indexNotifier.value;
       });
     });
+  }
+
+  void _completeOnboarding(BuildContext context) async {
+    final cacheHelper = getIt<CacheHelper>();
+    await cacheHelper.saveData(
+      key: SharedPrefereneceKey.isFirstTime,
+      value: false,
+    );
+
+    if (!context.mounted) return;
+    context.go(AppRoutes.login);
   }
 
   @override
@@ -65,9 +79,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   : AppString.onboardingbtn,
               imagePath: state.onboardingContent.image,
               title: state.onboardingContent.title,
-              onPressed: () {
+              onPressed: () async {
                 if (indexNotifier.value == 2) {
-                  context.pushReplacement(AppRoutes.register);
+                  _completeOnboarding(context);
                   return;
                 }
                 context.read<OnBoardingCubit>().nextOnboarding();

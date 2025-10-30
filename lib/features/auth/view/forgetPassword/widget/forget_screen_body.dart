@@ -6,6 +6,7 @@ import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_inicator.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
+import 'package:event_planning_app/features/auth/cubit/cubits/auth_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/email_text_field.dart';
@@ -17,7 +18,9 @@ class ForgetScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cubit = BlocProvider.of<UserCubit>(context);
+    final TextEditingController _emailController = TextEditingController();
+
+    final cubit = BlocProvider.of<AuthCubit>(context);
     final formKey = GlobalKey<FormState>();
 
     final size = MediaQuery.of(context).size;
@@ -51,8 +54,8 @@ class ForgetScreenBody extends StatelessWidget {
               height: size.height * 0.03,
             ),
             EmailTextField(
-              cubit: cubit,
-              controller: cubit.forgetPemailCtrl,
+              controller: _emailController,
+              errorText: null,
               hintText: AppString.emailEx,
             ),
             SizedBox(height: size.height * 0.05),
@@ -71,9 +74,9 @@ class ForgetScreenBody extends StatelessWidget {
                 return CustomTextbutton(
                     text: AppString.send,
                     onpressed: () {
-                      if (formKey.currentState!.validate()) {
-                        cubit.resetPassword(email: cubit.forgetPemailCtrl.text);
-                      }
+                      // if (formKey.currentState!.validate()) {
+                      //   cubit.resetPassword(email: cubit.forgetPemailCtrl.text);
+                      // }
                     });
               },
             )

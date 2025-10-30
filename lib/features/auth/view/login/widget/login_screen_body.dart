@@ -2,17 +2,13 @@
 
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
-import 'package:event_planning_app/core/utils/cache/shared_preferenece_key.dart';
-import 'package:event_planning_app/core/utils/widgets/dialogs/app_dialog.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/function/app_toast.dart';
-import 'package:event_planning_app/di/injections.dart';
-import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
+import 'package:event_planning_app/features/auth/cubit/cubits/auth_cubit.dart';
+import 'package:event_planning_app/features/auth/cubit/states/auth_state.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_button.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/auth_image.dart';
 import 'package:event_planning_app/features/auth/view/shared_widgets/name_text_field.dart';
@@ -24,73 +20,108 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_linedtext.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginScreenBody extends StatelessWidget {
+class LoginScreenBody extends StatefulWidget {
   const LoginScreenBody({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
+  State<LoginScreenBody> createState() => _LoginScreenBodyState();
+}
 
-    final cubit = BlocProvider.of<UserCubit>(context);
+class _LoginScreenBodyState extends State<LoginScreenBody> {
+  final _formKey = GlobalKey<FormState>();
+  // ✅ Controllers managed in UI
+  late final TextEditingController _emailController;
+  late final TextEditingController _passwordController;
+
+  // ✅ Password visibility managed in UI
+  bool _isPasswordVisible = false;
+
+  // Server validation errors
+  Map<String, String> _serverErrors = {};
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController();
+    _passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _isPasswordVisible = !_isPasswordVisible;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<AuthCubit>();
     final size = MediaQuery.of(context).size;
 
-    return BlocConsumer<UserCubit, UserState>(
-      listener: (context, state) async {
-        if (state is UserLoggedIn) {
-          final isFirstTime = !(await getIt<CacheHelper>()
-                  .getData(key: SharedPrefereneceKey.isFirstLogin) ??
-              false);
-          if (isFirstTime) {
-            // Navigate to Interests screen
-            context.push(AppRoutes.favEvent);
-          } else {
-            // Go to Home
-            context.pushReplacement(AppRoutes.navBar);
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is AuthAuthenticated) {
+          print('✅ Login successful, navigating to home');
+
+          AppToast.success('Welcome, ${state.user.username}!');
+          // Navigate to home or favorites based on first-time login
+          context.pushReplacement(AppRoutes.navBar);
+        } else if (state is AuthError) {
+          AppToast.error(state.message);
+        } else if (state is AuthValidationError) {
+          setState(() {
+            _serverErrors = state.errors;
+          });
+          // Show first error
+          if (state.errors.isNotEmpty) {
+            AppToast.warning(state.errors.values.first);
           }
-        } else if (state is UserErrorNotVerified) {
-          AppDialog.showConfirm(
-              context: context,
-              title: 'Email Not Verified',
-              message: 'Please Verify Your Email',
-              confirmText: 'Resend',
-              cancelText: 'I did it',
-              onConfirm: () {
-                cubit.sendVerificationEmail();
-                Navigator.of(context).pop();
-              });
-        } else if (state is UserErrorLoginFacebook ||
-            state is UserErrorLoginGoogle ||
-            state is UserErrorLoginUsername) {
-          AppToast.show(message: (state as UserError).message);
         }
       },
       builder: (context, state) {
+        final isLoading = state is AuthLoading;
+
         return Form(
-          key: formKey,
+          key: _formKey,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           child: ListView(
             padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
             children: [
               AuthImage(title: AppString.login),
 
-              // Name Field
+              // Email/Username Field
               NameTextField(
-                cubit: cubit,
                 hintText: AppString.enterName,
-                controller: cubit.loginNameCtrl,
+                controller: _emailController,
+                errorText: _serverErrors['email'],
               ),
+
               // Password Field
               PasswordTextField(
-                  cubit: cubit, controller: cubit.loginPasswordCtrl),
+                onToggleVisibility: _togglePasswordVisibility,
+                isPasswordVisible: _isPasswordVisible,
+                controller: _passwordController,
+                errorText: _serverErrors['password'],
+              ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Spacer(),
                   TextButton(
-                    onPressed: () {
-                      context.push(AppRoutes.forgetPassword);
-                    },
+                    onPressed: isLoading
+                        ? null
+                        : () {
+                            context.push(AppRoutes.forgetPassword);
+                          },
                     child: Text(
                       AppString.forgetPass,
                       style: AppTextStyle.medium14(AppColor.colorbA1),
@@ -99,22 +130,29 @@ class LoginScreenBody extends StatelessWidget {
                   SizedBox(width: size.height * 0.02),
                 ],
               ),
+
               // Login Button
               LoginButton(
                 isaddIcon: true,
-                formKey: formKey,
+                formKey: _formKey,
                 buttonText: AppString.login,
+                isLoading: isLoading,
                 onLogin: () {
-                  cubit.loginWithUsername(
-                    username: cubit.loginNameCtrl.text.trim(),
-                    password: cubit.loginPasswordCtrl.text.trim(),
+                  setState(() => _serverErrors = {});
+                  cubit.login(
+                    email: _emailController.text.trim(),
+                    password: _passwordController.text.trim(),
                   );
                 },
               ),
+
               const LinedText(text: AppString.or),
+
               // Social Login Buttons
               const SocialLoginButtons(isLogin: true),
+
               SizedBox(height: size.height * 0.02),
+
               // Redirect to Register
               RedirectLink(
                 questionText: AppString.noAcc,

@@ -3,43 +3,44 @@
 import 'package:event_planning_app/core/utils/utils/app_icon.dart';
 import 'package:event_planning_app/core/utils/utils/app_validator.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textform.dart';
-import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
-import 'package:event_planning_app/features/auth/cubit/user_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ConfirmPasswordTextField extends StatelessWidget {
-  final UserCubit cubit;
+  final TextEditingController controller;
+  final TextEditingController passwordController;
+  final bool isPasswordVisible;
+  final VoidCallback onToggleVisibility;
   final String hintText;
+  final String? errorText;
 
   const ConfirmPasswordTextField({
     super.key,
-    required this.cubit,
+    required this.controller,
+    required this.passwordController,
+    required this.isPasswordVisible,
+    required this.onToggleVisibility,
     required this.hintText,
+    this.errorText,
   });
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserCubit, UserState>(
-      buildWhen: (previous, current) => current is UserConfirmObscureToggled,
-      builder: (context, state) {
-        return CustomTextform(
-          obscureText: cubit.obscureConfirmText,
-          controller: cubit.confirmPassCtrl,
-          validator: (value) => AppValidator()
-              .confirmPasswordValidator(value, cubit.registerPasswordCtrl.text),
-          prefixicon: AppIcon.password,
-          prefixtext: hintText,
-          suffixicon: IconButton(
-            onPressed: cubit.toggleObscureConfirm,
-            icon: Icon(
-              cubit.obscureConfirmText
-                  ? Icons.visibility_off
-                  : Icons.visibility,
-            ),
-          ),
-        );
-      },
+    return CustomTextform(
+      obscureText: !isPasswordVisible,
+      controller: controller,
+      validator: (value) => AppValidator().confirmPasswordValidator(
+        value,
+        passwordController.text,
+      ),
+      prefixicon: AppIcon.password,
+      prefixtext: hintText,
+      errorText: errorText,
+      suffixicon: IconButton(
+        onPressed: onToggleVisibility,
+        icon: Icon(
+          isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+        ),
+      ),
     );
   }
 }

@@ -75,12 +75,7 @@ class UserRepoHelper {
         value: token,
       );
     }
-    if (verified) {
-      await _cacheHelper.saveData(
-        key: SharedPrefereneceKey.isLogin,
-        value: true,
-      );
-    }
+    if (verified) {}
   }
 
   Future<Map<String, dynamic>> getUserData(String uid) async {

@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use
-
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/features/home/cubit/cubits/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/states/home_state.dart';
@@ -32,7 +30,7 @@ class CategoriesSection extends StatelessWidget {
         }
         print('═══════════════════════════════════════');
 
-        if (state is HomeLoaded && state.data.categories.isNotEmpty) {
+        if (state.data.categories.isNotEmpty) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
