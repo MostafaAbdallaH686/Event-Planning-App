@@ -179,4 +179,10 @@ abstract class AppString {
   // booking cancelled screen
   static const String bookingCancelledSuccessfully =
       'Your Booking Cancelled Successfully';
+
+  // payment screen
+  static const String enterCardDetails = 'Please enter your card details';
+  static const String paymentSuccessful = 'Payment Successful';
+  static const String enterCardDetail = 'enter your card details';
+  static const String payNow = 'Pay Now';
 }

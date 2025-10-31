@@ -1,6 +1,5 @@
 import 'package:event_planning_app/core/utils/model/user_model.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
-import 'package:event_planning_app/features/profile/view/change_email.dart';
 import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

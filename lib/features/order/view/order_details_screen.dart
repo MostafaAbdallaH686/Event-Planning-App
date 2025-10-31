@@ -1,3 +1,4 @@
+import 'package:event_planning_app/core/utils/services/payment_test.dart';
 import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
@@ -44,14 +45,23 @@ class OrderDetailsScreen extends StatelessWidget {
             CustomTextbutton(
               text: AppString.placeOrder,
               onpressed: () {
-                context.push(
-                  AppRoutes.ticketBooked,
-                  extra: {
-                    'order': order.copyWith(
-                        paymentMethod: AppString.creditDebitCard),
-                    'seat': 'A12',
-                    'qrImageUrl': '',
-                  },
+                showDialog(
+                  context: context,
+                  barrierDismissible: false,
+                  builder: (context) => StripePaymentDialog(
+                    onPaymentSuccess: () {
+                      context.pushReplacement(
+                        AppRoutes.ticketBooked,
+                        extra: {
+                          'order': order.copyWith(
+                            paymentMethod: AppString.creditDebitCard,
+                          ),
+                          'seat': 'A12',
+                          'qrImageUrl': '',
+                        },
+                      );
+                    },
+                  ),
                 );
               },
             ),

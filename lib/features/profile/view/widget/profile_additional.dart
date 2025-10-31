@@ -4,7 +4,6 @@ import 'package:event_planning_app/core/utils/widgets/custom_circle_progress_ini
 import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_state.dart';
 
-import 'package:event_planning_app/features/profile/view/change_password.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

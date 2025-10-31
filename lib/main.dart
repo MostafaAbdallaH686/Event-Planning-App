@@ -37,9 +37,6 @@ void main() async {
     anonKey:
         "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndqdnhocnFkaGNpa3dsbG1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA0MzE5OTEsImV4cCI6MjA3NjAwNzk5MX0.AKULfXKInrrSYXvlXeIXktVqFHp8EwdYpVent8hbf7k",
   );
-  Stripe.publishableKey =
-      "pk_test_51RMc4kQriOXVGKDZnUxKbTjZoKuUwRxq496I0hnnhU9zVqTm2FBLJ21UBT25yldR3Oo4qW3agfQcbjqIXMsNXJao00PWV0nNbg";
-  await Stripe.instance.applySettings();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -49,6 +46,10 @@ void main() async {
     serverClientId:
         '229484552631-tuupqshucmh9spj48gr7qlj3u0rs9te2.apps.googleusercontent.com',
   );
+  Stripe.publishableKey =
+      'pk_test_515K0kaPycg1qZpCBE4caw2vrF41XRXxCS9XV70t220rPgDo13h1ju401e0duiDhs3x1XsG0MszY97pcD1p1TEgt000HUH9YwsS';
+
+  await Stripe.instance.applySettings();
 
   runApp(MyApp(
     cacheHelper: getIt<CacheHelper>(),
