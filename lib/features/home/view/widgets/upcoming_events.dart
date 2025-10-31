@@ -49,12 +49,8 @@ class UpcomingEventsSection extends StatelessWidget {
                     event: event,
                     isInterested: isInterested,
                     onTap: () {
-                      context.push(
-                        AppRoutes.eventDetails,
-                        extra: {
-                          "eventId": event.id,
-                        },
-                      );
+                      print('Navigating to details of event ID: ${event.id}');
+                      context.push('/eventDetails/${event.id}');
                     },
                     onAddInterest: () {
                       context.read<HomeCubit>().toggleInterestEvent(event.id);

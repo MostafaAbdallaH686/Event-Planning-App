@@ -2,7 +2,6 @@
 
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/features/home/cubit/home_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/home_state.dart';
@@ -43,13 +42,7 @@ class SeeAllUpComingScreen extends StatelessWidget {
                 final isJoined = state.joinedEventIds.contains(event.id);
                 return InkWell(
                   onTap: () {
-                    context.push(
-                      AppRoutes.eventDetails,
-                      extra: {
-                        "categoryId": event.categoryId,
-                        "eventId": event.id!,
-                      },
-                    );
+                    context.push('/eventDetails/${event.id}');
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: size.width * 0.02),

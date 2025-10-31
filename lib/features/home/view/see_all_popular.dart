@@ -43,13 +43,7 @@ class SeeAllPopularScreen extends StatelessWidget {
                 final isJoined = state.joinedEventIds.contains(event.id);
                 return InkWell(
                   onTap: () {
-                    context.push(
-                      AppRoutes.eventDetails,
-                      extra: {
-                        "categoryId": event.categoryId,
-                        "eventId": event.id!,
-                      },
-                    );
+                    context.push('/eventDetails/${event.id}');
                   },
                   child: Container(
                     margin: EdgeInsets.symmetric(vertical: size.width * 0.02),

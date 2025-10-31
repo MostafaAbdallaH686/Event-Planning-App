@@ -68,13 +68,7 @@ class _EmptyEventScreenBodyState extends State<EmptyEventScreenBody> {
                       return EventCard(
                         event: event,
                         onTap: () {
-                          context.push(
-                            AppRoutes.eventDetails,
-                            extra: {
-                              "categoryId": event.categoryId,
-                              "eventId": event.id,
-                            },
-                          );
+                          context.push('/eventDetails/${event.id}');
                         },
                       );
                     },

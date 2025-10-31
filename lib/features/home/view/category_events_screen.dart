@@ -4,7 +4,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
-import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/home/cubit/cubits/category_events_cubit.dart';
 import 'package:event_planning_app/features/home/cubit/states/category_events_state.dart';
@@ -288,10 +287,8 @@ class _EventCard extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          context.push(
-            AppRoutes.eventDetails,
-            extra: {"eventId": event.id},
-          );
+          print('➡️ Navigating to event details for event ID: ${event.id}');
+          context.push('/eventDetails/${event.id}');
         },
         borderRadius: BorderRadius.circular(12),
         child: Padding(

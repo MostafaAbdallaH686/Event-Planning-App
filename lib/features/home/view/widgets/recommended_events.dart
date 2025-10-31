@@ -26,10 +26,10 @@ class RecommendedEventsSection extends StatelessWidget {
           seeAllRoute: AppRoutes.seeAllRecommendation,
           events: state.data.recommendedEvents,
           interestedEventIds: state.data.joinedEventIds,
-          onEventTap: (event) => context.push(
-            AppRoutes.eventDetails,
-            extra: {"eventId": event.id},
-          ),
+          onEventTap: (event) {
+            print('Navigating to details of event ID: ${event.id}');
+            context.push('/eventDetails/${event.id}');
+          },
           onToggleInterest: (event) =>
               context.read<HomeCubit>().toggleInterestEvent(event.id),
         );

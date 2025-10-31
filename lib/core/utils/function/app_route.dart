@@ -148,6 +148,35 @@ GoRouter createRouter() {
           path: '/eventDetails/:id',
           builder: (context, state) {
             final eventId = state.pathParameters['id'] ?? '';
+
+            print('🔍 EventDetails route called');
+            print('   Path params: ${state.pathParameters}');
+            print('   Extra: ${state.extra}');
+            print('   Extracted eventId: "$eventId"');
+
+            if (eventId.isEmpty) {
+              print('⚠️ Event ID is empty!');
+              return Scaffold(
+                body: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.warning, size: 64, color: Colors.orange),
+                      const SizedBox(height: 16),
+                      const Text('No event ID provided'),
+                      const SizedBox(height: 8),
+                      Text('Path params: ${state.pathParameters}'),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () => context.go('/home'),
+                        child: const Text('Go Home'),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
             return EventDetailsScreen(eventId: eventId);
           },
         ),

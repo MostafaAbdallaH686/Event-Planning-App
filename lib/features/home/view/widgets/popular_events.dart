@@ -126,9 +126,7 @@ class _PopularEventsContent extends StatelessWidget {
   }
 
   void _navigateToDetails(BuildContext context, EventSummaryModel event) {
-    context.push(
-      AppRoutes.eventDetails,
-      extra: {"eventId": event.id},
-    );
+    print('Navigating to details of event ID: ${event.id}');
+    context.push('/eventDetails/${event.id}');
   }
 }

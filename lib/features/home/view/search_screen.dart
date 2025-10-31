@@ -195,10 +195,7 @@ class _SearchScreenState extends State<SearchScreen> {
               return _SearchResultCard(
                 event: event,
                 onTap: () {
-                  context.push(
-                    AppRoutes.eventDetails,
-                    extra: {"eventId": event.id},
-                  );
+                  context.push('/eventDetails/${event.id}');
                 },
               );
             },

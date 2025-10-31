@@ -22,7 +22,7 @@ abstract class AppRoutes {
   static const String seeAllUpComing = '/SeeAllUpComing';
   static const String searchScreen = '/SearchScreen';
   static const String categoryEvents = '/categoryEvents/:id/:name';
-  static const String eventDetails = '/eventDetails/:id';
+  // static const String eventDetails = '/eventDetails/:id';
   static const String navBar = '/navigationBar';
   static const String editProfile = '/editProfile';
   static const String createEvent = '/createEvent';
