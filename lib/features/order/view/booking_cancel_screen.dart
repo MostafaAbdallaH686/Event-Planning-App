@@ -36,7 +36,7 @@ class BookingCancelScreen extends StatelessWidget {
             CustomTextbutton(
                 text: AppString.goToHome,
                 onpressed: () {
-                  context.pushReplacement(AppRoutes.home);
+                  context.pushReplacement(AppRoutes.navBar);
                 }),
           ],
         ),

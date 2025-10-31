@@ -119,7 +119,7 @@ class _MainNavigationState extends State<MainNavigation> {
                 // Right side: two tabs
                 _TabItem(
                   iconPath: AppIcon.orders,
-                  label: AppString.ordersNav,
+                  label: AppString.bookingNav,
                   selected: _currentIndex == 2,
                   onTap: () => setState(() => _currentIndex = 2),
                 ),

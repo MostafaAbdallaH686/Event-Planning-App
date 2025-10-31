@@ -9,6 +9,8 @@ import 'package:event_planning_app/core/utils/firebase/firebase_options.dart';
 import 'package:event_planning_app/di/injections.dart';
 import 'package:event_planning_app/features/auth/cubit/user_cubit.dart';
 import 'package:event_planning_app/features/auth/data/user_repo.dart';
+import 'package:event_planning_app/features/booking/cubit/booking_cubit.dart';
+import 'package:event_planning_app/features/booking/data/booking_repo.dart';
 import 'package:event_planning_app/features/events/cubit/event_details_cubit.dart';
 import 'package:event_planning_app/features/events/cubit/interested_cubit.dart';
 import 'package:event_planning_app/features/events/data/interested_repo.dart';
@@ -81,6 +83,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => ProfileCubit(ProfileRepository()),
+        ),
+        BlocProvider<BookingCubit>(
+          create: (context) => BookingCubit(BookingRepo(FirestoreService())),
         ),
       ],
       child: MaterialApp.router(

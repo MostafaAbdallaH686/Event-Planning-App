@@ -59,7 +59,7 @@ abstract class AppString {
 // navigation bar
   static const String homeNav = "Home";
   static const String eventsNav = "Events";
-  static const String ordersNav = "Orders";
+  static const String bookingNav = "Booking";
   static const String profileNav = "Profile";
 
   //event Screen
@@ -185,4 +185,7 @@ abstract class AppString {
   static const String paymentSuccessful = 'Payment Successful';
   static const String enterCardDetail = 'enter your card details';
   static const String payNow = 'Pay Now';
+  // Booking Screen
+  static const String myBookings = 'My Bookings';
+  static const String noBooking = 'No bookings yet';
 }

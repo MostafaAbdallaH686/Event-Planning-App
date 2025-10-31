@@ -40,7 +40,7 @@ class ActionButtonsSection extends StatelessWidget {
         CustomTextbutton(
           text: AppString.goToHome,
           onpressed: () {
-            context.pushReplacement(AppRoutes.home);
+            context.pushReplacement(AppRoutes.navBar);
           },
         ),
         SizedBox(height: size.height * 0.025),

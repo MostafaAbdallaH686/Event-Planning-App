@@ -262,4 +262,21 @@ class FirestoreService {
       }
     });
   }
+
+  //Get Booked Events
+  Stream<List<EventModel>> streamBusinessEventsLimit5() {
+    try {
+      return _firestore
+          .collection('categories')
+          .doc('business')
+          .collection('events')
+          .limit(5)
+          .snapshots()
+          .map((snapshot) =>
+              snapshot.docs.map((doc) => EventModel.fromDoc(doc)).toList());
+    } catch (e) {
+      print('❌ Error streaming business events: $e');
+      return const Stream.empty();
+    }
+  }
 }
