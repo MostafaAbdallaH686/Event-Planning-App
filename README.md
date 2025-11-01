@@ -27,13 +27,17 @@ The app allows users to browse events, view details, book tickets, and get real-
 | Component | Technology Used |
 |------------|------------------|
 | **Frontend** | Flutter (Dart) |
-| **Backend** | Firebase (Auth, Firestore, Cloud Functions) |
+| **Backend** | API(Node js)&Firebase (Auth, Firestore, Cloud Functions) |
 | **State Management** | Bloc / Cubit |
 | **Design** | Figma |
 | **Version Control** | Git & GitHub |
 | **Deployment** | Firebase App Distribution / Play Store / App Store |
 
 ---
+## 📄 Documentation
+
+For detailed API structure, database schema, UI flow, and architecture diagrams:  
+📘 **Project Documentation:** [Click Here](https://drive.google.com/file/d/1TixXgDAMCCDHruMPI9fiSfceKlkfzJaz/view?usp=drive_link)
 
 ## 📱 Screens Overview
 
