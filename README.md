@@ -37,8 +37,9 @@ The app allows users to browse events, view details, book tickets, and get real-
 ## 📄 Documentation
 
 For detailed API structure, database schema, UI flow, and architecture diagrams:  
-📘 **Project Documentation:** [Click Here](https://drive.google.com/file/d/1TixXgDAMCCDHruMPI9fiSfceKlkfzJaz/view?usp=drive_link)
+📘 **Project Documentation:** [Click Here](https://drive.google.com/file/d/1TixXgDAMCCDHruMPI9fiSfceKlkfzJaz/view?usp=sharing)
 
+---
 ## 📱 Screens Overview
 
 - **Home Screen:** Displays featured and upcoming events.  
