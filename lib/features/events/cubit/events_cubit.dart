@@ -40,14 +40,18 @@ class CreateEventCubit extends Cubit<CreateEventState> {
   Map<String, String> _validate(EventModel input) {
     final errors = <String, String>{};
     if (input.title.trim().isEmpty) errors['title'] = 'Title is required';
-    if (input.description.trim().isEmpty)
+    if (input.description.trim().isEmpty) {
       errors['description'] = 'Description is required';
-    if (input.location.trim().isEmpty)
+    }
+    if (input.location.trim().isEmpty) {
       errors['location'] = 'Location is required';
-    if (input.categoryId.trim().isEmpty)
+    }
+    if (input.categoryId.trim().isEmpty) {
       errors['category'] = 'Category is required';
-    if (input.paymentRequired.isNaN || input.paymentRequired < 0)
+    }
+    if (input.paymentRequired.isNaN || input.paymentRequired < 0) {
       errors['price'] = 'Price must be >= 0';
+    }
     return errors;
   }
 }

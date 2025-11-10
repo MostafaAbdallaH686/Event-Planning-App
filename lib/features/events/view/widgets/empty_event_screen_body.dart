@@ -3,7 +3,6 @@
 import 'package:event_planning_app/core/utils/theme/app_colors.dart';
 import 'package:event_planning_app/core/utils/theme/app_text_style.dart';
 import 'package:event_planning_app/core/utils/utils/app_image.dart';
-import 'package:event_planning_app/core/utils/utils/app_routes.dart';
 import 'package:event_planning_app/core/utils/utils/app_string.dart';
 import 'package:event_planning_app/core/utils/widgets/custom_textbutton.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';

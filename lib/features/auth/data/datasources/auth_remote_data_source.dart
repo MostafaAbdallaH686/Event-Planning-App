@@ -102,7 +102,7 @@ Future<UserModel> register({
       await _googleSignIn.signOut();
 
       // Trigger Google Sign In
-      final GoogleSignInAccount? googleUser =
+      final GoogleSignInAccount googleUser =
           await _googleSignIn.authenticate();
 
       if (googleUser == null) {

@@ -18,7 +18,7 @@ class ForgetScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController _emailController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
 
     final cubit = BlocProvider.of<AuthCubit>(context);
     final formKey = GlobalKey<FormState>();
@@ -54,7 +54,7 @@ class ForgetScreenBody extends StatelessWidget {
               height: size.height * 0.03,
             ),
             EmailTextField(
-              controller: _emailController,
+              controller: emailController,
               errorText: null,
               hintText: AppString.emailEx,
             ),

@@ -18,8 +18,9 @@ class RecommendedEventsSection extends StatelessWidget {
     return BlocBuilder<HomeCubit, HomeState>(
       builder: (context, state) {
         if (state is! HomeLoaded) return const SizedBox.shrink();
-        if (state.data.recommendedEvents.isEmpty)
+        if (state.data.recommendedEvents.isEmpty) {
           return const SizedBox.shrink();
+        }
 
         return EventListSection(
           title: AppString.recommendation,
