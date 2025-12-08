@@ -1,7 +1,10 @@
 // ignore_for_file: avoid_print
 
+import 'dart:ui';
+
 import 'package:event_planning_app/core/utils/cache/cache_helper.dart';
 import 'package:event_planning_app/core/utils/function/app_route.dart';
+import 'package:event_planning_app/core/utils/services/crashlytics_service.dart';
 import 'package:event_planning_app/core/utils/services/firestore_service.dart';
 import 'package:event_planning_app/core/utils/services/toast_services.dart';
 import 'package:event_planning_app/core/utils/theme/app_theme_data.dart';
@@ -22,6 +25,7 @@ import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
 import 'package:event_planning_app/features/profile/data/profile_repostiry.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
@@ -44,6 +48,20 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Initialize Crashlytics only in release mode
+  const bool isRelease = bool.fromEnvironment('dart.vm.product');
+  if (isRelease) {
+    await CrashlyticsService.initialize();
+    await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+
+    FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
 
   await GoogleSignIn.instance.initialize(
     serverClientId:

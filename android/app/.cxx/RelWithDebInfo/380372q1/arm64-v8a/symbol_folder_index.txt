@@ -1,0 +1,1 @@
+C:\Users\11\Desktop\Event-Planning-App\build\app\intermediates\cxx\RelWithDebInfo\380372q1\obj\arm64-v8a
