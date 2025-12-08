@@ -20,6 +20,7 @@ import 'package:event_planning_app/features/home/data/home_repo.dart';
 import 'package:event_planning_app/features/onboarding/cubit/on_boarding_cubit.dart';
 import 'package:event_planning_app/features/profile/cubit/profile_cubit.dart';
 import 'package:event_planning_app/features/profile/data/profile_repostiry.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,8 +61,9 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   final CacheHelper cacheHelper;
+  final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-  const MyApp({super.key, required this.cacheHelper});
+  MyApp({super.key, required this.cacheHelper});
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +94,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Event Planning App',
         theme: AppThemeData.lightThemeData,
-        routerConfig: router,
+        routerConfig: createRouter(analytics),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:event_planning_app/features/booking/view/booking_screen.dart';
 import 'package:event_planning_app/features/events/view/empty_event_screen.dart';
 import 'package:event_planning_app/features/home/view/home_screen.dart';
 import 'package:event_planning_app/features/profile/view/profile_screen.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -37,6 +38,29 @@ class _MainNavigationState extends State<MainNavigation> {
   void initState() {
     super.initState();
     _currentIndex = widget.index;
+  }
+
+  Future<void> _reportScreen(int index) async {
+    const screenNames = ['Home', 'Events', 'Booking', 'Profile'];
+    final screenName = (index >= 0 && index < screenNames.length)
+        ? screenNames[index]
+        : 'Unknown';
+
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'screen_view',
+      parameters: {
+        'firebase_screen': screenName,
+        'firebase_screen_class': 'MainNavigation',
+      },
+    );
+
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'bottom_nav_tab_changed',
+      parameters: {
+        'tab_index': index,
+        'screen_name': screenName,
+      },
+    );
   }
 
   @override
@@ -104,13 +128,19 @@ class _MainNavigationState extends State<MainNavigation> {
                   iconPath: AppIcon.home,
                   label: AppString.homeNav,
                   selected: _currentIndex == 0,
-                  onTap: () => setState(() => _currentIndex = 0),
+                  onTap: () {
+                    setState(() => _currentIndex = 0);
+                    _reportScreen(0);
+                  },
                 ),
                 _TabItem(
                   iconPath: AppIcon.events,
                   label: AppString.eventsNav,
                   selected: _currentIndex == 1,
-                  onTap: () => setState(() => _currentIndex = 1),
+                  onTap: () {
+                    setState(() => _currentIndex = 1);
+                    _reportScreen(1);
+                  },
                 ),
 
                 // Space for FAB notch
@@ -121,13 +151,19 @@ class _MainNavigationState extends State<MainNavigation> {
                   iconPath: AppIcon.orders,
                   label: AppString.bookingNav,
                   selected: _currentIndex == 2,
-                  onTap: () => setState(() => _currentIndex = 2),
+                  onTap: () {
+                    setState(() => _currentIndex = 2);
+                    _reportScreen(2);
+                  },
                 ),
                 _TabItem(
                   iconPath: AppIcon.profile,
                   label: AppString.profileNav,
                   selected: _currentIndex == 3,
-                  onTap: () => setState(() => _currentIndex = 3),
+                  onTap: () {
+                    setState(() => _currentIndex = 3);
+                    _reportScreen(3);
+                  },
                 ),
               ],
             ),
